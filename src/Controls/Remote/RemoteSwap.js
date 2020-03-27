@@ -10,7 +10,7 @@ function RemoteSwap(props) {
     return (
         <RemoteBtnTemplate
             name={'zoom-out-map'}
-            style={(props.user.uid !== 'local') ? styles.rightRemoteBtn : {}}
+            style={(props.user.uid !== 'local') ? { ...styles.rightRemoteBtn, ...props.style } : {}}
             onPress={
                 () => {
                     dispatch({ type: 'onSwapVideo', value: { user: props.user } });

@@ -12,6 +12,7 @@ function MinVideoView(props) {
     const [overlay, setOverlay] = useState(false);
     const { styleProps } = useContext(PropsContext);
     const { minViewStyles } = styleProps || {};
+    const { minCloseBtnStyles } = styleProps || {};
 
     return (
         <View style={{ margin: 5 }}>
@@ -32,7 +33,7 @@ function MinVideoView(props) {
                     <View style={styles.minOverlay}>
 
                         <TouchableOpacity
-                            style={styles.minCloseBtn}
+                            style={{...styles.minCloseBtn, ...minCloseBtnStyles}}
                             onPress={() => setOverlay(!overlay)}
                         >
                             <Icon name="close" size={30} color="#007aff" />
