@@ -30,7 +30,9 @@ function Controls(props) {
                 {
                     (users) => (
                         <View style={{ ...styles.Controls, bottom: styles.Controls.bottom + 70 }}>
-                            <RemoteControls user={users[0]} showRemoteSwap={false} />
+                            <RemoteControls user={users[0]} showRemoteSwap={false} remoteBtnStyles={{
+                                muteRemoteVideo: styles.rightRemoteBtn
+                            }}/>
                         </View>
                     )
                 }
