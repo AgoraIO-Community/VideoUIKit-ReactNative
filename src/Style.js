@@ -85,5 +85,13 @@ export default StyleSheet.create({
         borderBottomRightRadius: 23,
         borderLeftWidth: 2 * StyleSheet.hairlineWidth,
         borderLeftColor: '#007aff'
-    }
+    },
+    remoteBtnContainer: {
+        width: '100%',
+        display: 'flex',
+        marginVertical: '25%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignSelf: 'center',
+    },
 });

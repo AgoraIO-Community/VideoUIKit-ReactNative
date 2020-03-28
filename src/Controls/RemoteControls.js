@@ -4,41 +4,29 @@ import RemoteAudioMute from './Remote/RemoteAudioMute'
 import RemoteVideoMute from './Remote/RemoteVideoMute'
 import RemoteSwap from './Remote/RemoteSwap'
 import PropsContext from '../PropsContext'
-import _ from 'lodash'
+import styles from '../Style'
 
 function RemoteControls(props) {
 
     console.log('remote control', props);
     const { styleProps } = useContext(PropsContext);
-    let remoteBtnStyles = {};
-    _.isEmpty(styleProps.remoteBtnStyles) ? { remoteBtnStyles } = props : { remoteBtnStyles } = styleProps;
-    // let muteRemoteAudio = {}, muteRemoteVideo = {}, remoteSwap = {};
+    const { remoteBtnStyles } = styleProps;
+    const { remoteBtnContainer } = remoteBtnStyles || {};
 
-    const { muteRemoteAudio, muteRemoteVideo, remoteSwap } = remoteBtnStyles || {};
     return (
-        <View style={{
-            width: '100%',
-            display: 'flex',
-            marginVertical: '25%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignSelf: 'center',
-        }}>
+        <View style={{...styles.remoteBtnContainer, ...remoteBtnContainer}}>
 
             {(props.showMuteRemoteAudio !== false) ?
                 <RemoteAudioMute
-                    style={muteRemoteAudio}
                     user={props.user} /> : <></>
 
             }
             {(props.showMuteRemoteVideo !== false) ?
                 <RemoteVideoMute
-                    style={muteRemoteVideo}
                     user={props.user} /> : <></>
             }
             {(props.showRemoteSwap !== false) ?
                 <RemoteSwap
-                    style={remoteSwap}
                     user={props.user} /> : <></>
             }
 
