@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
+import PropsContext from '../../PropsContext'
 import { RtcConsumer } from '../../RtcContext'
-import { Icon } from 'react-native-elements';
+import BtnTemplate from '../BtnTemplate'
+import styles from '../../Style'
 
 function FullScreen(props) {
+    const { styleProps } = useContext(PropsContext);
+    const { localBtnStyles } = styleProps;
+    const { fullScreen } = localBtnStyles || {};
+
     return (
         <RtcConsumer>
             {
                 (
                     ({ RtcEngine, dispatch }) => (
-                        <Icon
-                            raised
-                            reverse
+                        <BtnTemplate
                             name={'fullscreen'}
-                            type='material'
-                            color='#007aff'
-                            size={18}
+                            style={{ ...styles.localBtn, ...fullScreen }}
                             onPress={() => { dispatch({ action: 'onFullScreen' }) }}
                         />
                     )

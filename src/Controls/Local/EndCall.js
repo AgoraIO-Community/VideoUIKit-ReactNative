@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import PropsContext from '../../PropsContext'
 import { RtcConsumer } from '../../RtcContext'
-import { Icon } from 'react-native-elements';
+import BtnTemplate from '../BtnTemplate'
+import styles from '../../Style'
 
 function EndCall(props) {
+    const { styleProps } = useContext(PropsContext);
+    const { localBtnStyles } = styleProps;
+    const { endCall } = localBtnStyles || {};
+
     return (
         <RtcConsumer>
             {
                 (
                     ({ RtcEngine, dispatch }) => (
-                        <Icon
-                            raised
-                            reverse
-                            name='call-end'
-                            type='material'
-                            color='red'
-                            size={30}
+                        <BtnTemplate
+                            name={'call-end'}
+                            style={{ ...styles.endCall, ...endCall }}
                             onPress={() => dispatch({ type: 'onEndCall' })} />
                     )
                 )

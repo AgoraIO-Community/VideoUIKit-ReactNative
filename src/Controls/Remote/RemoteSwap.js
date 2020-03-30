@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import RtcContext from '../../RtcContext'
-import RemoteBtnTemplate from './RemoteBtnTemplate'
+import BtnTemplate from '../BtnTemplate'
 import styles from '../../Style'
 import PropsContext from '../../PropsContext'
 
@@ -12,7 +12,7 @@ function RemoteSwap(props) {
     const { remoteSwap } = remoteBtnStyles || {};
 
     return (
-        <RemoteBtnTemplate
+        <BtnTemplate
             name={'zoom-out-map'}
             style={(props.user.uid !== 'local') ? { ...styles.rightRemoteBtn, ...remoteSwap } : {}}
             onPress={

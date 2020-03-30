@@ -8,10 +8,11 @@ import styles from '../Style'
 
 function RemoteControls(props) {
 
-    console.log('remote control', props);
+    //console.log('remote control', props);
     const { styleProps } = useContext(PropsContext);
     const { remoteBtnStyles } = styleProps;
     const { remoteBtnContainer } = remoteBtnStyles || {};
+    //console.log("c:"+props.showRemoteSwap);
 
     return (
         <View style={{...styles.remoteBtnContainer, ...remoteBtnContainer}}>
@@ -22,11 +23,11 @@ function RemoteControls(props) {
 
             }
             {(props.showMuteRemoteVideo !== false) ?
-                <RemoteVideoMute
+                <RemoteVideoMute rightButton={!props.showRemoteSwap}
                     user={props.user} /> : <></>
             }
             {(props.showRemoteSwap !== false) ?
-                <RemoteSwap
+                <RemoteSwap 
                     user={props.user} /> : <></>
             }
 
