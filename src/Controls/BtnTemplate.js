@@ -1,13 +1,13 @@
-import React, { useContext } from 'react'
-import { StyleSheet, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import styles from './../Style'
-import PropsContex from './../PropsContext'
+import React, { useContext } from 'react';
+import { TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import PropsContex from './../PropsContext';
+import styles from './../Style';
 
 function btnTemplate(props) {
     const { styleProps } = useContext(PropsContex);
     const { BtnStyles, theme } = styleProps || {};
-    console.log("zz:",BtnStyles);
+    
     return (
         <TouchableOpacity
             style={{ ...styles.controlBtn, ...BtnStyles, ...props.style }}

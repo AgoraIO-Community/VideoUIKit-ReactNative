@@ -26,7 +26,7 @@ function MinVideoView(props) {
                         <AgoraView style={{ ...styles.minView, ...minViewStyles }} remoteUid={props.user.uid} mode={AgoraViewMode.HIDDEN} zOrderMediaOverlay={true} />
 
                 }
-            </TouchableOpacity >
+            </TouchableOpacity>
 
             {
                 overlay ?

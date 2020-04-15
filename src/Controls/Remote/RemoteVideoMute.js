@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react'
-import RtcContext from '../../RtcContext'
-import BtnTemplate from '../BtnTemplate'
-import PropsContext from '../../PropsContext'
+import React, { useContext } from 'react';
+import PropsContext from '../../PropsContext';
+import RtcContext from '../../RtcContext';
 import styles from '../../Style';
+import BtnTemplate from '../BtnTemplate';
 
 function RemoteVideoMute(props) {
 
@@ -10,7 +10,7 @@ function RemoteVideoMute(props) {
     const { styleProps } = useContext(PropsContext);
     const { remoteBtnStyles } = styleProps;
     const { muteRemoteVideo } = remoteBtnStyles || {};
-    console.log("chk:"+props.rightButton)
+
     return (
         (props.user.uid !== 'local') ?
             <BtnTemplate
