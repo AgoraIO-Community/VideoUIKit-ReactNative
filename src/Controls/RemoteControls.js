@@ -1,42 +1,31 @@
-import React from 'react'
+import React, { useContext } from 'react';
 import { View } from "react-native";
-import RemoteAudioMute from './Remote/RemoteAudioMute'
-import RemoteVideoMute from './Remote/RemoteVideoMute'
-import RemoteSwap from './Remote/RemoteSwap'
+import PropsContext from '../PropsContext';
+import styles from '../Style';
+import RemoteAudioMute from './Remote/RemoteAudioMute';
+import RemoteSwap from './Remote/RemoteSwap';
+import RemoteVideoMute from './Remote/RemoteVideoMute';
 
 function RemoteControls(props) {
 
-    console.log('remote control', props);
-    const { remoteBtnStyles } = props;
-    // let muteRemoteAudio = {}, muteRemoteVideo = {}, remoteSwap = {};
-
-    const { muteRemoteAudio, muteRemoteVideo, remoteSwap } = remoteBtnStyles || {};
-
+    const { styleProps } = useContext(PropsContext);
+    const { remoteBtnStyles } = styleProps;
+    const { remoteBtnContainer } = remoteBtnStyles || {};
 
     return (
-        <View style={{
-            width: '100%',
-            display: 'flex',
-            marginVertical: '25%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignSelf: 'center',
-        }}>
+        <View style={{...styles.remoteBtnContainer, ...remoteBtnContainer}}>
 
             {(props.showMuteRemoteAudio !== false) ?
                 <RemoteAudioMute
-                    style={muteRemoteAudio}
                     user={props.user} /> : <></>
 
             }
             {(props.showMuteRemoteVideo !== false) ?
-                <RemoteVideoMute
-                    style={muteRemoteVideo}
+                <RemoteVideoMute rightButton={!props.showRemoteSwap}
                     user={props.user} /> : <></>
             }
             {(props.showRemoteSwap !== false) ?
-                <RemoteSwap
-                    style={remoteSwap}
+                <RemoteSwap 
                     user={props.user} /> : <></>
             }
 

@@ -67,7 +67,7 @@ export default StyleSheet.create({
         right: 5,
         top: 5
     },
-    remoteControlBtn: {
+    controlBtn: {
         width: 46,
         height: 46,
         backgroundColor: 'rgba(255,255,255,0.1)',
@@ -85,5 +85,27 @@ export default StyleSheet.create({
         borderBottomRightRadius: 23,
         borderLeftWidth: 2 * StyleSheet.hairlineWidth,
         borderLeftColor: '#007aff'
+    },
+    remoteBtnContainer: {
+        width: '100%',
+        display: 'flex',
+        marginVertical: '25%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignSelf: 'center',
+    },
+    localBtn: {
+        borderRadius: 23,
+        borderWidth: 4 * StyleSheet.hairlineWidth,
+        borderColor: '#007aff',
+        backgroundColor: "#007aff"
+    },
+    endCall: {
+        borderRadius: 30,
+        borderWidth: 4 * StyleSheet.hairlineWidth,
+        borderColor: '#ff0000',
+        width: 60,
+        height: 60,
+        backgroundColor: "#ff0000"
     }
 });

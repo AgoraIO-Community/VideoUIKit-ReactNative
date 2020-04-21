@@ -1,17 +1,21 @@
 import React, { useState, useContext } from 'react'
 import RtcContext from '../../RtcContext'
-import RemoteBtnTemplate from './RemoteBtnTemplate'
+import BtnTemplate from '../BtnTemplate'
 import styles from '../../Style'
+import PropsContext from '../../PropsContext'
 
 function RemoteAudioMute(props) {
 
     const { RtcEngine, dispatch } = useContext(RtcContext);
+    const { styleProps } = useContext(PropsContext);
+    const { remoteBtnStyles } = styleProps;
+    const { muteRemoteAudio } = remoteBtnStyles || {};
 
     return (
         (props.user.uid !== 'local') ?
-            <RemoteBtnTemplate
+            <BtnTemplate
                 name={props.user.audio ? 'mic' : 'mic-off'}
-                style={{ ...styles.leftRemoteBtn, ...props.style }}
+                style={{ ...styles.leftRemoteBtn, ...muteRemoteAudio }}
                 onPress={
                     () => {
                         RtcEngine.muteRemoteAudioStream(props.user.uid, props.user.audio);

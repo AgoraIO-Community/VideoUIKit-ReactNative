@@ -11,7 +11,8 @@ function MinVideoView(props) {
 
     const [overlay, setOverlay] = useState(false);
     const { styleProps } = useContext(PropsContext);
-    const { minViewStyles } = styleProps || {};
+    const { minViewStyles, theme } = styleProps || {};
+    const { minCloseBtnStyles } = styleProps || {};
 
     return (
         <View style={{ margin: 5 }}>
@@ -25,20 +26,20 @@ function MinVideoView(props) {
                         <AgoraView style={{ ...styles.minView, ...minViewStyles }} remoteUid={props.user.uid} mode={AgoraViewMode.HIDDEN} zOrderMediaOverlay={true} />
 
                 }
-            </TouchableOpacity >
+            </TouchableOpacity>
 
             {
                 overlay ?
                     <View style={styles.minOverlay}>
 
                         <TouchableOpacity
-                            style={styles.minCloseBtn}
+                            style={{...styles.minCloseBtn, ...minCloseBtnStyles}}
                             onPress={() => setOverlay(!overlay)}
                         >
-                            <Icon name="close" size={30} color="#007aff" />
+                            <Icon name="close" size={30} color={theme || "#fff"} />
                         </TouchableOpacity>
 
-                        <RemoteControls user={props.user} {...props.remoteControlProps} />
+                        <RemoteControls showRemoteSwap={true} user={props.user} {...props.remoteControlProps} />
 
                     </View> : <></>
             }
