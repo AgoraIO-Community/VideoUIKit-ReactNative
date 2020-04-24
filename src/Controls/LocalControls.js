@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Icon } from 'react-native-elements';
 import { View, Text } from 'react-native';
 import styles from '../Style'
 import EndCall from './Local/EndCall'

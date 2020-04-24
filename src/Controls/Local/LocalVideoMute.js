@@ -16,7 +16,7 @@ function LocalVideoMute(props) {
                 (
                     ({ RtcEngine, dispatch }) => (
                         <BtnTemplate
-                            name={muted ? 'videocam-off' : 'videocam'}
+                            name={muted ? 'videocamOff' : 'videocam'}
                             style={{ ...styles.localBtn, ...muteLocalVideo }}
                             onPress={() => {
                                 let newState = !muted;

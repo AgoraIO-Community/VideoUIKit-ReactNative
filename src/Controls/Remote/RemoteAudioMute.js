@@ -14,7 +14,7 @@ function RemoteAudioMute(props) {
     return (
         (props.user.uid !== 'local') ?
             <BtnTemplate
-                name={props.user.audio ? 'mic' : 'mic-off'}
+                name={props.user.audio ? 'mic' : 'micOff'}
                 style={{ ...styles.leftRemoteBtn, ...muteRemoteAudio }}
                 onPress={
                     () => {

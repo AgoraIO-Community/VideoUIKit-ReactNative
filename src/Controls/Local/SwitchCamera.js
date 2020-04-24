@@ -15,7 +15,7 @@ function SwitchCamera(props) {
                 (
                     ({ RtcEngine, dispatch }) => (
                         <BtnTemplate
-                            name={'switch-camera'}
+                            name={'switchCamera'}
                             style={{ ...styles.localBtn, ...switchCamera }}
                             onPress={() => {
                                 RtcEngine.switchCamera()

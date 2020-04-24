@@ -15,7 +15,7 @@ function EndCall(props) {
                 (
                     ({ RtcEngine, dispatch }) => (
                         <BtnTemplate
-                            name={'call-end'}
+                            name={'callEnd'}
                             style={{ ...styles.endCall, ...endCall }}
                             onPress={() => dispatch({ type: 'onEndCall' })} />
                     )
