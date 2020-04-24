@@ -77,13 +77,13 @@ export default StyleSheet.create({
     leftRemoteBtn: {
         borderTopLeftRadius: 23,
         borderBottomLeftRadius: 23,
-        borderRightWidth: 2 * StyleSheet.hairlineWidth,
+        borderRightWidth: 4 * StyleSheet.hairlineWidth,
         borderRightColor: '#007aff'
     },
     rightRemoteBtn: {
         borderTopRightRadius: 23,
         borderBottomRightRadius: 23,
-        borderLeftWidth: 2 * StyleSheet.hairlineWidth,
+        borderLeftWidth: 4 * StyleSheet.hairlineWidth,
         borderLeftColor: '#007aff'
     },
     remoteBtnContainer: {

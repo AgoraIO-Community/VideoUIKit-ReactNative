@@ -14,7 +14,7 @@ function RemoteVideoMute(props) {
     return (
         (props.user.uid !== 'local') ?
             <BtnTemplate
-                name={props.user.video ? 'videocam' : 'videocam-off'}
+                name={props.user.video ? 'videocam' : 'videocamOff'}
                 style={(props.rightButton) ? { ...styles.rightRemoteBtn, ...muteRemoteVideo } : {...muteRemoteVideo}}
                 onPress={
                     () => {

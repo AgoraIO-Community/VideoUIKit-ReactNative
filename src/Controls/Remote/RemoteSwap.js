@@ -13,7 +13,7 @@ function RemoteSwap(props) {
 
     return (
         <BtnTemplate
-            name={'zoom-out-map'}
+            name={'remoteSwap'}
             style={(props.user.uid !== 'local') ? { ...styles.rightRemoteBtn, ...remoteSwap } : {}}
             onPress={
                 () => {

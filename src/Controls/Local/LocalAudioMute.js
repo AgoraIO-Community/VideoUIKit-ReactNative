@@ -16,7 +16,7 @@ function LocalAudioMute(props) {
                 (
                     ({ RtcEngine, dispatch }) => (
                         <BtnTemplate
-                            name={muted ? 'mic-off' : 'mic'}
+                            name={muted ? 'micOff' : 'mic'}
                             style={{ ...styles.localBtn, ...muteLocalAudio }}
                             onPress={() => {
                                 let newState = !muted;

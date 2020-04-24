@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { TouchableOpacity, Image } from "react-native";
 import PropsContex from './../PropsContext';
 import styles from './../Style';
-
+import icons from './Icons';
 function btnTemplate(props) {
     const { styleProps } = useContext(PropsContex);
     const { BtnStyles, theme } = styleProps || {};
@@ -13,7 +12,7 @@ function btnTemplate(props) {
             style={{ ...styles.controlBtn, ...BtnStyles, ...props.style }}
             onPress={props.onPress}
         >
-            <Icon name={props.name} size={props.size || 20} color={theme || props.color || "#fff"} />
+            <Image style={{width: 25, height: 25}} source={{uri: icons[props.name], isStatic: true}} tintColor={theme || props.color || "#fff"} />
         </TouchableOpacity>
     )
 }

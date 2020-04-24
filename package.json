@@ -21,9 +21,7 @@
   "dependencies": {
     "react": "^16.13.1",
     "react-native": "^0.62.0",
-    "react-native-agora": "^2.9.1-alpha.3",
-    "react-native-elements": "^1.2.7",
-    "react-native-vector-icons": "^6.6.0"
+    "react-native-agora": "^2.9.1-alpha.3"
   },
   "bugs": {
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
@@ -31,7 +29,6 @@
   "peerDependencies": {
     "react": "^16.9.0",
     "react-native": "^0.61.5",
-    "react-native-vector-icons": "^6.6.0",
     "react-native-agora": "^2.9.1-alpha.2"
   },
   "devDependencies": {
