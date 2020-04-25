@@ -7,7 +7,7 @@ import styles from '../../Style'
 function LocalAudioMute(props) {
     const [muted, setMuted] = useState(false);
     const { styleProps } = useContext(PropsContext);
-    const { localBtnStyles } = styleProps;
+    const { localBtnStyles } = styleProps || {};
     const { muteLocalAudio } = localBtnStyles || {};
 
     return (

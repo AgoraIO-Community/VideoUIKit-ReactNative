@@ -6,7 +6,7 @@ import styles from '../../Style'
 
 function SwitchCamera(props) {
     const { styleProps } = useContext(PropsContext);
-    const { localBtnStyles } = styleProps;
+    const { localBtnStyles } = styleProps || {};
     const { switchCamera } = localBtnStyles || {};
 
     return (

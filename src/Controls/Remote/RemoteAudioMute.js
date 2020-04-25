@@ -8,7 +8,7 @@ function RemoteAudioMute(props) {
 
     const { RtcEngine, dispatch } = useContext(RtcContext);
     const { styleProps } = useContext(PropsContext);
-    const { remoteBtnStyles } = styleProps;
+    const { remoteBtnStyles } = styleProps || {};
     const { muteRemoteAudio } = remoteBtnStyles || {};
 
     return (

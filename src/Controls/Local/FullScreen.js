@@ -6,7 +6,7 @@ import styles from '../../Style'
 
 function FullScreen(props) {
     const { styleProps } = useContext(PropsContext);
-    const { localBtnStyles } = styleProps;
+    const { localBtnStyles } = styleProps || {};
     const { fullScreen } = localBtnStyles || {};
 
     return (

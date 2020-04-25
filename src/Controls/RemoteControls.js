@@ -9,7 +9,7 @@ import RemoteVideoMute from './Remote/RemoteVideoMute';
 function RemoteControls(props) {
 
     const { styleProps } = useContext(PropsContext);
-    const { remoteBtnStyles } = styleProps;
+    const { remoteBtnStyles } = styleProps || {};
     const { remoteBtnContainer } = remoteBtnStyles || {};
 
     return (

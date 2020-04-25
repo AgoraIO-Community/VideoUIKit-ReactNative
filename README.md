@@ -9,16 +9,8 @@
 
 To a react-native application generated using react-native-cli, add the following:
 
-**Peer dependencies:**
 ```
-npm i react-native-vector-icons
-npm i react-native-agora
-react-native link react-native-vector-icons
-```
-
-**UIKit:**
-```
-npm i agora-rn-uikit
+npm i react-native-agora agora-rn-uikit
 ```
 
 ### Usage
