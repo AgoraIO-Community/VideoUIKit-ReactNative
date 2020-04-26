@@ -1,21 +1,22 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
+import PropsContext from '../../PropsContext'
 import { RtcConsumer } from '../../RtcContext'
-import { Icon } from 'react-native-elements';
+import BtnTemplate from '../BtnTemplate'
+import styles from '../../Style'
 
 function SwitchCamera(props) {
-    const [muted, setMuted] = useState(false);
+    const { styleProps } = useContext(PropsContext);
+    const { localBtnStyles } = styleProps || {};
+    const { switchCamera } = localBtnStyles || {};
+
     return (
         <RtcConsumer>
             {
                 (
                     ({ RtcEngine, dispatch }) => (
-                        <Icon
-                            raised
-                            reverse
-                            name={'switch-camera'}
-                            type='material'
-                            color='#007aff'
-                            size={18}
+                        <BtnTemplate
+                            name={'switchCamera'}
+                            style={{ ...styles.localBtn, ...switchCamera }}
                             onPress={() => {
                                 RtcEngine.switchCamera()
                                 dispatch({ action: 'onSwitchCamera' });

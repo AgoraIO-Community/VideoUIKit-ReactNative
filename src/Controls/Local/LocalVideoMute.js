@@ -1,21 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import PropsContext from '../../PropsContext'
 import { RtcConsumer } from '../../RtcContext'
-import { Icon } from 'react-native-elements';
+import BtnTemplate from '../BtnTemplate'
+import styles from '../../Style'
 
 function LocalVideoMute(props) {
     const [muted, setMuted] = useState(false);
+    const { styleProps } = useContext(PropsContext);
+    const { localBtnStyles } = styleProps || {};
+    const { muteLocalVideo } = localBtnStyles || {};
+
     return (
         <RtcConsumer>
             {
                 (
                     ({ RtcEngine, dispatch }) => (
-                        <Icon
-                            raised
-                            reverse
-                            name={muted ? 'videocam-off' : 'videocam'}
-                            type='material'
-                            color='#007aff'
-                            size={18}
+                        <BtnTemplate
+                            name={muted ? 'videocamOff' : 'videocam'}
+                            style={{ ...styles.localBtn, ...muteLocalVideo }}
                             onPress={() => {
                                 let newState = !muted;
                                 setMuted(newState);

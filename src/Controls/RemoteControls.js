@@ -1,16 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import { View } from "react-native";
-import RemoteAudioMute from './Remote/RemoteAudioMute'
-import RemoteVideoMute from './Remote/RemoteVideoMute'
-import RemoteSwap from './Remote/RemoteSwap'
-import PropsContext from '../PropsContext'
-import styles from '../Style'
+import PropsContext from '../PropsContext';
+import styles from '../Style';
+import RemoteAudioMute from './Remote/RemoteAudioMute';
+import RemoteSwap from './Remote/RemoteSwap';
+import RemoteVideoMute from './Remote/RemoteVideoMute';
 
 function RemoteControls(props) {
 
-    console.log('remote control', props);
     const { styleProps } = useContext(PropsContext);
-    const { remoteBtnStyles } = styleProps;
+    const { remoteBtnStyles } = styleProps || {};
     const { remoteBtnContainer } = remoteBtnStyles || {};
 
     return (
@@ -22,11 +21,11 @@ function RemoteControls(props) {
 
             }
             {(props.showMuteRemoteVideo !== false) ?
-                <RemoteVideoMute
+                <RemoteVideoMute rightButton={!props.showRemoteSwap}
                     user={props.user} /> : <></>
             }
             {(props.showRemoteSwap !== false) ?
-                <RemoteSwap
+                <RemoteSwap 
                     user={props.user} /> : <></>
             }
 

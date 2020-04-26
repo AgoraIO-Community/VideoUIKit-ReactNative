@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { View, TouchableOpacity, TouchableNativeFeedback } from 'react-native'
+import { View, TouchableOpacity, Image } from 'react-native'
 import { AgoraView } from 'react-native-agora';
 import styles from './Style'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import icons from './Controls/Icons'
 import RemoteControls from './Controls/RemoteControls'
 import { AgoraViewMode } from 'react-native-agora';
 import PropsContext from './PropsContext'
@@ -11,7 +11,7 @@ function MinVideoView(props) {
 
     const [overlay, setOverlay] = useState(false);
     const { styleProps } = useContext(PropsContext);
-    const { minViewStyles } = styleProps || {};
+    const { minViewStyles, theme } = styleProps || {};
     const { minCloseBtnStyles } = styleProps || {};
 
     return (
@@ -26,7 +26,7 @@ function MinVideoView(props) {
                         <AgoraView style={{ ...styles.minView, ...minViewStyles }} remoteUid={props.user.uid} mode={AgoraViewMode.HIDDEN} zOrderMediaOverlay={true} />
 
                 }
-            </TouchableOpacity >
+            </TouchableOpacity>
 
             {
                 overlay ?
@@ -36,10 +36,10 @@ function MinVideoView(props) {
                             style={{...styles.minCloseBtn, ...minCloseBtnStyles}}
                             onPress={() => setOverlay(!overlay)}
                         >
-                            <Icon name="close" size={30} color="#007aff" />
+                            <Image style={{width: 25, height: 25}} source={{uri: icons['close'], isStatic: true}} tintColor={theme || props.color || "#fff"} />
                         </TouchableOpacity>
 
-                        <RemoteControls user={props.user} {...props.remoteControlProps} />
+                        <RemoteControls showRemoteSwap={true} user={props.user} {...props.remoteControlProps} />
 
                     </View> : <></>
             }

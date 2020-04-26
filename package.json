@@ -1,7 +1,10 @@
 {
   "name": "agora-rn-uikit",
-  "version": "0.1.0",
-  "author": {"name": "Vineeth Srinivasn","email": "vineeth@agora.io"},
+  "version": "0.2.1",
+  "author": {
+    "name": "Vineeth Srinivasn",
+    "email": "vineeth@agora.io"
+  },
   "description": "Agora react native UI KIT. Rapidly integrate video calling into your React Native application with built in UI Elements.",
   "scripts": {
     "android": "react-native run-android",
@@ -15,16 +18,12 @@
     "type": "git",
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit"
   },
-  "dependencies": {
-    "react-native-elements": "^1.2.7"
-  },
-  "bugs":{
+  "bugs": {
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
   },
   "peerDependencies": {
     "react": "^16.9.0",
     "react-native": "^0.61.5",
-    "react-native-vector-icons": "^6.6.0",
     "react-native-agora": "^2.9.1-alpha.2"
   },
   "devDependencies": {
