@@ -11,17 +11,15 @@ function LocalAudioMute() {
   const {muteLocalAudio} = localBtnStyles || {};
   const {dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
-  const muted = !local.audio;
 
   return (
     <BtnTemplate
-      name={muted ? 'micOff' : 'mic'}
+      name={local.audio ? 'mic' : 'micOff'}
       style={{...styles.localBtn, ...(muteLocalAudio as object)}}
       onPress={() => {
-        let newState = !muted;
         (dispatch as DispatchType<'LocalMuteAudio'>)({
           type: 'LocalMuteAudio',
-          value: [newState],
+          value: [local.audio],
         });
       }}
     />

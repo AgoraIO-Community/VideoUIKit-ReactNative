@@ -11,17 +11,15 @@ function LocalVideoMute() {
   const {muteLocalVideo} = localBtnStyles || {};
   const {dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
-  const muted = !local.video;
 
   return (
     <BtnTemplate
-      name={muted ? 'videocamOff' : 'videocam'}
+      name={local.video ? 'videocam' : 'videocamOff'}
       style={{...styles.localBtn, ...(muteLocalVideo as object)}}
       onPress={() => {
-        let newState = !muted;
         (dispatch as DispatchType<'LocalMuteVideo'>)({
           type: 'LocalMuteVideo',
-          value: [newState],
+          value: [local.video],
         });
       }}
     />

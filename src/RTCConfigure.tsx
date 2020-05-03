@@ -133,7 +133,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         );
         const LocalAudioMute = (user: UidInterface) => {
           if (user.uid === 'local') {
-            user.audio = (action as ActionType<'LocalMuteAudio'>).value[0];
+            user.audio = !(action as ActionType<'LocalMuteAudio'>).value[0];
           }
           return user;
         };
@@ -148,7 +148,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         );
         const LocalVideoMute = (user: UidInterface) => {
           if (user.uid === 'local') {
-            user.video = (action as ActionType<'LocalMuteVideo'>).value[0];
+            user.video = !(action as ActionType<'LocalMuteVideo'>).value[0];
           }
           return user;
         };
@@ -204,34 +204,40 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         //Request required permissions from Android
         await requestCameraAndAudioPermission();
       }
-      engine.current = await RtcEngine.create(rtcProps.appId);
-      engine.current.enableVideo();
-      engine.current.addListener('UserJoined', (...args) => {
-        //Get current peer IDs
-        (dispatch as DispatchType<'UserJoined'>)({
-          type: 'UserJoined',
-          value: args,
+      try {
+        engine.current = await RtcEngine.create(rtcProps.appId);
+        console.log(engine.current);
+        await engine.current.enableVideo();
+        engine.current.addListener('UserJoined', (...args) => {
+          //Get current peer IDs
+          (dispatch as DispatchType<'UserJoined'>)({
+            type: 'UserJoined',
+            value: args,
+          });
         });
-      });
 
-      engine.current.addListener('UserOffline', (...args) => {
-        //If user leaves
-        (dispatch as DispatchType<'UserOffline'>)({
-          type: 'UserOffline',
-          value: args,
+        engine.current.addListener('UserOffline', (...args) => {
+          //If user leaves
+          (dispatch as DispatchType<'UserOffline'>)({
+            type: 'UserOffline',
+            value: args,
+          });
         });
-      });
-      (joinRes as (arg0: boolean) => void)(true);
-      setReady(true);
+        (joinRes as (arg0: boolean) => void)(true);
+        setReady(true);
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     if (joinRes) {
       init();
       return () => {
-        RtcEngine.instance().destroy();
+        (engine.current as RtcEngine).destroy();
       };
     }
-  }, [rtcProps.appId, joinRes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rtcProps.appId]);
 
   // Dynamically switches channel when channel prop changes
   useEffect(() => {
@@ -250,7 +256,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     }
     join();
     return () => {
-      canJoin.current = RtcEngine.instance()
+      canJoin.current = (engine.current as RtcEngine)
         .leaveChannel()
         .catch((err: any) => console.log(err));
     };

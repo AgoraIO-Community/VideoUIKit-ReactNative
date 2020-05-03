@@ -59,8 +59,8 @@ export interface CallbacksInterface
 
 export interface PropsInterface {
   rtcProps: RtcPropsInterface;
-  styleProps?: StylePropInterface;
-  callbacks?: CallbacksInterface;
+  styleProps?: Partial<StylePropInterface>;
+  callbacks?: Partial<CallbacksInterface>;
 }
 
 const initialValue: PropsInterface = {
