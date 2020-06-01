@@ -1,50 +1,67 @@
-import React, {useState, useContext} from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
-import {RtcLocalView, RtcRemoteView, Types} from 'react-native-agora';
+import React, { useState, useContext } from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { RtcLocalView, RtcRemoteView, Types } from 'react-native-agora';
 import styles from './Style';
 import icons from './Controls/Icons';
 import RemoteControls from './Controls/RemoteControls';
 import PropsContext from './PropsContext';
-import {UidInterface} from './RtcContext';
+import { UidInterface } from './RtcContext';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
-const {VideoRenderMode} = Types;
+const { VideoRenderMode } = Types;
 
 interface MinViewInterface {
   user: UidInterface;
   color?: string;
+  showOverlay?: boolean;
 }
 
 const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const [overlay, setOverlay] = useState(false);
-  const {styleProps} = useContext(PropsContext);
-  const {minViewStyles, theme, remoteBtnStyles} = styleProps || {};
-  const {minCloseBtnStyles} = remoteBtnStyles || {};
-
+  const { styleProps } = useContext(PropsContext);
+  const { minViewStyles, theme, remoteBtnStyles } = styleProps || {};
+  const { minCloseBtnStyles } = remoteBtnStyles || {};
+  const { showOverlay } = props || {};
+  
   return (
-    <View style={{margin: 5}}>
-      <TouchableOpacity onPress={() => setOverlay(true)}>
-        {props.user.uid === 'local' ? (
+    <View style={{ margin: 5 }}>
+      {overlay && showOverlay ?
+        <TouchableOpacity onPress={() => setOverlay(true)}>
+          {props.user.uid === 'local' ? (
+            <LocalView
+              style={{ ...styles.minView, ...(minViewStyles as object) }}
+              renderMode={VideoRenderMode.Hidden}
+              zOrderMediaOverlay={true}
+            />
+          ) : (
+              <RemoteView
+                style={{ ...styles.minView, ...(minViewStyles as object) }}
+                uid={props.user.uid as number}
+                renderMode={VideoRenderMode.Hidden}
+                zOrderMediaOverlay={true}
+              />
+            )}
+        </TouchableOpacity>
+        : props.user.uid === 'local' ? (
           <LocalView
-            style={{...styles.minView, ...(minViewStyles as object)}}
+            style={{ ...styles.minView, ...(minViewStyles as object) }}
             renderMode={VideoRenderMode.Hidden}
             zOrderMediaOverlay={true}
           />
         ) : (
-          <RemoteView
-            style={{...styles.minView, ...(minViewStyles as object)}}
-            uid={props.user.uid as number}
-            renderMode={VideoRenderMode.Hidden}
-            zOrderMediaOverlay={true}
-          />
-        )}
-      </TouchableOpacity>
+            <RemoteView
+              style={{ ...styles.minView, ...(minViewStyles as object) }}
+              uid={props.user.uid as number}
+              renderMode={VideoRenderMode.Hidden}
+              zOrderMediaOverlay={true}
+            />
+          )}
 
-      {overlay ? (
+      {overlay && showOverlay ? (
         <View style={styles.minOverlay}>
           <TouchableOpacity
-            style={{...styles.minCloseBtn, ...(minCloseBtnStyles as object)}}
+            style={{ ...styles.minCloseBtn, ...(minCloseBtnStyles as object) }}
             onPress={() => setOverlay(!overlay)}>
             <Image
               style={{
@@ -52,15 +69,14 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
                 height: 25,
                 tintColor: theme || props.color || '#fff',
               }}
-              source={{uri: icons.close}}
+              source={{ uri: icons.close }}
             />
           </TouchableOpacity>
-
           <RemoteControls showRemoteSwap={true} user={props.user} />
         </View>
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </View>
   );
 };
