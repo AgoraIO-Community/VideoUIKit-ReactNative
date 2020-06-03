@@ -11,9 +11,10 @@ import {MaxUidConsumer} from '../MaxUidContext';
 import PropsContext from '../PropsContext';
 import LocalUserContextComponent from '../LocalUserContext';
 
-function Controls() {
+function Controls(props) {
   const {styleProps} = useContext(PropsContext);
   const {localBtnContainer} = styleProps || {};
+  const showButton = props.showButton !== undefined ? props.showButton : true;
   return (
     <LocalUserContextComponent>
       <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
@@ -23,7 +24,7 @@ function Controls() {
         <SwitchCamera />
         <FullScreen />
       </View>
-      <MaxUidConsumer>
+      {showButton ? <MaxUidConsumer>
         {(users) => (
           <View
             style={{...styles.Controls, bottom: styles.Controls.bottom + 70}}>
@@ -31,6 +32,8 @@ function Controls() {
           </View>
         )}
       </MaxUidConsumer>
+      : <></>
+      }
     </LocalUserContextComponent>
   );
 }
