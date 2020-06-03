@@ -12,6 +12,8 @@ import MaxVideoView from './src/MaxVideoView';
 import MinVideoView from './src/MinVideoView';
 import RtcConfigure from "./src/RTCConfigure";
 import BtnTemplate from "./src/Controls/BtnTemplate";
+import Recording from './src/Controls/Local/Recording';
+import Screenshare from './src/Controls/Local/Screenshare';
 
 export {
   Endcall,
@@ -27,5 +29,7 @@ export {
   MaxVideoView,
   MinVideoView,
   RtcConfigure,
-  BtnTemplate
+  BtnTemplate,
+  Recording,
+  Screenshare,
 };
