@@ -20,14 +20,14 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   return props.user.uid === 'local' ? (
     <LocalView
       style={{...styles.fullView, ...(maxViewStyles as object)}}
-      renderMode={VideoRenderMode.Hidden}
+      renderMode={VideoRenderMode.Fit}
     />
   ) : (
     <>
       <RemoteView
         style={{...styles.fullView, ...(maxViewStyles as object)}}
         uid={props.user.uid as number}
-        renderMode={VideoRenderMode.Hidden}
+        renderMode={VideoRenderMode.Fit}
       />
     </>
   );
