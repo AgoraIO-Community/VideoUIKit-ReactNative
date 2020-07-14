@@ -1,16 +1,35 @@
-export { Endcall } from './src/Controls/Local/EndCall';
-export { FullScreen } from './src/Controls/Local/FullScreen';
-export { LocalAudioMute } from './src/Controls/Local/LocalAudioMute';
-export { LocalVideoMute } from './src/Controls/Local/LocalVideoMute';
-export { SwitchCamera } from './src/Controls/Local/SwitchCamera';
-export { LocalControls } from './src/Controls/LocalControls';
-export { RemoteAudioMute } from './src/Controls/Remote/RemoteAudioMute';
-export { RemoteSwap } from './src/Controls/Remote/RemoteSwap';
-export { RemoteVideoMute } from './src/Controls/Remote/RemoteVideoMute';
-export { RemoteControls } from './src/Controls/RemoteControls';
-export { MaxVideoView } from './src/MaxVideoView';
-export { MinVideoView } from './src/MinVideoView';
+import Endcall from './src/Controls/Local/EndCall';
+import FullScreen from './src/Controls/Local/FullScreen';
+import LocalAudioMute from './src/Controls/Local/LocalAudioMute';
+import LocalVideoMute from './src/Controls/Local/LocalVideoMute';
+import SwitchCamera from './src/Controls/Local/SwitchCamera';
+import Controls from './src/Controls/LocalControls';
+import RemoteAudioMute from './src/Controls/Remote/RemoteAudioMute';
+import RemoteSwap from './src/Controls/Remote/RemoteSwap';
+import RemoteVideoMute from './src/Controls/Remote/RemoteVideoMute';
+import RemoteControls from './src/Controls/RemoteControls';
+import MaxVideoView from './src/MaxVideoView';
+import MinVideoView from './src/MinVideoView';
+import RtcConfigure from "./src/RTCConfigure";
+import BtnTemplate from "./src/Controls/BtnTemplate";
+import Recording from './src/Controls/Local/Recording';
+import Screenshare from './src/Controls/Local/Screenshare';
 
-
-
-
+export {
+  Endcall,
+  FullScreen,
+  LocalAudioMute,
+  LocalVideoMute,
+  SwitchCamera,
+  Controls,
+  RemoteAudioMute,
+  RemoteSwap,
+  RemoteVideoMute,
+  RemoteControls,
+  MaxVideoView,
+  MinVideoView,
+  RtcConfigure,
+  BtnTemplate,
+  Recording,
+  Screenshare,
+};
