@@ -40,7 +40,9 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   let canJoin = useRef(new Promise<boolean | void>((res) => (joinRes = res)));
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine | null>(null);
-
+  let {callActive} = props;
+  callActive === undefined ? (callActive = true) : {};
+  
   const reducer = (
     state: UidStateInterface,
     action: ActionInterface<keyof CallbacksInterface, CallbacksInterface>,
@@ -254,13 +256,21 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         console.error('trying to join before RTC Engine was initialized');
       }
     }
-    join();
+    if (callActive) {
+      join();
+      console.log('Attempted join: ', rtcProps.channel);
+    } else {
+      console.log('In precall - waiting to join');
+    }
     return () => {
-      canJoin.current = (engine.current as RtcEngine)
-        .leaveChannel()
-        .catch((err: any) => console.log(err));
+      if (callActive) {
+        console.log('Leaving channel');
+        canJoin.current = (engine.current as RtcEngine)
+          .leaveChannel()
+          .catch((err: any) => console.log(err));
+      }
     };
-  }, [rtcProps.channel, rtcProps.uid, rtcProps.token]);
+  }, [rtcProps.channel, rtcProps.uid, rtcProps.token, callActive]);
 
   return (
     <RtcProvider value={{RtcEngine: engine.current as RtcEngine, dispatch}}>
