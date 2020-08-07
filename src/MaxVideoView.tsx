@@ -1,13 +1,11 @@
 import React, {useContext} from 'react';
-import {RtcLocalView, RtcRemoteView} from 'react-native-agora';
+import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from './Style';
-import {Types} from 'react-native-agora';
 import PropsContext from './PropsContext';
 import {UidInterface} from './RtcContext';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
-const {VideoRenderMode} = Types;
 
 interface MaxViewInterface {
   user: UidInterface;

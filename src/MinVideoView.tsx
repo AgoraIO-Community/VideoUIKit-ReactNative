@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import { RtcLocalView, RtcRemoteView, Types } from 'react-native-agora';
+import { RtcLocalView, RtcRemoteView, VideoRenderMode } from 'react-native-agora';
 import styles from './Style';
 import icons from './Controls/Icons';
 import RemoteControls from './Controls/RemoteControls';
@@ -9,7 +9,6 @@ import { UidInterface } from './RtcContext';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
-const { VideoRenderMode } = Types;
 
 interface MinViewInterface {
   user: UidInterface;
