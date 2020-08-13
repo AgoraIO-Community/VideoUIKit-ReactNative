@@ -42,7 +42,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   let engine = useRef<RtcEngine | null>(null);
   let {callActive} = props;
   callActive === undefined ? (callActive = true) : {};
-  
+
   const reducer = (
     state: UidStateInterface,
     action: ActionInterface<keyof CallbacksInterface, CallbacksInterface>,
@@ -162,6 +162,45 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       case 'SwitchCamera':
         (engine.current as RtcEngine).switchCamera();
         break;
+      case 'RemoteAudioStateChanged':
+        let audioState;
+        if (action.value[1] === 0) {
+          audioState = false;
+        } else if (action.value[1] === 2) {
+          audioState = true;
+        }
+        const audioChange = (user: UidInterface) => {
+          if (user.uid == action.value[0]) {
+            user.audio = audioState;
+            user.video = user.video;
+          }
+          return user;
+        };
+        stateUpdate = {
+          min: state.min.map(audioChange),
+          max: state.max.map(audioChange),
+        };
+        break;
+      case 'RemoteVideoStateChanged':
+        let videoState;
+        let logx= action.value;
+        if (action.value[1] === 0) {
+          videoState = false;
+        } else if (action.value[1] === 2) {
+          videoState = true;
+        }
+        const videoChange = (user: UidInterface) => {
+          if (user.uid == action.value[0]) {
+            user.video = videoState;
+            user.audio = user.audio;
+          }
+          return user;
+        };
+        stateUpdate = {
+          min: state.min.map(videoChange),
+          max: state.max.map(videoChange),
+        };
+        break;
     }
 
     // Handle event listeners
@@ -171,10 +210,10 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       callbacks[action.type].apply(null, action.value);
       console.log('callback executed');
     } else {
-      console.log('callback not found', props);
+      // console.log('callback not found', action.type);
     }
 
-    console.log(state, action, stateUpdate);
+    // console.log(state, action, stateUpdate);
 
     return {
       ...state,
@@ -225,6 +264,21 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             value: args,
           });
         });
+
+        engine.current.addListener('RemoteAudioStateChanged', (...args) => {
+          (dispatch as DispatchType<'RemoteAudioStateChanged'>)({
+            type: 'RemoteAudioStateChanged',
+            value: args,
+          });
+        });
+
+        engine.current.addListener('RemoteVideoStateChanged', (...args) => {
+          dispatch({
+            type: 'RemoteVideoStateChanged',
+            value: args,
+          });
+        });
+
         (joinRes as (arg0: boolean) => void)(true);
         setReady(true);
       } catch (e) {
