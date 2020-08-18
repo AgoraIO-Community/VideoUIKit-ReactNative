@@ -249,6 +249,10 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         engine.current = await RtcEngine.create(rtcProps.appId);
         console.log(engine.current);
         await engine.current.enableVideo();
+        if (rtcProps.dual) {
+          await engine.current.enableDualStreamMode();
+          await engine.current.setRemoteSubscribeFallbackOption(1);
+        }
         engine.current.addListener('UserJoined', (...args) => {
           //Get current peer IDs
           (dispatch as DispatchType<'UserJoined'>)({

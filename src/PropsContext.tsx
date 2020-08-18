@@ -40,6 +40,7 @@ export interface RtcPropsInterface {
   channel: string;
   uid?: number;
   token?: string | null;
+  dual?: boolean | null;
 }
 
 export interface CustomCallbacksInterface {
