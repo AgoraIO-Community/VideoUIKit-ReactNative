@@ -31,10 +31,14 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
       onPress={props.onPress}>
       <Image
         style={{
-          width: 25,
-          height: 25,
-          tintColor: theme || props.color || '#fff',
+          width: 42,
+          height: 42,
+          tintColor:
+            props.name !== 'callEnd'
+              ? theme || props.color || '#fff'
+              : '#f97365',
         }}
+        resizeMode={'contain'}
         source={{uri: icons[props.name]}}
       />
     </TouchableOpacity>

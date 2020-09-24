@@ -3,6 +3,7 @@ import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from './Style';
 import PropsContext from './PropsContext';
 import {UidInterface} from './RtcContext';
+import {View} from 'react-native';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
@@ -16,10 +17,14 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {maxViewStyles} = styleProps || {};
 
   return props.user.uid === 'local' ? (
-    <LocalView
-      style={{...styles.fullView, ...(maxViewStyles as object)}}
-      renderMode={VideoRenderMode.Fit}
-    />
+    props.user.video ? (
+      <LocalView
+        style={{...styles.fullView, ...(maxViewStyles as object)}}
+        renderMode={VideoRenderMode.Fit}
+      />
+    ) : (
+      <View style={{flex: 1, backgroundColor: '#000'}} />
+    )
   ) : (
     <>
       <RemoteView

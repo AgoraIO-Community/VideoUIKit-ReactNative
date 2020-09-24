@@ -5,7 +5,7 @@ import styles from './Style';
 import icons from './Controls/Icons';
 import RemoteControls from './Controls/RemoteControls';
 import PropsContext from './PropsContext';
-import { UidInterface } from './RtcContext';
+import {UidInterface} from './RtcContext';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
@@ -28,11 +28,15 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
       {overlay && showOverlay ?
         <TouchableOpacity onPress={() => setOverlay(true)}>
           {props.user.uid === 'local' ? (
-            <LocalView
-              style={{ ...styles.minView, ...(minViewStyles as object) }}
-              renderMode={VideoRenderMode.Hidden}
-              zOrderMediaOverlay={true}
-            />
+            props.user.video ? (
+              <LocalView
+                style={{ ...styles.minView, ...(minViewStyles as object) }}
+                renderMode={VideoRenderMode.Hidden}
+                zOrderMediaOverlay={true}
+              />
+            ) : (
+              <View style={{flex: 1, backgroundColor: '#000'}} />
+            )
           ) : (
               <RemoteView
                 style={{ ...styles.minView, ...(minViewStyles as object) }}
