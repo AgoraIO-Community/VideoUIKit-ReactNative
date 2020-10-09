@@ -249,10 +249,21 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         engine.current = await RtcEngine.create(rtcProps.appId);
         console.log(engine.current);
         await engine.current.enableVideo();
+
         if (rtcProps.dual) {
           await engine.current.enableDualStreamMode(rtcProps.dual);
           await engine.current.setRemoteSubscribeFallbackOption(1);
         }
+
+        if (
+          rtcProps.encryption &&
+          rtcProps.encryption.key &&
+          rtcProps.encryption.mode
+        ) {
+          await engine.current.setEncryptionSecret(rtcProps.encryption.key);
+          await engine.current.setEncryptionMode(rtcProps.encryption.mode);
+        }
+
         engine.current.addListener('UserJoined', (...args) => {
           //Get current peer IDs
           (dispatch as DispatchType<'UserJoined'>)({

@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/RtcEvents';
+import { EncryptionMode } from 'react-native-agora';
 
 interface UidInterface {
   // TODO: refactor local to 0 and remove string.
@@ -41,6 +42,13 @@ export interface RtcPropsInterface {
   uid?: number;
   token?: string | null;
   dual?: boolean | null;
+  encryption?: {
+    key: string;
+    mode:
+      | EncryptionMode.AES128XTS
+      | EncryptionMode.AES256XTS
+      | EncryptionMode.AES128ECB;
+  };
 }
 
 export interface CustomCallbacksInterface {
