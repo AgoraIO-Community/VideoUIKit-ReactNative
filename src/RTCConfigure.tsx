@@ -255,15 +255,6 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           await engine.current.setRemoteSubscribeFallbackOption(1);
         }
 
-        if (
-          rtcProps.encryption &&
-          rtcProps.encryption.key &&
-          rtcProps.encryption.mode
-        ) {
-          await engine.current.setEncryptionSecret(rtcProps.encryption.key);
-          await engine.current.setEncryptionMode(rtcProps.encryption.mode);
-        }
-
         engine.current.addListener('UserJoined', (...args) => {
           //Get current peer IDs
           (dispatch as DispatchType<'UserJoined'>)({
@@ -285,6 +276,10 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             type: 'RemoteAudioStateChanged',
             value: args,
           });
+        });
+
+        engine.current.addListener('Error', (e) => {
+          console.log('Error: ', e);
         });
 
         engine.current.addListener('RemoteVideoStateChanged', (...args) => {
@@ -314,6 +309,15 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   useEffect(() => {
     async function join() {
       await canJoin.current;
+      if (
+        rtcProps.encryption &&
+        rtcProps.encryption.key &&
+        rtcProps.encryption.mode
+      ) {
+        console.log('using channel encryption', rtcProps.encryption);
+        await engine.current.setEncryptionSecret(rtcProps.encryption.key);
+        await engine.current.setEncryptionMode(rtcProps.encryption.mode);
+      }
       if (engine.current) {
         engine.current.joinChannel(
           rtcProps.token || null,
