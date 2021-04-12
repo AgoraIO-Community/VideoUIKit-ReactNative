@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/RtcEvents';
 import { EncryptionMode } from 'react-native-agora';
-
+import {VideoProfile} from './quality';
 interface UidInterface {
   // TODO: refactor local to 0 and remove string.
   uid: number | string;
@@ -42,6 +42,7 @@ export interface RtcPropsInterface {
   uid?: number;
   token?: string | null;
   dual?: boolean | null;
+  profile?: VideoProfile;
   encryption?: {
     key: string;
     mode:

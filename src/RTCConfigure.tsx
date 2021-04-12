@@ -5,7 +5,7 @@ import React, {
   useContext,
   useRef,
 } from 'react';
-import RtcEngine from 'react-native-agora';
+import RtcEngine, {VideoEncoderConfiguration} from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from './permission';
 import {
@@ -22,6 +22,7 @@ import PropsContext, {
 } from './PropsContext';
 import {MinUidProvider} from './MinUidContext';
 import {MaxUidProvider} from './MaxUidContext';
+import quality from './quality';
 
 const initialState: UidStateInterface = {
   min: [],
@@ -183,7 +184,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         break;
       case 'RemoteVideoStateChanged':
         let videoState;
-        let logx= action.value;
+        let logx = action.value;
         if (action.value[1] === 0) {
           videoState = false;
         } else if (action.value[1] === 2) {
@@ -248,6 +249,18 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       try {
         engine.current = await RtcEngine.create(rtcProps.appId);
         console.log(engine.current);
+        if (rtcProps.profile) {
+          if (Platform.OS === 'web') {
+            // @ts-ignore
+            await engine.current.setVideoProfile(rtcProps.profile);
+          } else {
+            const config: VideoEncoderConfiguration = quality[rtcProps.profile];
+            await engine.current.setVideoEncoderConfiguration({
+              ...config,
+              bitrate: 0,
+            });
+          }
+        }
         await engine.current.enableVideo();
 
         if (rtcProps.dual) {
