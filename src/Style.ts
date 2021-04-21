@@ -27,8 +27,8 @@ export default StyleSheet.create({
     color: '#fff',
   },
   fullView: {
-    width: dimensions.width,
-    height: dimensions.height,
+    width: '100%', //dimensions.width,
+    height: '100%', //dimensions.height,
   },
   minView: {
     width: 240,
@@ -44,9 +44,9 @@ export default StyleSheet.create({
   },
   Controls: {
     position: 'absolute',
-    bottom: 70,
+    bottom: 25,
     left: 0,
-    width: dimensions.width,
+    width: '100%',
     height: 70,
     zIndex: 10,
     display: 'flex',

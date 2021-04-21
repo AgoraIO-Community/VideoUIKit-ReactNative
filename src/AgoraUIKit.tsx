@@ -1,41 +1,22 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import RtcConfigure from './RTCConfigure';
-import MaxVideoView from './MaxVideoView';
-import MinVideoView from './MinVideoView';
-import {MinUidConsumer} from './MinUidContext';
-import {MaxUidConsumer} from './MaxUidContext';
-import {PropsProvider, PropsInterface} from './PropsContext';
-
-import styles from './Style';
+import {PropsProvider, PropsInterface, layout, role} from './PropsContext';
 import LocalControls from './Controls/LocalControls';
-
-// import console = require('console');
+import GridVideo from './GridVideo';
+import PinnedVideo from './PinnedVideo';
 
 const AgoraUIKit: React.FC<PropsInterface> = (props) => {
   return (
     <PropsProvider value={props}>
-      <View>
+      <View style={props.styleProps?.UIKitContainer}>
         <RtcConfigure>
-          <MaxUidConsumer>
-            {(maxUsers) => (
-              <MaxVideoView user={maxUsers[0]} key={maxUsers[0].uid} />
-            )}
-          </MaxUidConsumer>
-
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            style={styles.minContainer}>
-            <MinUidConsumer>
-              {(minUsers) =>
-                minUsers.map((user) => (
-                  <MinVideoView user={user} key={user.uid} />
-                ))
-              }
-            </MinUidConsumer>
-          </ScrollView>
-          <LocalControls />
+          {props.rtcProps?.layout === layout.grid ? (
+            <GridVideo />
+          ) : (
+            <PinnedVideo />
+          )}
+          <LocalControls showButton={props.rtcProps.layout !== layout.grid} />
         </RtcConfigure>
       </View>
     </PropsProvider>
