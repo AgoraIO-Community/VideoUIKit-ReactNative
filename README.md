@@ -20,19 +20,17 @@ npm i react-native-agora agora-rn-uikit
 
 1.  Connect your Android device to system with debugging on 
 2.  Type adb devices to verify if the device is connected 
-3.  Navigate to the frontend directory `agora-app-builder/<projectName>/` in a terminal 
-4.  Run `npm start` – This will start the development server 
-5.  Open another terminal in the same folder 
-6.  Run `npm run android` - This will deploy the app on the Android device. (Now, the app will connect our development server)
-7.  Note Android simulators are not recommended since they might not be able to access camera and mic.
+3.  Run `npm start` – This will start the development server 
+4.  Open another terminal in the same folder 
+5.  Run `npm run android` - This will deploy the app on the Android device. (Now, the app will connect our development server)
+6.  Note Android simulators are not recommended since they might not be able to access camera and mic.
 
 ### Instructions for running on IOS:
 
 1.  Connect an IOS device to system, create an apple developer account and register your device with apple for development.
 2.  Run `npx pod-install` to download the necessary pods.
-3.  Open the `.xcworkspace` file located in `<projectName>/ios` folder using XCode.
+3.  Open the `.xcworkspace` file located in `ios` folder using XCode.
 4.  Open the info tab and add the following: 
-
     1.  **Privacy Camera description** - Camera permission
     2.  **Privacy Microphone description** - Mic permission
 5.  Configure code signing: https://reactnative.dev/docs/running-on-device#2-configure-code-signing
