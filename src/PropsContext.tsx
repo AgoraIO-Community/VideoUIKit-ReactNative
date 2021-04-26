@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/RtcEvents';
-import { EncryptionMode } from 'react-native-agora';
+import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from './quality';
 interface UidInterface {
   // TODO: refactor local to 0 and remove string.
@@ -36,6 +36,12 @@ interface StylePropInterface {
   localBtnContainer?: StyleProp<ViewStyle>;
 }
 
+export enum DualStreamMode {
+  HIGH,
+  LOW,
+  DYNAMIC,
+}
+
 export interface RtcPropsInterface {
   appId: string;
   channel: string;
@@ -43,6 +49,7 @@ export interface RtcPropsInterface {
   token?: string | null;
   dual?: boolean | null;
   profile?: VideoProfile;
+  initialDualStreamMode: DualStreamMode;
   encryption?: {
     key: string;
     mode:
@@ -61,6 +68,7 @@ export interface CustomCallbacksInterface {
   UserMuteRemoteVideo(user: UidInterface, muted: UidInterface['video']): void;
   LocalMuteAudio(muted: boolean): void;
   LocalMuteVideo(muted: boolean): void;
+  UpdateDualStreamMode(mode: DualStreamMode): void;
 }
 
 export interface CallbacksInterface

@@ -4,6 +4,7 @@ import React, {
   useReducer,
   useContext,
   useRef,
+  useCallback,
 } from 'react';
 import RtcEngine, {VideoEncoderConfiguration} from 'react-native-agora';
 import {Platform} from 'react-native';
@@ -19,6 +20,7 @@ import {
 import PropsContext, {
   RtcPropsInterface,
   CallbacksInterface,
+  DualStreamMode,
 } from './PropsContext';
 import {MinUidProvider} from './MinUidContext';
 import {MaxUidProvider} from './MaxUidContext';
@@ -31,6 +33,7 @@ const initialState: UidStateInterface = {
       uid: 'local',
       audio: true,
       video: true,
+      streamType: 'high',
     },
   ],
 };
@@ -41,6 +44,9 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   let canJoin = useRef(new Promise<boolean | void>((res) => (joinRes = res)));
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine | null>(null);
+  let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
+    rtcProps.initialDualStreamMode || DualStreamMode.DYNAMIC,
+  );
   let {callActive} = props;
   callActive === undefined ? (callActive = true) : {};
 
@@ -52,6 +58,42 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       uids = [...state.max, ...state.min].map((u: UidInterface) => u.uid);
 
     switch (action.type) {
+      case 'UpdateDualStreamMode':
+        const newMode = (action as ActionType<'UpdateDualStreamMode'>).value[0];
+        if (newMode === DualStreamMode.HIGH) {
+          const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
+            ...user,
+            streamType: 'high',
+          }));
+          const minStateUpdate: UidInterface[] = state.min.map((user) => ({
+            ...user,
+            streamType: 'high',
+          }));
+          stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+        }
+        if (newMode === DualStreamMode.LOW) {
+          const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
+            ...user,
+            streamType: 'low',
+          }));
+          const minStateUpdate: UidInterface[] = state.min.map((user) => ({
+            ...user,
+            streamType: 'low',
+          }));
+          stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+        }
+        if (newMode === DualStreamMode.DYNAMIC) {
+          const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
+            ...user,
+            streamType: 'high',
+          }));
+          const minStateUpdate: UidInterface[] = state.min.map((user) => ({
+            ...user,
+            streamType: 'low',
+          }));
+          stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+        }
+        break;
       case 'UserJoined':
         if (
           uids.indexOf((action as ActionType<'UserJoined'>).value[0]) === -1
@@ -64,11 +106,17 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
               uid: (action as ActionType<'UserJoined'>).value[0],
               audio: true,
               video: true,
+              streamType:
+                dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default
             },
           ]; //By default add to minimized
 
           if (minUpdate.length === 1 && state.max[0].uid === 'local') {
             //Only one remote and local is maximized
+            //Change stream type to high if dualStreaMode is DYNAMIC
+            if (dualStreamMode === DualStreamMode.DYNAMIC) {
+              minUpdate[0].streamType = 'high';
+            }
             //Swap max and min
             stateUpdate = {
               max: minUpdate,
@@ -81,7 +129,9 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             };
           }
 
-          console.log('new user joined!\n', state, stateUpdate);
+          console.log('new user joined!\n', state, stateUpdate, {
+            dualStreamMode,
+          });
         }
         break;
       case 'UserOffline':
@@ -222,23 +272,58 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     };
   };
 
-  const swapVideo = (state: UidStateInterface, ele: UidInterface) => {
-    let newState: UidStateInterface = {
-      min: [],
-      max: [],
-    };
-    newState.min = state.min.filter((e) => e !== ele);
-    if (state.max[0].uid === 'local') {
-      newState.min.unshift(state.max[0]);
-    } else {
-      newState.min.push(state.max[0]);
-    }
-    newState.max = [ele];
+  const swapVideo = useCallback(
+    (state: UidStateInterface, ele: UidInterface) => {
+      let newState: UidStateInterface = {
+        min: [],
+        max: [],
+      };
+      // Remove the minimized element which is being swapped out
+      newState.min = state.min.filter((e) => e !== ele);
 
-    return newState;
-  };
+      let maxEle = state.max[0]; // Element which is currently maximized
+      let minEle = ele;
 
+      if (dualStreamMode === DualStreamMode.DYNAMIC) {
+        maxEle.streamType = 'low'; // set stream quality to low
+        minEle.streamType = 'high'; // set stream quality to high
+
+        // No need to modify the streamType if the mode is not dynamic
+      }
+
+      if (maxEle.uid === 'local') {
+        newState.min.unshift(maxEle);
+      } else {
+        newState.min.push(maxEle);
+      }
+      newState.max = [minEle];
+
+      return newState;
+    },
+    [dualStreamMode],
+  );
   const [uidState, dispatch] = useReducer(reducer, initialState);
+
+  // When mode is updated, reducer is triggered to update the individual states
+  useEffect(() => {
+    (dispatch as DispatchType<'UpdateDualStreamMode'>)({
+      type: 'UpdateDualStreamMode',
+      value: [dualStreamMode],
+    });
+  }, [dualStreamMode]);
+
+  useEffect(() => {
+    const setStreamType = (user: UidInterface) => {
+      if (user.uid !== 'local') {
+        engine.current?.setRemoteVideoStreamType(
+          user.uid as number,
+          user.streamType === 'high' ? 0 : 1,
+        );
+      }
+    };
+    uidState.max.map(setStreamType);
+    uidState.min.map(setStreamType);
+  }, [uidState.min, uidState.max]);
 
   useEffect(() => {
     async function init() {
@@ -263,10 +348,20 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         }
         await engine.current.enableVideo();
 
-        if (rtcProps.dual) {
-          await engine.current.enableDualStreamMode(rtcProps.dual);
-          await engine.current.setRemoteSubscribeFallbackOption(1);
-        }
+        engine.current.addListener('JoinChannelSuccess', async (...args) => {
+          //Get current peer IDs
+          (dispatch as DispatchType<'JoinChannelSuccess'>)({
+            type: 'JoinChannelSuccess',
+            value: args,
+          });
+
+          console.log('UIkit enabling dual stream', rtcProps.dual);
+          if (rtcProps.dual) {
+            console.log('UIkit enabled dual stream');
+            await engine.current.enableDualStreamMode(rtcProps.dual);
+            await engine.current.setRemoteSubscribeFallbackOption(1);
+          }
+        });
 
         engine.current.addListener('UserJoined', (...args) => {
           //Get current peer IDs
@@ -332,7 +427,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         await engine.current.setEncryptionMode(rtcProps.encryption.mode);
       }
       if (engine.current) {
-        engine.current.joinChannel(
+        await engine.current.joinChannel(
           rtcProps.token || null,
           rtcProps.channel,
           null,
@@ -359,7 +454,12 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   }, [rtcProps.channel, rtcProps.uid, rtcProps.token, callActive]);
 
   return (
-    <RtcProvider value={{RtcEngine: engine.current as RtcEngine, dispatch}}>
+    <RtcProvider
+      value={{
+        RtcEngine: engine.current as RtcEngine,
+        dispatch,
+        setDualStreamMode,
+      }}>
       <MaxUidProvider value={uidState.max}>
         <MinUidProvider value={uidState.min}>
           {

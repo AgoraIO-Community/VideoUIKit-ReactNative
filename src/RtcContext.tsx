@@ -1,12 +1,13 @@
 import React, {Dispatch} from 'react';
 import {CallbacksInterface} from './PropsContext';
 import RtcEngine from 'react-native-agora';
-
+import type {DualStreamMode} from './PropsContext';
 export interface UidInterface {
   // TODO: refactor local to 0 and remove string.
   uid: number | string;
   audio: boolean;
   video: boolean;
+  streamType: 'high' | 'low';
 }
 
 export interface UidStateInterface {
@@ -34,6 +35,7 @@ export type ActionType<T extends keyof CallbacksInterface> = ActionInterface<
 export interface RtcContextInterface {
   RtcEngine: RtcEngine;
   dispatch: DispatchType<keyof CallbacksInterface>;
+  setDualStreamMode: React.Dispatch<React.SetStateAction<DualStreamMode>>;
 }
 
 const RtcContext = React.createContext<RtcContextInterface>(
