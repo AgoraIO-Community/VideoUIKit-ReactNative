@@ -5,6 +5,7 @@ import React, {
   useContext,
   useRef,
   useCallback,
+  useDebugValue,
 } from 'react';
 import RtcEngine, {VideoEncoderConfiguration} from 'react-native-agora';
 import {Platform} from 'react-native';
@@ -40,6 +41,7 @@ const initialState: UidStateInterface = {
 
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   const [ready, setReady] = useState<boolean>(false);
+  useDebugValue(ready, (ready) => `ready to join ${String(ready)}`);
   let joinRes: ((arg0: boolean) => void) | null = null;
   let canJoin = useRef(new Promise<boolean | void>((res) => (joinRes = res)));
   const {callbacks, rtcProps} = useContext(PropsContext);
@@ -312,18 +314,18 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     });
   }, [dualStreamMode]);
 
-  useEffect(() => {
-    const setStreamType = (user: UidInterface) => {
-      if (user.uid !== 'local') {
-        engine.current?.setRemoteVideoStreamType(
-          user.uid as number,
-          user.streamType === 'high' ? 0 : 1,
-        );
-      }
-    };
-    uidState.max.map(setStreamType);
-    uidState.min.map(setStreamType);
-  }, [uidState.min, uidState.max]);
+  // useEffect(() => {
+  //   const setStreamType = (user: UidInterface) => {
+  //     if (user.uid !== 'local') {
+  //       engine.current?.setRemoteVideoStreamType(
+  //         user.uid as number,
+  //         user.streamType === 'high' ? 0 : 1,
+  //       );
+  //     }
+  //   };
+  //   uidState.max.map(setStreamType);
+  //   uidState.min.map(setStreamType);
+  // }, [uidState.min, uidState.max]);
 
   useEffect(() => {
     async function init() {
@@ -346,7 +348,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             });
           }
         }
-        await engine.current.enableVideo();
+        // await engine.current.enableVideo();
 
         engine.current.addListener('JoinChannelSuccess', async (...args) => {
           //Get current peer IDs
@@ -400,7 +402,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         (joinRes as (arg0: boolean) => void)(true);
         setReady(true);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
 
