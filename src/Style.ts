@@ -1,10 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
-
-let dimensions = {
-  //get dimensions of the device to use in view styles
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   max: {
@@ -27,8 +21,8 @@ export default StyleSheet.create({
     color: '#fff',
   },
   fullView: {
-    width: '100%', //dimensions.width,
-    height: '100%', //dimensions.height,
+    width: '100%',
+    height: '100%',
   },
   minView: {
     width: 240,
@@ -40,7 +34,7 @@ export default StyleSheet.create({
     left: 0,
     padding: 0,
     margin: 0,
-    width: dimensions.width,
+    height: 145,
   },
   Controls: {
     position: 'absolute',
@@ -104,11 +98,11 @@ export default StyleSheet.create({
     backgroundColor: '#007aff',
   },
   endCall: {
-    borderRadius: 30,
+    borderRadius: 23,
     borderWidth: 4 * StyleSheet.hairlineWidth,
-    borderColor: '#ff0000',
-    width: 60,
-    height: 60,
-    backgroundColor: '#ff0000',
+    borderColor: '#f14',
+    width: 46,
+    height: 46,
+    backgroundColor: '#f14',
   },
 });

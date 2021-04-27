@@ -10,10 +10,12 @@ import RemoteVideoMute from './src/Controls/Remote/RemoteVideoMute';
 import RemoteControls from './src/Controls/RemoteControls';
 import MaxVideoView from './src/MaxVideoView';
 import MinVideoView from './src/MinVideoView';
-import RtcConfigure from "./src/RTCConfigure";
-import BtnTemplate from "./src/Controls/BtnTemplate";
-import Recording from './src/Controls/Local/Recording';
-import Screenshare from './src/Controls/Local/Screenshare';
+import RtcConfigure from './src/RTCConfigure';
+import BtnTemplate from './src/Controls/BtnTemplate';
+// import Recording from './src/Controls/Local/Recording';
+// import Screenshare from './src/Controls/Local/Screenshare';
+import PinnedVideo from './src/PinnedVideo';
+import GridVideo from './src/GridVideo';
 
 export {
   Endcall,
@@ -30,6 +32,8 @@ export {
   MinVideoView,
   RtcConfigure,
   BtnTemplate,
-  Recording,
-  Screenshare,
+  // Recording,
+  // Screenshare,
+  PinnedVideo,
+  GridVideo,
 };

@@ -13,7 +13,7 @@ import LocalUserContextComponent from '../LocalUserContext';
 
 function Controls(props) {
   const {styleProps, rtcProps} = useContext(PropsContext);
-  const {localBtnContainer} = styleProps || {};
+  const {localBtnContainer, maxViewRemoteBtnContainer} = styleProps || {};
   const showButton = props.showButton !== undefined ? props.showButton : true;
   return (
     <LocalUserContextComponent>
@@ -24,9 +24,9 @@ function Controls(props) {
           <>
             <LocalAudioMute />
             <LocalVideoMute />
-            <EndCall />
             <SwitchCamera />
-            <FullScreen />
+            <EndCall />
+            {/* <FullScreen /> */}
           </>
         )}
       </View>
@@ -34,7 +34,11 @@ function Controls(props) {
         <MaxUidConsumer>
           {(users) => (
             <View
-              style={{...styles.Controls, bottom: styles.Controls.bottom + 70}}>
+              style={{
+                ...styles.Controls,
+                bottom: styles.Controls.bottom + 70,
+                ...(maxViewRemoteBtnContainer as object),
+              }}>
               <RemoteControls user={users[0]} showRemoteSwap={false} />
             </View>
           )}

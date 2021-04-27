@@ -19,7 +19,7 @@ interface BtnTemplateInterface {
 
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
-  const {BtnTemplateStyles, theme} = styleProps || {};
+  const {BtnTemplateStyles, theme, iconSize} = styleProps || {};
 
   return (
     <TouchableOpacity
@@ -31,8 +31,8 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
       onPress={props.onPress}>
       <Image
         style={{
-          width: 25,
-          height: 25,
+          width: iconSize || 25,
+          height: iconSize || 25,
           tintColor: theme || props.color || '#fff',
         }}
         source={{uri: icons[props.name]}}

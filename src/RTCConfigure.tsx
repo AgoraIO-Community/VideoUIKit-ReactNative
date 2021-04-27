@@ -46,8 +46,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     max: [
       {
         uid: 'local',
-        audio: rtcProps.enableAudio ? rtcProps.enableAudio : true, //bug - check from prop
-        video: rtcProps.enableVideo ? rtcProps.enableVideo : true, //bug - check from prop (rtcProps.defaultAudioEnabled)
+        audio: rtcProps.enableAudio === false ? false : true,
+        video: rtcProps.enableVideo === false ? false : true,
       },
     ],
   };
@@ -88,30 +88,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
               min: minUpdate,
             };
           }
-
-          // if (rtcProps.manualDualStream === 2) {
-          //   if (uids.length > 1) {
-          //     engine.current?.setRemoteVideoStreamType(
-          //       (action as ActionType<'UserJoined'>).value[0],
-          //       VideoStreamType.Low,
-          //     );
-          //   }
-          // } else if (rtcProps.manualDualStream === 1) {
-          //   if (uids.length > 1) {
-          //     engine.current?.setRemoteVideoStreamType(
-          //       (action as ActionType<'UserJoined'>).value[0],
-          //       VideoStreamType.High,
-          //     );
-          //   }
-          // } else if (rtcProps.manualDualStream === 0) {
-          //   if (uids.length > 1) {
-          //     engine.current?.setRemoteVideoStreamType(
-          //       (action as ActionType<'UserJoined'>).value[0],
-          //       VideoStreamType.Low,
-          //     );
-          //   }
-          // }
-          console.log('new user joined!\n');
+          console.log('new user joined!\n', action.value[0]);
         }
         break;
       case 'UserOffline':
@@ -157,21 +134,16 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           });
         break;
       case 'ActiveSpeaker':
-        // console.log('speak: ', state, action.value[0]);
-        // convert into for each / map
-        let users = [...state.max, ...state.min];
-        let swapUid = action.value[0];
-        users.forEach((user) => {
-          if (user.uid === swapUid) {
-            stateUpdate = swapVideo(state, user);
-          }
-        });
-        // for (let i = 0; i < users.length; i++) {
-        //   if (users[i].uid === swapUid) {
-        //     stateUpdate = swapVideo(state, users[i]);
-        //     break;
-        //   }
-        // }
+        console.log('speak: ', action.value[0]);
+        if (state.max[0].uid !== action.value[0]) {
+          let users = [...state.max, ...state.min];
+          let swapUid = action.value[0] as number;
+          users.forEach((user) => {
+            if (user.uid === swapUid) {
+              stateUpdate = swapVideo(state, user);
+            }
+          });
+        }
         break;
       case 'UserMuteRemoteAudio':
         const audioMute = (user: UidInterface) => {
@@ -236,8 +208,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           max: [
             {
               uid: 'local',
-              audio: rtcProps.enableAudio ? rtcProps.enableAudio : true,
-              video: rtcProps.enableVideo ? rtcProps.enableVideo : true,
+              audio: rtcProps.enableAudio === false ? false : true,
+              video: rtcProps.enableVideo === false ? false : true,
             },
           ],
         };
@@ -264,27 +236,12 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       max: [],
     };
     newState.min = state.min.filter((e) => e !== ele);
-    // if (rtcProps.manualDualStream === 2) {
-    //   if (ele.uid !== 'local') {
-    //     engine.current?.setRemoteVideoStreamType(
-    //       ele.uid as number,
-    //       VideoStreamType.High,
-    //     );
-    //   }
-    // }
     if (state.max[0].uid === 'local') {
       newState.min.unshift(state.max[0]);
     } else {
       newState.min.push(state.max[0]);
-      // if (rtcProps.manualDualStream === 2) {
-      //   engine.current?.setRemoteVideoStreamType(
-      //     state.max[0].uid as number,
-      //     VideoStreamType.Low,
-      //   );
-      // }
     }
     newState.max = [ele];
-
     return newState;
   };
 
@@ -327,7 +284,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         });
 
         /* ActiveSpeaker */
-        if (rtcProps.activeSpeaker && rtcProps.layout === layout.pin) {
+        if (rtcProps.activeSpeaker && rtcProps.layout !== layout.grid) {
           console.log('ActiveSpeaker enabled');
           await engine.current.enableAudioVolumeIndication(1000, 3, false);
           engine.current.addListener('ActiveSpeaker', (...args) => {
@@ -391,6 +348,18 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         } else {
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
+        /* enableVideo */
+        if (rtcProps.enableVideo === false) {
+          engine.current?.muteLocalVideoStream(true);
+        } else {
+          engine.current?.muteLocalVideoStream(false);
+        }
+        /* enableAudio */
+        if (rtcProps.enableAudio === false) {
+          engine.current?.muteLocalAudioStream(true);
+        } else {
+          engine.current?.muteLocalAudioStream(false);
+        }
         /* Token URL */
         if (rtcProps.tokenUrl) {
           const UID = rtcProps.uid || 0;
@@ -440,28 +409,35 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           .catch((err: any) => console.log(err));
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     rtcProps.channel,
     rtcProps.uid,
     rtcProps.token,
     callActive,
     rtcProps.tokenUrl,
-    rtcProps.role,
+    // rtcProps.role, (don't rejoin channel, uses toggleRole function to switch role)
     rtcProps.mode,
     rtcProps.enableDualStream,
+    // rtcProps.enableVideo, (don't rejoin channel, only used for initialization)
+    // rtcProps.enableAudio, (don't rejoin channel, only used for initialization)
   ]);
 
-  // disable local video if audience
-  // useEffect(() => {
-  //   if (
-  //     (rtcProps.role === role.Audience) ||
-  //     rtcProps.enableVideo === false
-  //   ) {
-  //     engine.current?.enableLocalVideo(false);
-  //   } else {
-  //     engine.current?.enableLocalVideo(true);
-  //   }
-  // }, [rtcProps.mode, rtcProps.role, rtcProps.enableVideo]);
+  useEffect(() => {
+    const toggleRole = async () => {
+      if (rtcProps.mode === mode.LiveBroadcasting) {
+        await engine.current?.setChannelProfile(
+          ChannelProfile.LiveBroadcasting,
+        );
+        await engine.current?.setClientRole(
+          rtcProps.role === role.Audience
+            ? ClientRole.Audience
+            : ClientRole.Broadcaster,
+        );
+      }
+    };
+    toggleRole();
+  }, [rtcProps.mode, rtcProps.role]);
 
   return (
     <RtcProvider value={{RtcEngine: engine.current as RtcEngine, dispatch}}>

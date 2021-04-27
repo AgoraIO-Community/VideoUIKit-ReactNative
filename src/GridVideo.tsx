@@ -1,9 +1,15 @@
-import React, {useContext, useMemo, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import MaxVideoView from './MaxVideoView';
 import MinUidContext from './MinUidContext';
 import MaxUidContext from './MaxUidContext';
-import PropsContext, {mode, role} from './PropsContext';
+import PropsContext, {role} from './PropsContext';
 
 const layout = (len: number, isDesktop: boolean = true) => {
   console.log('layout');
@@ -24,19 +30,26 @@ const layout = (len: number, isDesktop: boolean = true) => {
   };
 };
 
-const GridVideo = () => {
+const GridVideo: React.FC = () => {
   console.log('re render grid');
   const max = useContext(MaxUidContext);
   const min = useContext(MinUidContext);
-  const {rtcProps} = useContext(PropsContext);
+  const {rtcProps, styleProps} = useContext(PropsContext);
   const users =
     rtcProps.role === role.Audience
       ? [...max, ...min].filter((user) => user.uid !== 'local')
       : [...max, ...min];
   let onLayout = (e: any) => {
-    setDim([e.nativeEvent.layout.width, e.nativeEvent.layout.height]);
+    setDim([
+      e.nativeEvent.layout.width,
+      e.nativeEvent.layout.height,
+      e.nativeEvent.layout.width > e.nativeEvent.layout.height,
+    ]);
   };
-  const [dim, setDim] = useState([
+  const [dim, setDim]: [
+    [number, number, boolean],
+    Dispatch<SetStateAction<[number, number, boolean]>>,
+  ] = useState([
     Dimensions.get('window').width,
     Dimensions.get('window').height,
     Dimensions.get('window').width > Dimensions.get('window').height,
@@ -52,7 +65,11 @@ const GridVideo = () => {
         <View style={style.gridRow} key={ridx}>
           {r.map((c, cidx) => (
             <View style={style.col} key={cidx}>
-              <View style={style.gridVideoContainerInner}>
+              <View
+                style={{
+                  ...style.gridVideoContainerInner,
+                  ...(styleProps?.gridVideoView as object),
+                }}>
                 {rtcProps.role === role.Audience &&
                 users[ridx * dims.c + cidx].uid === 'local' ? null : (
                   <MaxVideoView

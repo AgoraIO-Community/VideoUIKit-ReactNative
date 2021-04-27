@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import RtcConfigure from './RTCConfigure';
-import {PropsProvider, PropsInterface, layout, role} from './PropsContext';
+import {PropsProvider, PropsInterface, layout} from './PropsContext';
 import LocalControls from './Controls/LocalControls';
 import GridVideo from './GridVideo';
 import PinnedVideo from './PinnedVideo';
