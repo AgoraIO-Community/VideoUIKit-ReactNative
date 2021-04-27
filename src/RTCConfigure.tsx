@@ -348,7 +348,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             });
           }
         }
-        // await engine.current.enableVideo();
+        await engine.current.enableVideo();
 
         engine.current.addListener('JoinChannelSuccess', async (...args) => {
           //Get current peer IDs
