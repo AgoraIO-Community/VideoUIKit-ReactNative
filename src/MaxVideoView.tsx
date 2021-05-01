@@ -10,7 +10,9 @@ const RemoteView = RtcRemoteView.SurfaceView;
 interface MaxViewInterface {
   user: UidInterface;
 }
-
+/**
+ * MaxViewView takes in a user
+ */
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
   const {maxViewStyles, videoMode} = styleProps || {};

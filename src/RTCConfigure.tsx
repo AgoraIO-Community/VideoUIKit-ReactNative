@@ -6,11 +6,7 @@ import React, {
   useContext,
   useRef,
 } from 'react';
-import RtcEngine, {
-  ChannelProfile,
-  ClientRole,
-  StreamFallbackOptions,
-} from 'react-native-agora';
+import RtcEngine, {ChannelProfile, ClientRole} from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from './permission';
 import {
@@ -32,6 +28,10 @@ import {MinUidProvider} from './MinUidContext';
 import {MaxUidProvider} from './MaxUidContext';
 // useeffect -> if audience enablelocalvideo(false);
 
+/**
+ * The RtcConfigre component handles the logic for the video experience.
+ * It's a collection of providers to wrap your components that need access to user data or engine dispatch
+ */
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   const {callbacks, rtcProps} = useContext(PropsContext);
   const [ready, setReady] = useState<boolean>(false);
@@ -326,15 +326,6 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     async function join() {
       await canJoin.current;
       if (engine.current) {
-        /* Dual Stream */
-        if (rtcProps.enableDualStream === true) {
-          await engine.current.enableDualStreamMode(rtcProps.enableDualStream);
-          await engine.current.setRemoteSubscribeFallbackOption(
-            StreamFallbackOptions.VideoStreamLow,
-          );
-        } else if (rtcProps.enableDualStream === false) {
-          await engine.current.enableDualStreamMode(rtcProps.enableDualStream);
-        }
         /* Live Streaming */
         if (rtcProps.mode === mode.LiveBroadcasting) {
           await engine.current.setChannelProfile(
@@ -418,11 +409,29 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     rtcProps.tokenUrl,
     // rtcProps.role, (don't rejoin channel, uses toggleRole function to switch role)
     rtcProps.mode,
-    rtcProps.enableDualStream,
     // rtcProps.enableVideo, (don't rejoin channel, only used for initialization)
     // rtcProps.enableAudio, (don't rejoin channel, only used for initialization)
   ]);
 
+  /* Dual Stream */
+  useEffect(() => {
+    const toggleDualStream = async () => {
+      if (rtcProps.dualStreamMode) {
+        await engine.current?.enableDualStreamMode(true);
+        await engine.current?.setRemoteSubscribeFallbackOption(
+          rtcProps.dualStreamMode,
+        );
+        await engine.current?.setLocalPublishFallbackOption(
+          rtcProps.dualStreamMode,
+        );
+      } else {
+        await engine.current?.enableDualStreamMode(false);
+      }
+    };
+    toggleDualStream();
+  }, [rtcProps.dualStreamMode]);
+
+  /* Live Stream Role */
   useEffect(() => {
     const toggleRole = async () => {
       if (rtcProps.mode === mode.LiveBroadcasting) {

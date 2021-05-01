@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
-import {VideoRenderMode} from 'react-native-agora/src/common/Enums';
+import {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
 import {RtcEngineEvents} from 'react-native-agora/src/common/RtcEvents';
 
 interface UidInterface {
@@ -52,11 +52,7 @@ interface localBtnStylesInterface {
   fullScreen?: StyleProp<ViewStyle>;
 }
 
-interface StylePropInterface {
-  /**
-   * Color tint for icons
-   */
-  theme?: string;
+export interface StylePropInterface {
   /**
    * Sets the scaling of the video
    */
@@ -67,7 +63,15 @@ interface StylePropInterface {
   /**
    * Color tint for icons
    */
+  theme?: string;
+  /**
+   * Color tint for icons
+   */
   iconSize?: number;
+  /**
+   * Custom base64 string for icon
+   */
+  customIcon?: Partial<IconsInterface>;
   /**
    * Globals style for the local buttons (except end call)
    */
@@ -147,10 +151,14 @@ export interface RtcPropsInterface {
    * Once set to true, the UI Kit attempts to join the channel. Can be set to false to initialise the SDK and wait before joining the channel. (default: true)
    */
   callActive?: boolean;
+  // enableDualStream?: boolean;
+  // /**
+  //  * Enables dual stream mode. (default: false)
+  //  */
   /**
-   * Enables dual stream mode. (default: false)
+   * Enable dual stream mode with selected fallback option. (default: disabled)
    */
-  enableDualStream?: boolean;
+  dualStreamMode?: StreamFallbackOptions;
   /**
    * Choose between grid layout and pinned layout. (default: pinned layout)
    */
@@ -258,6 +266,20 @@ export interface PropsInterface {
    * Callbacks for different functions of the UI Kit
    */
   callbacks?: Partial<CallbacksInterface>;
+}
+
+export interface IconsInterface {
+  // fullscreen: string;
+  videocam: string;
+  videocamOff: string;
+  mic: string;
+  micOff: string;
+  switchCamera: string;
+  callEnd: string;
+  remoteSwap: string;
+  close: string;
+  // recording: string;
+  // screenshare: string;
 }
 
 const initialValue: PropsInterface = {

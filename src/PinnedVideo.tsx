@@ -5,7 +5,7 @@ import MinVideoView from './MinVideoView';
 import {MinUidConsumer} from './MinUidContext';
 import {MaxUidConsumer} from './MaxUidContext';
 import styles from './Style';
-import LocalControls from './Controls/LocalControls';
+// import LocalControls from './Controls/LocalControls';
 import PropsContext, {role} from './PropsContext';
 
 const PinnedVideo: React.FC = () => {
@@ -18,7 +18,7 @@ const PinnedVideo: React.FC = () => {
     });
   });
 
-  console.log(styleProps?.minViewContainer);
+  // console.log(styleProps?.minViewContainer);
   return (
     <>
       <MaxUidConsumer>
@@ -46,7 +46,7 @@ const PinnedVideo: React.FC = () => {
           }
         </MinUidConsumer>
       </ScrollView>
-      <LocalControls />
+      {/* <LocalControls /> */}
     </>
   );
 };

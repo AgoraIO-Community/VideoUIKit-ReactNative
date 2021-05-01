@@ -6,9 +6,9 @@ import {
   TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
-import PropsContext from './../PropsContext';
+import PropsContext, {IconsInterface} from './../PropsContext';
 import styles from '../Style';
-import icons, {IconsInterface} from './Icons';
+import icons from './Icons';
 
 interface BtnTemplateInterface {
   name: keyof IconsInterface;
@@ -19,7 +19,7 @@ interface BtnTemplateInterface {
 
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
-  const {BtnTemplateStyles, theme, iconSize} = styleProps || {};
+  const {BtnTemplateStyles, theme, iconSize, customIcon} = styleProps || {};
 
   return (
     <TouchableOpacity
@@ -35,7 +35,11 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           height: iconSize || 25,
           tintColor: theme || props.color || '#fff',
         }}
-        source={{uri: icons[props.name]}}
+        source={{
+          uri: customIcon?.[props.name]
+            ? customIcon[props.name]
+            : icons[props.name],
+        }}
       />
     </TouchableOpacity>
   );
