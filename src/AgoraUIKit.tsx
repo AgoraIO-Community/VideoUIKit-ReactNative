@@ -1,3 +1,6 @@
+/**
+ * @module AgoraUIKit
+ */
 import React from 'react';
 import {View} from 'react-native';
 import RtcConfigure from './RTCConfigure';
@@ -6,6 +9,10 @@ import LocalControls from './Controls/LocalControls';
 import GridVideo from './GridVideo';
 import PinnedVideo from './PinnedVideo';
 
+/**
+ * High level component to render the UI Kit
+ * @param props {@link PropsInterface}
+ */
 const AgoraUIKit: React.FC<PropsInterface> = (props) => {
   return (
     <PropsProvider value={props}>

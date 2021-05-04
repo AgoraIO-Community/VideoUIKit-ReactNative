@@ -32,7 +32,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const {showOverlay} = props || {};
 
   return (
-    <View style={{margin: 5}}>
+    <View style={{marginRight: 5}}>
       {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
           {props.user.uid === 'local' ? (

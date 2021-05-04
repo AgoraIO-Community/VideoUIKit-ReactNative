@@ -1,9 +1,8 @@
 /**
- * @format
+ * @module agora-rn-uikit
  */
-
 import AgoraUIKit from './src/AgoraUIKit';
-export {StreamFallbackOptions} from 'react-native-agora';
+export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
 export {
   layout,
   role,
@@ -13,4 +12,5 @@ export {
   CallbacksInterface,
   PropsInterface,
 } from './src/PropsContext';
+
 export default AgoraUIKit;

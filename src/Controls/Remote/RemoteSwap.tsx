@@ -11,7 +11,7 @@ interface RemoteSwapInterface {
 const RemoteSwap: React.FC<RemoteSwapInterface> = (props) => {
   const {dispatch} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
-  const {remoteBtnStyles} = styleProps || {};
+  const {remoteBtnStyles, theme} = styleProps || {};
   const {remoteSwap} = remoteBtnStyles || {};
 
   return (
@@ -19,8 +19,14 @@ const RemoteSwap: React.FC<RemoteSwapInterface> = (props) => {
       name={'remoteSwap'}
       style={
         props.user.uid !== 'local'
-          ? {...styles.rightRemoteBtn, ...(remoteSwap as object)}
-          : {}
+          ? {
+              ...styles.rightRemoteBtn,
+              borderColor: theme ? theme : styles.leftRemoteBtn.borderColor,
+              ...(remoteSwap as object),
+            }
+          : {
+              ...(remoteSwap as object),
+            }
       }
       onPress={() => {
         (dispatch as DispatchType<'SwapVideo'>)({

@@ -3,6 +3,9 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
 import {RtcEngineEvents} from 'react-native-agora/src/common/RtcEvents';
 
+/**
+ * The user object
+ */
 interface UidInterface {
   // TODO: refactor local to 0 and remove string.
   uid: number | string;
@@ -10,6 +13,9 @@ interface UidInterface {
   video: boolean;
 }
 
+/**
+ * Remote Buttons styles
+ */
 interface remoteBtnStylesInterface {
   /**
    * Style for the remote mute audio button
@@ -29,6 +35,9 @@ interface remoteBtnStylesInterface {
   minCloseBtnStyles?: StyleProp<ViewStyle>;
 }
 
+/**
+ * Local Buttons styles
+ */
 interface localBtnStylesInterface {
   /**
    * Style for the local mute audio button
@@ -46,12 +55,11 @@ interface localBtnStylesInterface {
    * Style for the end call button
    */
   endCall?: StyleProp<ViewStyle>;
-  /**
-   * Style for the fullscreen button
-   */
-  fullScreen?: StyleProp<ViewStyle>;
 }
 
+/**
+ * Props object for customising the UI Kit, takes in react native styling
+ */
 export interface StylePropInterface {
   /**
    * Sets the scaling of the video
@@ -122,6 +130,9 @@ export interface StylePropInterface {
   UIKitContainer?: StyleProp<ViewStyle>;
 }
 
+/**
+ * Props object for customising the UI Kit functionality
+ */
 export interface RtcPropsInterface {
   /**
    * Agora App ID - used to authenticate the request
@@ -181,6 +192,9 @@ export interface RtcPropsInterface {
   enableVideo?: boolean;
 }
 
+/**
+ * Select a pre built layout
+ */
 export enum layout {
   /**
    * 0: Grid layout: each user occupies a cell in the grid
@@ -191,6 +205,10 @@ export enum layout {
    */
   pin = 1,
 }
+
+/**
+ * User role for live streaming mode
+ */
 export enum role {
   /**
    * 1: A host can both send and receive streams.
@@ -201,6 +219,10 @@ export enum role {
    */
   Audience = 2,
 }
+
+/**
+ * Mode for RTC (Live or Broadcast)
+ */
 export enum mode {
   /**
    * 0: (Default) The Communication profile.
@@ -219,10 +241,6 @@ export interface CustomCallbacksInterface {
    * Callback for EndCall
    */
   EndCall(): void;
-  /**
-   * Callback for Fullscreen
-   */
-  FullScreen(): void;
   /**
    * Callback for SwitchCamera
    */
@@ -268,18 +286,42 @@ export interface PropsInterface {
   callbacks?: Partial<CallbacksInterface>;
 }
 
+/**
+ * Custom Icons require a base64 endcoded transparent PNG
+ */
 export interface IconsInterface {
-  // fullscreen: string;
+  /**
+   * Icon for Camera/Video mute in on state
+   */
   videocam: string;
+  /**
+   * Icon for Camera/Video mute in off state
+   */
   videocamOff: string;
+  /**
+   * Icon for Mic/Audio mute in on state
+   */
   mic: string;
+  /**
+   * Icon for Mic/Audio mute in off state
+   */
   micOff: string;
+  /**
+   * Icon to switch between device cameras
+   */
   switchCamera: string;
+  /**
+   * Icon to end the call
+   */
   callEnd: string;
+  /**
+   * Icon to swap the min user to max view
+   */
   remoteSwap: string;
+  /**
+   * Icon to close the overlay in floating layout
+   */
   close: string;
-  // recording: string;
-  // screenshare: string;
 }
 
 const initialValue: PropsInterface = {
