@@ -1,12 +1,16 @@
 /**
- * @format
+ * @module agora-rn-uikit
  */
-
-// import {AppRegistry} from 'react-native';
-// import App from './App';
-// import {name as appName} from './app.json';
-
-// AppRegistry.registerComponent(appName, () => App);
-
 import AgoraUIKit from './src/AgoraUIKit';
+export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
+export {
+  layout,
+  role,
+  mode,
+  RtcPropsInterface,
+  StylePropInterface,
+  CallbacksInterface,
+  PropsInterface,
+} from './src/PropsContext';
+
 export default AgoraUIKit;
