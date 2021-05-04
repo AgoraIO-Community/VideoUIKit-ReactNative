@@ -1,20 +1,54 @@
-<div style="text-align:center">
-<h1> Agora React Native UIKit</h1>
-<h6>Rapidly integrate video calling into your React Native applications with built in UI Elements.</h6>
-</div>
+# Agora UI Kit for React Native
+Instantly integrate Agora video calling or streaming into your React Native application.
+
+![img](UI%20Kit.png)
 
 ## Getting started
 
+### Requirements
+- [An Agora developer account](https://www.agora.io/en/blog/how-to-get-started-with-agora?utm_source=github&utm_repo=agora-ios-uikit)
+- Android or iOS Device
+- React Native Project
 
-**Important: Agora's react native SDK does NOT work with expo managed workflow. So this uikit WON'T work with expo apps either. This is because video calling SDKs require native modules which is not supported by expo and react native doesn't support WebRTC yet.**
+Expo manged workflow isn't supported as the library uses native modules. Either use react-native-cli or use the 'expo eject' command to convert your app from an expo-managed workflow to a bare workflow. Once you have an Agora developer account and an App ID, you're ready to use this library.
+
 
 ### Installation
-
 To a react-native application generated using react-native-cli, add the following:
 
 ```
 npm i react-native-agora agora-rn-uikit
 ```
+
+### Usage
+
+This UIKit is very simple to use and contains a high level component called `AgoraUIKit`. You can check out code explanation here.
+
+**A simple sample app integrating Agora UI Kit:**
+```javascript
+import React, {useState} from 'react';
+import AgoraUIKit from 'agora-rn-uikit';
+
+const App = () => {
+  const [videoCall, setVideoCall] = useState(true);
+  const rtcProps = {
+    appId: '<Agora App ID>',
+    channel: 'test',
+  };
+  const callbacks = {
+    EndCall: () => setVideoCall(false),
+  };
+  return videoCall ? (
+    <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
+  ) : (
+    <Text onPress={()=>setVideoCall(true)}>Start Call</Text>
+  );
+};
+
+export default App;
+```
+
+**Replace the `'<Agora App ID>'` with your own appID**. 
 
 ### Instructions for running on Android:
 
@@ -25,7 +59,7 @@ npm i react-native-agora agora-rn-uikit
 5.  Run `npm run android` - This will deploy the app on the Android device. (Now, the app will connect our development server)
 6.  Note Android simulators are not recommended since they might not be able to access camera and mic.
 
-### Instructions for running on IOS:
+### Instructions for running on iOS:
 
 1.  Connect an IOS device to system, create an apple developer account and register your device with apple for development.
 2.  Run `npx pod-install` to download the necessary pods.
@@ -37,32 +71,8 @@ npm i react-native-agora agora-rn-uikit
 6.  Run the project by clicking the Run button in Xcode 
 7.  Note Simulators won’t work since IOS simulator can’t access camera
 
-### Usage
+## Documentation
 
-This UIKit is very simple to use and contains a high level component called `AgoraUIKit`.
+For full documentation, see our [docs page](https://agoraio-community.github.io/ReactNative-UIKit/).
 
-**A simple sample app integrating Agora UI Kit:**
-```javascript
-import React, { useState } from 'react';
-import AgoraUIKit from 'agora-rn-uikit';
-
-const App = () => {
-  const [videoCall, setVideoCall] = useState(true);
-  const rtcProps = {
-    appId: '<-----App ID here----->',
-    channel: 'test',
-  };
-  const callbacks = {
-    EndCall: () => setVideoCall(false),
-  };
-  return videoCall ? (
-    <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
-  ) : (
-    <></>
-  );
-};
-
-export default App;
-```
-
-**Replace the `'<-----App ID here----->'` with your own appID**. You can get one by creating a project at https://sso.agora.io
+You can visit the [wiki](https://github.com/AgoraIO-Community/ReactNative-UIKit/wiki) for other examples and in depth guide.

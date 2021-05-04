@@ -267,6 +267,10 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           });
         });
 
+        engine.current.addListener('Error', (args: any) => {
+          console.log('error', args);
+        });
+
         engine.current.addListener('UserOffline', (...args) => {
           //If remote user leaves
           (dispatch as DispatchType<'UserOffline'>)({
