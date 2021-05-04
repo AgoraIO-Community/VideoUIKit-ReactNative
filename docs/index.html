@@ -1,0 +1,206 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>agora-rn-uikit</title>
+	<meta name="description" content="Documentation for agora-rn-uikit">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">agora-rn-uikit</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>agora-rn-uikit</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#agora-ui-kit-for-react-native" id="agora-ui-kit-for-react-native" style="color: inherit; text-decoration: none;">
+					<h1>Agora UI Kit for React Native</h1>
+				</a>
+				<p>Instantly integrate Agora video calling or streaming into your React Native application.</p>
+				<p><img src="UI%20Kit.png" alt="img"></p>
+				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+					<h2>Getting started</h2>
+				</a>
+				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
+					<h3>Requirements</h3>
+				</a>
+				<ul>
+					<li><a href="https://www.agora.io/en/blog/how-to-get-started-with-agora?utm_source=github&amp;utm_repo=agora-ios-uikit">An Agora developer account</a></li>
+					<li>Android or iOS Device</li>
+					<li>React Native Project</li>
+				</ul>
+				<p>Expo manged workflow isn&#39;t supported as the library uses native modules. Either use react-native-cli or use the &#39;expo eject&#39; command to convert your app from an expo-managed workflow to a bare workflow. Once you have an Agora developer account and an App ID, you&#39;re ready to use this library.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h3>Installation</h3>
+				</a>
+				<p>To a react-native application generated using react-native-cli, add the following:</p>
+				<pre><code><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">i</span><span style="color: #000000"> </span><span style="color: #001080">react</span><span style="color: #000000">-</span><span style="color: #001080">native</span><span style="color: #000000">-</span><span style="color: #001080">agora</span><span style="color: #000000"> </span><span style="color: #001080">agora</span><span style="color: #000000">-</span><span style="color: #001080">rn</span><span style="color: #000000">-</span><span style="color: #001080">uikit</span>
+</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h3>Usage</h3>
+				</a>
+				<p>This UIKit is very simple to use and contains a high level component called <code>AgoraUIKit</code>. You can check out code explanation here.</p>
+				<p><strong>A simple sample app integrating Agora UI Kit:</strong></p>
+				<pre><code class="language-javascript"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">React</span><span style="color: #000000">, {</span><span style="color: #001080">useState</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;react&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">AgoraUIKit</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;agora-rn-uikit&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">App</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">const</span><span style="color: #000000"> [</span><span style="color: #0070C1">videoCall</span><span style="color: #000000">, </span><span style="color: #0070C1">setVideoCall</span><span style="color: #000000">] = </span><span style="color: #795E26">useState</span><span style="color: #000000">(</span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">rtcProps</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #001080">appId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;&lt;Agora App ID&gt;&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #001080">channel:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;test&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">callbacks</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #795E26">EndCall</span><span style="color: #001080">:</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">setVideoCall</span><span style="color: #000000">(</span><span style="color: #0000FF">false</span><span style="color: #000000">),</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">videoCall</span><span style="color: #000000"> ? (</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">AgoraUIKit</span><span style="color: #000000"> </span><span style="color: #FF0000">rtcProps</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #001080">rtcProps</span><span style="color: #0000FF">}</span><span style="color: #000000"> </span><span style="color: #FF0000">callbacks</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #001080">callbacks</span><span style="color: #0000FF">}</span><span style="color: #000000"> </span><span style="color: #800000">/&gt;</span>
+<span style="color: #000000">  ) : (</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;</span><span style="color: #267F99">Text</span><span style="color: #000000"> </span><span style="color: #FF0000">onPress</span><span style="color: #000000">=</span><span style="color: #0000FF">{</span><span style="color: #000000FF">()</span><span style="color: #0000FF">=&gt;</span><span style="color: #795E26">setVideoCall</span><span style="color: #000000FF">(</span><span style="color: #0000FF">true</span><span style="color: #000000FF">)</span><span style="color: #0000FF">}</span><span style="color: #800000">&gt;</span><span style="color: #000000">Start Call</span><span style="color: #800000">&lt;/</span><span style="color: #267F99">Text</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  );</span>
+<span style="color: #000000">};</span>
+
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #001080">App</span><span style="color: #000000">;</span>
+</code></pre>
+				<p><strong>Replace the <code>&#39;&lt;Agora App ID&gt;&#39;</code> with your own appID</strong>. </p>
+				<a href="#instructions-for-running-on-android" id="instructions-for-running-on-android" style="color: inherit; text-decoration: none;">
+					<h3>Instructions for running on Android:</h3>
+				</a>
+				<ol>
+					<li> Connect your Android device to system with debugging on </li>
+					<li> Type adb devices to verify if the device is connected </li>
+					<li> Run <code>npm start</code> – This will start the development server </li>
+					<li> Open another terminal in the same folder </li>
+					<li> Run <code>npm run android</code> - This will deploy the app on the Android device. (Now, the app will connect our development server)</li>
+					<li> Note Android simulators are not recommended since they might not be able to access camera and mic.</li>
+				</ol>
+				<a href="#instructions-for-running-on-ios" id="instructions-for-running-on-ios" style="color: inherit; text-decoration: none;">
+					<h3>Instructions for running on iOS:</h3>
+				</a>
+				<ol>
+					<li> Connect an IOS device to system, create an apple developer account and register your device with apple for development.</li>
+					<li> Run <code>npx pod-install</code> to download the necessary pods.</li>
+					<li> Open the <code>.xcworkspace</code> file located in <code>ios</code> folder using XCode.</li>
+					<li>Open the info tab and add the following: <ol>
+							<li> <strong>Privacy Camera description</strong> - Camera permission</li>
+							<li> <strong>Privacy Microphone description</strong> - Mic permission</li>
+						</ol>
+					</li>
+					<li> Configure code signing: <a href="https://reactnative.dev/docs/running-on-device#2-configure-code-signing">https://reactnative.dev/docs/running-on-device#2-configure-code-signing</a></li>
+					<li> Run the project by clicking the Run button in Xcode </li>
+					<li> Note Simulators won’t work since IOS simulator can’t access camera</li>
+				</ol>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<p>For full documentation, see our <a href="https://agoraio-community.github.io/ReactNative-UIKit/">docs page</a>.</p>
+				<p>You can visit the <a href="https://github.com/AgoraIO-Community/ReactNative-UIKit/wiki">wiki</a> for other examples and in depth guide.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-is-external">
+						<a href="enums/streamfallbackoptions.html" class="tsd-kind-icon">Stream<wbr>Fallback<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-is-external">
+						<a href="enums/videorendermode.html" class="tsd-kind-icon">Video<wbr>Render<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/layout.html" class="tsd-kind-icon">layout</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/mode.html" class="tsd-kind-icon">mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/role.html" class="tsd-kind-icon">role</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/callbacksinterface.html" class="tsd-kind-icon">Callbacks<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/propsinterface.html" class="tsd-kind-icon">Props<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcpropsinterface.html" class="tsd-kind-icon">Rtc<wbr>Props<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/stylepropinterface.html" class="tsd-kind-icon">Style<wbr>Prop<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#default" class="tsd-kind-icon">default</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
