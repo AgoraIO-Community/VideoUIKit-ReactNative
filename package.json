@@ -13,9 +13,9 @@
   ],
   "license": "MIT",
   "files": [
-    "Components.js",
-    "Contexts.js",
-    "index.js",
+    "Components.ts",
+    "Contexts.ts",
+    "index.ts",
     "/src/**/*"
   ],
   "description": "Agora react native UI KIT. Rapidly integrate video calling into your React Native application with built in UI Elements.",
