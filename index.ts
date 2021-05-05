@@ -3,10 +3,8 @@
  */
 import AgoraUIKit from './src/AgoraUIKit';
 export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
-export {
-  layout,
-  role,
-  mode,
+export {layout, role, mode} from './src/PropsContext';
+export type {
   RtcPropsInterface,
   StylePropInterface,
   CallbacksInterface,
