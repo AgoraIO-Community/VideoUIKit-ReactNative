@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
-import {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
+import RtcEngine, {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
 import {RtcEngineEvents} from 'react-native-agora/src/common/RtcEvents';
 
 /**
@@ -284,6 +284,10 @@ export interface PropsInterface {
    * Callbacks for different functions of the UI Kit
    */
   callbacks?: Partial<CallbacksInterface>;
+  /**
+   * Function to expose the current RtcEngine instance (for example, to allow setting new event listeners)
+   */
+  setRtcEngine(engine: RtcEngine): void;
 }
 
 /**

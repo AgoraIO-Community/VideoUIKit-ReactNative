@@ -33,7 +33,7 @@ import {MaxUidProvider} from './MaxUidContext';
  * It's a collection of providers to wrap your components that need access to user data or engine dispatch
  */
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
-  const {callbacks, rtcProps} = useContext(PropsContext);
+  const {callbacks, rtcProps, setRtcEngine} = useContext(PropsContext);
   const [ready, setReady] = useState<boolean>(false);
   let joinRes: ((arg0: boolean) => void) | null = null;
   let canJoin = useRef(new Promise<boolean | void>((res) => (joinRes = res)));
@@ -256,6 +256,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       try {
         engine.current = await RtcEngine.create(rtcProps.appId);
         console.log(engine.current);
+        setRtcEngine(engine.current);
         await engine.current.enableVideo();
 
         /* Listeners */
