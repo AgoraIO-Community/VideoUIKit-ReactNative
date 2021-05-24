@@ -256,7 +256,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       try {
         engine.current = await RtcEngine.create(rtcProps.appId);
         console.log(engine.current);
-        setRtcEngine(engine.current);
+        setRtcEngine && setRtcEngine(engine.current);
         await engine.current.enableVideo();
 
         /* Listeners */
