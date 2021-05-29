@@ -106,8 +106,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             ...state.min,
             {
               uid: (action as ActionType<'UserJoined'>).value[0],
-              audio: true,
-              video: true,
+              audio: false,
+              video: false,
               streamType:
                 dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default
             },
