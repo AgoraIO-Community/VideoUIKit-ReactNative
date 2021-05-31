@@ -437,8 +437,12 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         rtcProps.encryption.mode
       ) {
         console.log('using channel encryption', rtcProps.encryption);
-        await engine.current.setEncryptionSecret(rtcProps.encryption.key);
-        await engine.current.setEncryptionMode(rtcProps.encryption.mode);
+        // await engine.current.setEncryptionSecret(rtcProps.encryption.key);
+        // await engine.current.setEncryptionMode(rtcProps.encryption.mode);
+        await engine.current.enableEncryption(true, {
+          encryptionKey: rtcProps.encryption.key,
+          encryptionMode: rtcProps.encryption.mode,
+        });
       }
       if (engine.current) {
         await engine.current.joinChannel(
