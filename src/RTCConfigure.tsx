@@ -429,12 +429,20 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         await engine.current.setEncryptionMode(rtcProps.encryption.mode);
       }
       if (engine.current) {
+        if(uidState.max[0].video){
+          await engine.current.muteLocalVideoStream(true);
+        }
+        
         await engine.current.joinChannel(
           rtcProps.token || null,
           rtcProps.channel,
           null,
           rtcProps.uid || 0,
         );
+        if(uidState.max[0].video){
+          await engine.current.muteLocalVideoStream(false);
+        }
+
       } else {
         console.error('trying to join before RTC Engine was initialized');
       }
