@@ -106,8 +106,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             ...state.min,
             {
               uid: (action as ActionType<'UserJoined'>).value[0],
-              audio: true,
-              video: true,
+              audio: false,
+              video: false,
               streamType:
                 dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default
             },
@@ -348,7 +348,19 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             });
           }
         }
-        await engine.current.enableVideo();
+        try {
+          await engine.current.enableVideo();
+        } catch (e) {
+          (dispatch as DispatchType<'LocalMuteAudio'>)({
+            type: 'LocalMuteAudio',
+            value: [true],
+          });
+          (dispatch as DispatchType<'LocalMuteVideo'>)({
+            type: 'LocalMuteVideo',
+            value: [true],
+          });
+          console.error('No devices', e);
+        }
 
         engine.current.addListener('JoinChannelSuccess', async (...args) => {
           //Get current peer IDs
@@ -361,7 +373,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           if (rtcProps.dual) {
             console.log('UIkit enabled dual stream');
             await engine.current.enableDualStreamMode(rtcProps.dual);
-            await engine.current.setRemoteSubscribeFallbackOption(1);
+            // await engine.current.setRemoteSubscribeFallbackOption(1);
           }
         });
 
@@ -425,8 +437,12 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         rtcProps.encryption.mode
       ) {
         console.log('using channel encryption', rtcProps.encryption);
-        await engine.current.setEncryptionSecret(rtcProps.encryption.key);
-        await engine.current.setEncryptionMode(rtcProps.encryption.mode);
+        // await engine.current.setEncryptionSecret(rtcProps.encryption.key);
+        // await engine.current.setEncryptionMode(rtcProps.encryption.mode);
+        await engine.current.enableEncryption(true, {
+          encryptionKey: rtcProps.encryption.key,
+          encryptionMode: rtcProps.encryption.mode,
+        });
       }
       if (engine.current) {
         if(uidState.max[0].video){
