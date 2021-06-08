@@ -7,7 +7,10 @@ import React, {
   useCallback,
   useDebugValue,
 } from 'react';
-import RtcEngine, {VideoEncoderConfiguration} from 'react-native-agora';
+import RtcEngine, {
+  VideoEncoderConfiguration,
+  AreaCode,
+} from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from './permission';
 import {
@@ -334,7 +337,14 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         await requestCameraAndAudioPermission();
       }
       try {
-        engine.current = await RtcEngine.create(rtcProps.appId);
+        if (Platform.OS === 'android' || Platform.OS === 'ios') {
+          engine.current = await RtcEngine.createWithAreaCode(
+            rtcProps.appId,
+            AreaCode.GLOB ^ AreaCode.CN,
+          );
+        } else {
+          engine.current = await RtcEngine.create(rtcProps.appId);
+        }
         console.log(engine.current);
         if (rtcProps.profile) {
           if (Platform.OS === 'web') {
@@ -394,6 +404,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         });
 
         engine.current.addListener('RemoteAudioStateChanged', (...args) => {
+          console.log('RemoteAudioStateChanged', args);
+
           (dispatch as DispatchType<'RemoteAudioStateChanged'>)({
             type: 'RemoteAudioStateChanged',
             value: args,
@@ -405,6 +417,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         });
 
         engine.current.addListener('RemoteVideoStateChanged', (...args) => {
+          console.log('RemoteVideoStateChanged', args);
+
           dispatch({
             type: 'RemoteVideoStateChanged',
             value: args,
@@ -432,6 +446,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     async function join() {
       await canJoin.current;
       if (
+        engine.current &&
         rtcProps.encryption &&
         rtcProps.encryption.key &&
         rtcProps.encryption.mode
