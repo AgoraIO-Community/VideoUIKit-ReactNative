@@ -15,6 +15,7 @@ function LocalAudioMute() {
   return (
     <BtnTemplate
       name={local.audio ? 'mic' : 'micOff'}
+      btnText={'Audio'}
       style={{...styles.localBtn, ...(muteLocalAudio as object)}}
       onPress={() => {
         (dispatch as DispatchType<'LocalMuteAudio'>)({

@@ -15,6 +15,7 @@ function LocalVideoMute() {
   return (
     <BtnTemplate
       name={local.video ? 'videocam' : 'videocamOff'}
+      btnText={'Video'}
       style={{...styles.localBtn, ...(muteLocalVideo as object)}}
       onPress={() => {
         (dispatch as DispatchType<'LocalMuteVideo'>)({

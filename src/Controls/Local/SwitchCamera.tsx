@@ -13,6 +13,7 @@ function SwitchCamera() {
     <BtnTemplate
       name={'switchCamera'}
       style={{...styles.localBtn, ...(switchCamera as object)}}
+      btnText={'Switch'}
       onPress={() => {
         // RtcEngine.switchCamera();
         (dispatch as DispatchType<'SwitchCamera'>)({
