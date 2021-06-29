@@ -48,7 +48,12 @@ const App = () => {
 export default App;
 ```
 
-**Replace the `'<Agora App ID>'` with your own appID**. 
+**Replace the `'<Agora App ID>'` with your own appID**.
+
+If you're using an App ID in secured mode, you'll need to pass in a token (you can generate a temporary token using the Agora console).
+
+### Demo Project
+There's a React Native UIKit demo [here](https://github.com/AgoraIO-Community/ReactNative-UIKit-example), and one with typescript [here](https://github.com/AgoraIO-Community/ReactNative-UIKit-example/tree/typescript).
 
 ### Instructions for running on Android:
 
