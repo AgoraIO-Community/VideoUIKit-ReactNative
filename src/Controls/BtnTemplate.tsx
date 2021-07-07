@@ -5,6 +5,8 @@ import {
   StyleProp,
   TouchableOpacityProps,
   ViewStyle,
+  Text,
+  View,
 } from 'react-native';
 import PropsContext from './../PropsContext';
 import styles from '../Style';
@@ -15,6 +17,7 @@ interface BtnTemplateInterface {
   color?: string;
   onPress?: TouchableOpacityProps['onPress'];
   style?: StyleProp<ViewStyle>;
+  btnText?: string;
 }
 
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
@@ -22,25 +25,37 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {BtnTemplateStyles, theme} = styleProps || {};
 
   return (
-    <TouchableOpacity
-      style={{
-        ...styles.controlBtn,
-        ...(BtnTemplateStyles as object),
-        ...(props.style as object),
-      }}
-      onPress={props.onPress}>
-      <Image
+    <TouchableOpacity onPress={props.onPress}>
+      <View
         style={{
-          width: '100%',
-          height: '100%',
-          tintColor:
+          ...styles.controlBtn,
+          ...(BtnTemplateStyles as object),
+          ...(props.style as object),
+        }}>
+        <Image
+          style={{
+            width: '100%',
+            height: '100%',
+            tintColor:
+              props.name !== 'callEnd'
+                ? theme || props.color || '#fff'
+                : '#FD0845',
+          }}
+          resizeMode={'contain'}
+          source={{uri: icons[props.name]}}
+        />
+      </View>
+      <Text
+        style={{
+          textAlign: 'center',
+          marginTop: 5,
+          color:
             props.name !== 'callEnd'
               ? theme || props.color || '#fff'
               : '#FD0845',
-        }}
-        resizeMode={'contain'}
-        source={{uri: icons[props.name]}}
-      />
+        }}>
+        {props.btnText}
+      </Text>
     </TouchableOpacity>
   );
 };

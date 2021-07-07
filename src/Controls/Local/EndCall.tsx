@@ -13,6 +13,7 @@ function EndCall() {
   return (
     <BtnTemplate
       name={'callEnd'}
+      btnText={'Hang Up'}
       style={{...styles.endCall, ...(endCall as object)}}
       onPress={() =>
         (dispatch as DispatchType<'EndCall'>)({
