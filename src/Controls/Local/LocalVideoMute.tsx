@@ -5,18 +5,30 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../LocalUserContext';
 
-function LocalVideoMute() {
+interface Props {
+  btnText?: string;
+  variant?: 'outlined' | 'text';
+}
+
+function LocalVideoMute(props: Props) {
+  const {btnText = 'Video', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
-  const {localBtnStyles} = styleProps || {};
+  const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalVideo} = localBtnStyles || {};
+  const {muteRemoteAudio} = remoteBtnStyles || {};
   const {dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
 
   return (
     <BtnTemplate
       name={local.video ? 'videocam' : 'videocamOff'}
-      btnText={'Video'}
-      style={{...styles.localBtn, ...(muteLocalVideo as object)}}
+      btnText={btnText}
+      style={{
+        ...styles.localBtn,
+        ...(variant === 'Outlined'
+          ? (muteLocalVideo as object)
+          : (muteRemoteAudio as object)),
+      }}
       onPress={() => {
         (dispatch as DispatchType<'LocalMuteVideo'>)({
           type: 'LocalMuteVideo',

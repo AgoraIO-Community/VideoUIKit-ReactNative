@@ -5,18 +5,29 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../LocalUserContext';
 
-function LocalAudioMute() {
+interface Props {
+  btnText?: string;
+  variant?: 'outlined' | 'text';
+}
+function LocalAudioMute(props: Props) {
+  const {btnText = 'Audio', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
-  const {localBtnStyles} = styleProps || {};
+  const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalAudio} = localBtnStyles || {};
+  const {muteRemoteAudio} = remoteBtnStyles || {};
   const {dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
 
   return (
     <BtnTemplate
       name={local.audio ? 'mic' : 'micOff'}
-      btnText={'Audio'}
-      style={{...styles.localBtn, ...(muteLocalAudio as object)}}
+      btnText={btnText}
+      style={{
+        ...styles.localBtn,
+        ...(variant === 'Outlined'
+          ? (muteLocalAudio as object)
+          : (muteRemoteAudio as object)),
+      }}
       onPress={() => {
         (dispatch as DispatchType<'LocalMuteAudio'>)({
           type: 'LocalMuteAudio',
