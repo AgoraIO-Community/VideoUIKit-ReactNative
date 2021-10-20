@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
-import PropsContext from '../../PropsContext';
-import RtcContext, {DispatchType} from '../../RtcContext';
+import PropsContext from '../../Contexts/PropsContext';
+import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
@@ -16,7 +16,7 @@ function EndCall() {
       btnText={'Hang Up'}
       style={{...styles.endCall, ...(endCall as object)}}
       onPress={() =>
-        (dispatch as DispatchType<'EndCall'>)({
+        dispatch({
           type: 'EndCall',
           value: [],
         })

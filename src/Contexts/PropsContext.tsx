@@ -1,13 +1,27 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
-import {RtcEngineEvents} from 'react-native-agora/lib/RtcEvents';
+import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {EncryptionMode} from 'react-native-agora';
-import {VideoProfile} from './quality';
-interface UidInterface {
+import {VideoProfile} from '../Utils/quality';
+
+// disabled is intentionally kept as the 1st item in the enum.
+// This way, it evaluates to a falsy value in a if statement
+export enum ToggleState {
+  disabled,
+  enabled,
+  disabling, // enabled -> disabling -> disabled
+  enabling, // disabled -> enabling -> enabled
+}
+
+export const toggleHelper = (state: ToggleState) =>
+  state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
+
+export interface UidInterface {
   // TODO: refactor local to 0 and remove string.
   uid: number | string;
-  audio: boolean;
-  video: boolean;
+  audio: ToggleState;
+  video: ToggleState;
+  streamType: 'high' | 'low';
 }
 
 interface remoteBtnStylesInterface {
@@ -50,6 +64,7 @@ export interface RtcPropsInterface {
   dual?: boolean | null;
   profile?: VideoProfile;
   initialDualStreamMode: DualStreamMode;
+  callActive: boolean;
   encryption?: {
     key: string;
     mode:
@@ -59,21 +74,24 @@ export interface RtcPropsInterface {
   };
 }
 
-export interface CustomCallbacksInterface {
-  EndCall(): void;
-  FullScreen(): void;
-  SwitchCamera(): void;
+export interface CallbacksInterface {
+  EndCall(): void; //?
+  FullScreen(): void; //?
+  SwitchCamera(): void; //Not in reducer
+  UpdateDualStreamMode(mode: DualStreamMode): void;
+  UserJoined: RtcEngineEvents['UserJoined'];
+  UserOffline: RtcEngineEvents['UserOffline'];
   SwapVideo(user: UidInterface): void;
   UserMuteRemoteAudio(user: UidInterface, muted: UidInterface['audio']): void;
   UserMuteRemoteVideo(user: UidInterface, muted: UidInterface['video']): void;
-  LocalMuteAudio(muted: boolean): void;
-  LocalMuteVideo(muted: boolean): void;
-  UpdateDualStreamMode(mode: DualStreamMode): void;
+  LocalMuteAudio(muted: ToggleState): void;
+  LocalMuteVideo(muted: ToggleState): void;
+  RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
+  RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
+  JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
 }
 
-export interface CallbacksInterface
-  extends RtcEngineEvents,
-    CustomCallbacksInterface {}
+export type CustomCallbacksInterface = CallbacksInterface;
 
 export interface PropsInterface {
   rtcProps: RtcPropsInterface;

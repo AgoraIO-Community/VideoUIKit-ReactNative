@@ -12,31 +12,32 @@ import RtcEngine, {
   AreaCode,
 } from 'react-native-agora';
 import {Platform} from 'react-native';
-import requestCameraAndAudioPermission from './permission';
+import requestCameraAndAudioPermission from './Utils/permission';
 import {
   RtcProvider,
-  UidInterface,
   UidStateInterface,
   DispatchType,
-  ActionInterface,
   ActionType,
-} from './RtcContext';
+} from './Contexts/RtcContext';
 import PropsContext, {
+  ToggleState,
+  UidInterface,
   RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
-} from './PropsContext';
-import {MinUidProvider} from './MinUidContext';
-import {MaxUidProvider} from './MaxUidContext';
-import quality from './quality';
+} from './Contexts/PropsContext';
+import {MinUidProvider} from './Contexts/MinUidContext';
+import {MaxUidProvider} from './Contexts/MaxUidContext';
+import quality from './Utils/quality';
+import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 const initialState: UidStateInterface = {
   min: [],
   max: [
     {
       uid: 'local',
-      audio: true,
-      video: true,
+      audio: ToggleState.enabled,
+      video: ToggleState.enabled,
       streamType: 'high',
     },
   ],
@@ -57,7 +58,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
 
   const reducer = (
     state: UidStateInterface,
-    action: ActionInterface<keyof CallbacksInterface, CallbacksInterface>,
+    action: ActionType<keyof CallbacksInterface>,
   ) => {
     let stateUpdate = {},
       uids = [...state.max, ...state.min].map((u: UidInterface) => u.uid);
@@ -66,6 +67,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       case 'UpdateDualStreamMode':
         const newMode = (action as ActionType<'UpdateDualStreamMode'>).value[0];
         if (newMode === DualStreamMode.HIGH) {
+          // Update everybody to high
           const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
             ...user,
             streamType: 'high',
@@ -75,8 +77,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             streamType: 'high',
           }));
           stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
-        }
-        if (newMode === DualStreamMode.LOW) {
+        } else if (newMode === DualStreamMode.LOW) {
+          // Update everybody to low
           const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
             ...user,
             streamType: 'low',
@@ -86,8 +88,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             streamType: 'low',
           }));
           stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
-        }
-        if (newMode === DualStreamMode.DYNAMIC) {
+        } else if (newMode === DualStreamMode.DYNAMIC) {
+          // Max users are high other are low
           const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
             ...user,
             streamType: 'high',
@@ -104,17 +106,17 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           uids.indexOf((action as ActionType<'UserJoined'>).value[0]) === -1
         ) {
           //If new user has joined
-
+          //By default add to minimized
           let minUpdate = [
             ...state.min,
             {
               uid: (action as ActionType<'UserJoined'>).value[0],
-              audio: false,
-              video: false,
+              audio: ToggleState.disabled,
+              video: ToggleState.disabled,
               streamType:
                 dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default
             },
-          ]; //By default add to minimized
+          ];
 
           if (minUpdate.length === 1 && state.max[0].uid === 'local') {
             //Only one remote and local is maximized
@@ -164,7 +166,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       case 'UserMuteRemoteAudio':
         const audioMute = (user: UidInterface) => {
           if (user.uid === (action.value[0] as UidInterface).uid) {
-            user.audio = !action.value[1];
+            user.audio = action.value[1];
           }
           return user;
         };
@@ -186,27 +188,30 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         };
         break;
       case 'LocalMuteAudio':
-        (engine.current as RtcEngine).muteLocalAudioStream(
-          (action as ActionType<'LocalMuteAudio'>).value[0],
-        );
-        const LocalAudioMute = (user: UidInterface) => {
-          if (user.uid === 'local') {
-            user.audio = !(action as ActionType<'LocalMuteAudio'>).value[0];
-          }
-          return user;
-        };
-        stateUpdate = {
-          min: state.min.map(LocalAudioMute),
-          max: state.max.map(LocalAudioMute),
-        };
+        // (engine.current as RtcEngine).muteLocalAudioStream(
+        //   (action as ActionType<'LocalMuteAudio'>).value[0],
+        // );
+
+        if (actionTypeGuard(action, action.type)) {
+          const LocalAudioMute = (user: UidInterface) => {
+            if (user.uid === 'local') {
+              user.audio = action.value[0];
+            }
+            return user;
+          };
+          stateUpdate = {
+            min: state.min.map(LocalAudioMute),
+            max: state.max.map(LocalAudioMute),
+          };
+        }
         break;
       case 'LocalMuteVideo':
-        (engine.current as RtcEngine).muteLocalVideoStream(
-          (action as ActionType<'LocalMuteAudio'>).value[0],
-        );
+        // (engine.current as RtcEngine).muteLocalVideoStream(
+        //   (action as ActionType<'LocalMuteAudio'>).value[0],
+        // );
         const LocalVideoMute = (user: UidInterface) => {
           if (user.uid === 'local') {
-            user.video = !(action as ActionType<'LocalMuteVideo'>).value[0];
+            user.video = (action as ActionType<'LocalMuteVideo'>).value[0];
           }
           return user;
         };
@@ -215,20 +220,19 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           max: state.max.map(LocalVideoMute),
         };
         break;
-      case 'SwitchCamera':
-        (engine.current as RtcEngine).switchCamera();
-        break;
       case 'RemoteAudioStateChanged':
-        let audioState;
-        if (action.value[1] === 0) {
+        let audioState: boolean;
+        if ((action as ActionType<'RemoteAudioStateChanged'>).value[1] === 0) {
           audioState = false;
-        } else if (action.value[1] === 2) {
+        } else if (
+          (action as ActionType<'RemoteAudioStateChanged'>).value[1] === 2
+        ) {
           audioState = true;
         }
         const audioChange = (user: UidInterface) => {
-          if (user.uid == action.value[0]) {
+          if (user.uid === action.value[0]) {
             user.audio = audioState;
-            user.video = user.video;
+            // user.video = user.video;
           }
           return user;
         };
@@ -238,17 +242,23 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         };
         break;
       case 'RemoteVideoStateChanged':
-        let videoState;
-        let logx = action.value;
-        if (action.value[1] === 0) {
+        let videoState: boolean;
+        if ((action as ActionType<'RemoteVideoStateChanged'>).value[1] === 0) {
           videoState = false;
-        } else if (action.value[1] === 2) {
+        } else if (
+          (action as ActionType<'RemoteVideoStateChanged'>).value[1] === 2
+        ) {
           videoState = true;
         }
         const videoChange = (user: UidInterface) => {
-          if (user.uid == action.value[0]) {
-            user.video = videoState;
-            user.audio = user.audio;
+          if (
+            user.uid ===
+            (action as ActionType<'RemoteVideoStateChanged'>).value[0]
+          ) {
+            user.video = videoState
+              ? ToggleState.enabled
+              : ToggleState.disabled;
+            // user.audio = user.audio;
           }
           return user;
         };
@@ -259,7 +269,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         break;
     }
 
-    // Handle event listeners
+    // TODO: remove Handle event listeners
 
     if (callbacks && callbacks[action.type]) {
       // @ts-ignore
@@ -307,11 +317,14 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     },
     [dualStreamMode],
   );
-  const [uidState, dispatch] = useReducer(reducer, initialState);
+  const [uidState, dispatch]: [UidStateInterface, DispatchType] = useReducer(
+    reducer,
+    initialState,
+  );
 
   // When mode is updated, reducer is triggered to update the individual states
   useEffect(() => {
-    (dispatch as DispatchType<'UpdateDualStreamMode'>)({
+    dispatch({
       type: 'UpdateDualStreamMode',
       value: [dualStreamMode],
     });
@@ -340,6 +353,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         if (Platform.OS === 'android' || Platform.OS === 'ios') {
           engine.current = await RtcEngine.createWithAreaCode(
             rtcProps.appId,
+            // eslint-disable-next-line no-bitwise
             AreaCode.GLOB ^ AreaCode.CN,
           );
         } else {
@@ -361,35 +375,35 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         try {
           await engine.current.enableVideo();
         } catch (e) {
-          (dispatch as DispatchType<'LocalMuteAudio'>)({
+          dispatch({
             type: 'LocalMuteAudio',
             value: [true],
           });
-          (dispatch as DispatchType<'LocalMuteVideo'>)({
+          dispatch({
             type: 'LocalMuteVideo',
-            value: [true],
+            value: [ToggleState.disabled],
           });
           console.error('No devices', e);
         }
 
-        engine.current.addListener('JoinChannelSuccess', async (...args) => {
-          //Get current peer IDs
-          (dispatch as DispatchType<'JoinChannelSuccess'>)({
-            type: 'JoinChannelSuccess',
-            value: args,
-          });
-
-          console.log('UIkit enabling dual stream', rtcProps.dual);
-          if (rtcProps.dual) {
-            console.log('UIkit enabled dual stream');
-            await engine.current.enableDualStreamMode(rtcProps.dual);
-            // await engine.current.setRemoteSubscribeFallbackOption(1);
-          }
-        });
+        engine.current.addListener(
+          'JoinChannelSuccess',
+          async (channel, uid, elapsed) => {
+            //Invoke the callback
+            console.log('UIkit enabling dual stream', rtcProps.dual);
+            if (rtcProps.dual) {
+              console.log('UIkit enabled dual stream');
+              await engine.current!.enableDualStreamMode(rtcProps.dual);
+              // await engine.current.setRemoteSubscribeFallbackOption(1);
+            }
+            callbacks?.JoinChannelSuccess &&
+              callbacks.JoinChannelSuccess(channel, uid, elapsed);
+          },
+        );
 
         engine.current.addListener('UserJoined', (...args) => {
           //Get current peer IDs
-          (dispatch as DispatchType<'UserJoined'>)({
+          dispatch({
             type: 'UserJoined',
             value: args,
           });
@@ -397,7 +411,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
 
         engine.current.addListener('UserOffline', (...args) => {
           //If user leaves
-          (dispatch as DispatchType<'UserOffline'>)({
+          dispatch({
             type: 'UserOffline',
             value: args,
           });
@@ -406,7 +420,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         engine.current.addListener('RemoteAudioStateChanged', (...args) => {
           console.log('RemoteAudioStateChanged', args);
 
-          (dispatch as DispatchType<'RemoteAudioStateChanged'>)({
+          dispatch({
             type: 'RemoteAudioStateChanged',
             value: args,
           });
@@ -460,20 +474,19 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         });
       }
       if (engine.current) {
-        if(uidState.max[0].video){
+        if (uidState.max[0].video) {
           await engine.current.muteLocalVideoStream(true);
         }
-        
+
         await engine.current.joinChannel(
           rtcProps.token || null,
           rtcProps.channel,
           null,
           rtcProps.uid || 0,
         );
-        if(uidState.max[0].video){
+        if (uidState.max[0].video) {
           await engine.current.muteLocalVideoStream(false);
         }
-
       } else {
         console.error('trying to join before RTC Engine was initialized');
       }

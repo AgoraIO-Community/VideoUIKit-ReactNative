@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import PropsContext from './../PropsContext';
+import PropsContext from '../Contexts/PropsContext';
 import styles from '../Style';
 import icons, {IconsInterface} from './Icons';
 

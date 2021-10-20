@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
-import PropsContext from '../../PropsContext';
-import RtcContext, {DispatchType} from '../../RtcContext';
+import PropsContext from '../../Contexts/PropsContext';
+import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
@@ -14,7 +14,7 @@ function FullScreen() {
       name={'fullscreen'}
       style={{...styles.localBtn, ...(fullScreen as object)}}
       onPress={() => {
-        (dispatch as DispatchType<'FullScreen'>)({
+        dispatch({
           type: 'FullScreen',
           value: [],
         });
