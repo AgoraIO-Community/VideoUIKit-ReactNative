@@ -112,41 +112,9 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         }
         break;
       case 'LocalMuteVideo':
-<<<<<<< Updated upstream
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = LocalMuteVideo(state, action);
         }
-=======
-        const unique = new Date()
-          .valueOf()
-          .toString()
-          .split('')
-          .reverse()
-          .join('')
-          .slice(0, 2);
-        console.log('[Called Mute] - ', unique);
-
-        (engine.current as RtcEngine)
-          .muteLocalVideoStream(
-            (action as ActionType<'LocalMuteAudio'>).value[0],
-          )
-          .then(() => {
-            console.log('[Done Mute] - ', unique);
-          });
-        const LocalVideoMute = (user: UidInterface) => {
-          if (user.uid === 'local') {
-            user.video = !(action as ActionType<'LocalMuteVideo'>).value[0];
-          }
-          return user;
-        };
-        stateUpdate = {
-          min: state.min.map(LocalVideoMute),
-          max: state.max.map(LocalVideoMute),
-        };
-        break;
-      case 'SwitchCamera':
-        (engine.current as RtcEngine).switchCamera();
->>>>>>> Stashed changes
         break;
       case 'RemoteAudioStateChanged':
         if (actionTypeGuard(action, action.type)) {
