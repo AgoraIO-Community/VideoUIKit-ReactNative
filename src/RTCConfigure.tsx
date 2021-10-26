@@ -31,6 +31,18 @@ import {MaxUidProvider} from './Contexts/MaxUidContext';
 import quality from './Utils/quality';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
+import {
+  LocalMuteAudio,
+  LocalMuteVideo,
+  RemoteAudioStateChanged,
+  RemoteVideoStateChanged,
+  UpdateDualStreamMode,
+  UserJoined,
+  UserMuteRemoteAudio,
+  UserMuteRemoteVideo,
+  UserOffline,
+} from './Reducer';
+
 const initialState: UidStateInterface = {
   min: [],
   max: [
@@ -65,153 +77,65 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
 
     switch (action.type) {
       case 'UpdateDualStreamMode':
-        const newMode = (action as ActionType<'UpdateDualStreamMode'>).value[0];
-        if (newMode === DualStreamMode.HIGH) {
-          // Update everybody to high
-          const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
-            ...user,
-            streamType: 'high',
-          }));
-          const minStateUpdate: UidInterface[] = state.min.map((user) => ({
-            ...user,
-            streamType: 'high',
-          }));
-          stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
-        } else if (newMode === DualStreamMode.LOW) {
-          // Update everybody to low
-          const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
-            ...user,
-            streamType: 'low',
-          }));
-          const minStateUpdate: UidInterface[] = state.min.map((user) => ({
-            ...user,
-            streamType: 'low',
-          }));
-          stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
-        } else if (newMode === DualStreamMode.DYNAMIC) {
-          // Max users are high other are low
-          const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
-            ...user,
-            streamType: 'high',
-          }));
-          const minStateUpdate: UidInterface[] = state.min.map((user) => ({
-            ...user,
-            streamType: 'low',
-          }));
-          stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UpdateDualStreamMode(state, action);
         }
         break;
       case 'UserJoined':
-        if (
-          uids.indexOf((action as ActionType<'UserJoined'>).value[0]) === -1
-        ) {
-          //If new user has joined
-          //By default add to minimized
-          let minUpdate = [
-            ...state.min,
-            {
-              uid: (action as ActionType<'UserJoined'>).value[0],
-              audio: ToggleState.disabled,
-              video: ToggleState.disabled,
-              streamType:
-                dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default
-            },
-          ];
-
-          if (minUpdate.length === 1 && state.max[0].uid === 'local') {
-            //Only one remote and local is maximized
-            //Change stream type to high if dualStreaMode is DYNAMIC
-            if (dualStreamMode === DualStreamMode.DYNAMIC) {
-              minUpdate[0].streamType = 'high';
-            }
-            //Swap max and min
-            stateUpdate = {
-              max: minUpdate,
-              min: state.max,
-            };
-          } else {
-            //More than one remote
-            stateUpdate = {
-              min: minUpdate,
-            };
-          }
-
-          console.log('new user joined!\n', state, stateUpdate, {
-            dualStreamMode,
-          });
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UserJoined(state, action, dualStreamMode, uids);
         }
         break;
       case 'UserOffline':
-        if (
-          state.max[0].uid === (action as ActionType<'UserOffline'>).value[0]
-        ) {
-          //If max has the remote video
-          let minUpdate = [...state.min];
-          stateUpdate = {
-            max: [minUpdate.pop()],
-            min: minUpdate,
-          };
-        } else {
-          stateUpdate = {
-            min: state.min.filter(
-              (user) =>
-                user.uid !== (action as ActionType<'UserOffline'>).value[0],
-            ),
-          };
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UserOffline(state, action);
         }
         break;
       case 'SwapVideo':
-        stateUpdate = swapVideo(state, action.value[0] as UidInterface);
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = swapVideo(state, action.value[0]);
+        }
         break;
       case 'UserMuteRemoteAudio':
-        const audioMute = (user: UidInterface) => {
-          if (user.uid === (action.value[0] as UidInterface).uid) {
-            user.audio = action.value[1];
-          }
-          return user;
-        };
-        stateUpdate = {
-          min: state.min.map(audioMute),
-          max: state.max.map(audioMute),
-        };
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UserMuteRemoteAudio(state, action);
+        }
         break;
       case 'UserMuteRemoteVideo':
-        const videoMute = (user: UidInterface) => {
-          if (user.uid === (action.value[0] as UidInterface).uid) {
-            user.video = !action.value[1];
-          }
-          return user;
-        };
-        stateUpdate = {
-          min: state.min.map(videoMute),
-          max: state.max.map(videoMute),
-        };
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UserMuteRemoteVideo(state, action);
+        }
         break;
       case 'LocalMuteAudio':
-        // (engine.current as RtcEngine).muteLocalAudioStream(
-        //   (action as ActionType<'LocalMuteAudio'>).value[0],
-        // );
-
         if (actionTypeGuard(action, action.type)) {
-          const LocalAudioMute = (user: UidInterface) => {
-            if (user.uid === 'local') {
-              user.audio = action.value[0];
-            }
-            return user;
-          };
-          stateUpdate = {
-            min: state.min.map(LocalAudioMute),
-            max: state.max.map(LocalAudioMute),
-          };
+          stateUpdate = LocalMuteAudio(state, action);
         }
         break;
       case 'LocalMuteVideo':
-        // (engine.current as RtcEngine).muteLocalVideoStream(
-        //   (action as ActionType<'LocalMuteAudio'>).value[0],
-        // );
+<<<<<<< Updated upstream
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = LocalMuteVideo(state, action);
+        }
+=======
+        const unique = new Date()
+          .valueOf()
+          .toString()
+          .split('')
+          .reverse()
+          .join('')
+          .slice(0, 2);
+        console.log('[Called Mute] - ', unique);
+
+        (engine.current as RtcEngine)
+          .muteLocalVideoStream(
+            (action as ActionType<'LocalMuteAudio'>).value[0],
+          )
+          .then(() => {
+            console.log('[Done Mute] - ', unique);
+          });
         const LocalVideoMute = (user: UidInterface) => {
           if (user.uid === 'local') {
-            user.video = (action as ActionType<'LocalMuteVideo'>).value[0];
+            user.video = !(action as ActionType<'LocalMuteVideo'>).value[0];
           }
           return user;
         };
@@ -220,52 +144,19 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           max: state.max.map(LocalVideoMute),
         };
         break;
+      case 'SwitchCamera':
+        (engine.current as RtcEngine).switchCamera();
+>>>>>>> Stashed changes
+        break;
       case 'RemoteAudioStateChanged':
-        let audioState: boolean;
-        if ((action as ActionType<'RemoteAudioStateChanged'>).value[1] === 0) {
-          audioState = false;
-        } else if (
-          (action as ActionType<'RemoteAudioStateChanged'>).value[1] === 2
-        ) {
-          audioState = true;
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = RemoteAudioStateChanged(state, action);
         }
-        const audioChange = (user: UidInterface) => {
-          if (user.uid === action.value[0]) {
-            user.audio = audioState;
-            // user.video = user.video;
-          }
-          return user;
-        };
-        stateUpdate = {
-          min: state.min.map(audioChange),
-          max: state.max.map(audioChange),
-        };
         break;
       case 'RemoteVideoStateChanged':
-        let videoState: boolean;
-        if ((action as ActionType<'RemoteVideoStateChanged'>).value[1] === 0) {
-          videoState = false;
-        } else if (
-          (action as ActionType<'RemoteVideoStateChanged'>).value[1] === 2
-        ) {
-          videoState = true;
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = RemoteVideoStateChanged(state, action);
         }
-        const videoChange = (user: UidInterface) => {
-          if (
-            user.uid ===
-            (action as ActionType<'RemoteVideoStateChanged'>).value[0]
-          ) {
-            user.video = videoState
-              ? ToggleState.enabled
-              : ToggleState.disabled;
-            // user.audio = user.audio;
-          }
-          return user;
-        };
-        stateUpdate = {
-          min: state.min.map(videoChange),
-          max: state.max.map(videoChange),
-        };
         break;
     }
 
@@ -377,7 +268,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         } catch (e) {
           dispatch({
             type: 'LocalMuteAudio',
-            value: [true],
+            value: [ToggleState.disabled],
           });
           dispatch({
             type: 'LocalMuteVideo',

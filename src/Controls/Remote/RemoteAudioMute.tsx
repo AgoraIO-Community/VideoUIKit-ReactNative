@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
-import RtcContext, {UidInterface, DispatchType} from '../../RtcContext';
+import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import PropsContext from '../../PropsContext';
+import PropsContext, {UidInterface} from '../../Contexts/PropsContext';
 
 interface RemoteAudioMuteInterface {
   user: UidInterface;
@@ -23,7 +23,7 @@ const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
           props.user.uid as number,
           props.user.audio,
         );
-        (dispatch as DispatchType<'UserMuteRemoteAudio'>)({
+        dispatch({
           type: 'UserMuteRemoteAudio',
           value: [props.user, props.user.audio],
         });
