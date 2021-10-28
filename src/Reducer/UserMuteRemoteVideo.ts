@@ -1,5 +1,5 @@
-import {UidInterface} from 'src/Contexts/PropsContext';
-import {ActionType, UidStateInterface} from 'src/Contexts/RtcContext';
+import {UidInterface} from '../Contexts/PropsContext';
+import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
 
 export default function UserMuteRemoteVideo(
   state: UidStateInterface,

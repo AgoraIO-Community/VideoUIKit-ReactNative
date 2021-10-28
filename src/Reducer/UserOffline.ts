@@ -1,4 +1,4 @@
-import {ActionType, UidStateInterface} from 'src/Contexts/RtcContext';
+import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
 
 export default function UserOffline(
   state: UidStateInterface,

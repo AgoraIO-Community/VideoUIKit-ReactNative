@@ -1,5 +1,5 @@
-import {ToggleState, UidInterface} from 'src/Contexts/PropsContext';
-import {ActionType, UidStateInterface} from 'src/Contexts/RtcContext';
+import {ToggleState, UidInterface} from '../Contexts/PropsContext';
+import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
 
 export default function RemoteAudioStateChanged(
   state: UidStateInterface,

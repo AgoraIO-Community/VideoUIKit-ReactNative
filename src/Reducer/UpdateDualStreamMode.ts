@@ -1,5 +1,5 @@
-import {DualStreamMode, UidInterface} from 'src/Contexts/PropsContext';
-import {ActionType, UidStateInterface} from 'src/Contexts/RtcContext';
+import {DualStreamMode, UidInterface} from '../Contexts/PropsContext';
+import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
 
 export default function UpdateDualStreamMode(
   state: UidStateInterface,

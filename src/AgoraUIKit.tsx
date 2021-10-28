@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import RtcConfigure from './RTCConfigure';
+import RtcConfigure from './RtcConfigure';
 import MaxVideoView from './Views/MaxVideoView';
 import MinVideoView from './Views/MinVideoView';
 import {MinUidConsumer} from './Contexts/MinUidContext';

@@ -1,5 +1,5 @@
-import {DualStreamMode, ToggleState} from 'src/Contexts/PropsContext';
-import {ActionType, UidStateInterface} from 'src/Contexts/RtcContext';
+import {DualStreamMode, ToggleState} from '../Contexts/PropsContext';
+import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
 
 export default function UserJoined(
   state: UidStateInterface,
