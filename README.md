@@ -6,11 +6,12 @@ Instantly integrate Agora video calling or streaming into your React Native appl
 ## Getting started
 
 ### Requirements
-- [An Agora developer account](https://www.agora.io/en/blog/how-to-get-started-with-agora?utm_source=github&utm_repo=agora-ios-uikit)
+- [An Agora developer account](https://www.agora.io/en/blog/how-to-get-started-with-agora?utm_source=github&utm_repo=ReactNative-UIKit)
 - Android or iOS Device
 - React Native Project
 
-Expo manged workflow isn't supported as the library uses native modules. Either use react-native-cli or use the 'expo eject' command to convert your app from an expo-managed workflow to a bare workflow. Once you have an Agora developer account and an App ID, you're ready to use this library.
+Expo is now supported using custom-dev-clients, for more information read this [blog post](https://www.agora.io/en/blog/building-a-video-calling-app-using-the-agora-sdk-on-expo-react-native/)
+
 
 
 ### Installation
