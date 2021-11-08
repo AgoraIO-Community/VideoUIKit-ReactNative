@@ -3,7 +3,7 @@ name: Issue report
 about: Report any issues while trying to use the UIKit
 title: ''
 labels: ''
-assignees: technophilic
+assignees: EkaanshArora
 
 ---
 
@@ -14,10 +14,10 @@ assignees: technophilic
    - [ ] Android
  - OS Version: [e.g. 22, 14.1]
 
-**App Info** (Note: Expo CLI managed workflow is not supported by the UIKit)
+**App Info**
  - Type:
    - [X] React Native CLI
-   - [ ] Expo CLI - bare workflow
+   - [ ] Expo CLI (using custom development clients)
  - CLI Version: [e.g. 22]
 
 **Describe the issue**
