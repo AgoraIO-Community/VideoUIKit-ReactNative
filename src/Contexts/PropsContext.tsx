@@ -63,8 +63,8 @@ export interface RtcPropsInterface {
   token?: string | null;
   dual?: boolean | null;
   profile?: VideoProfile;
-  initialDualStreamMode: DualStreamMode;
-  callActive: boolean;
+  initialDualStreamMode?: DualStreamMode;
+  callActive?: boolean;
   encryption?: {
     key: string;
     mode:

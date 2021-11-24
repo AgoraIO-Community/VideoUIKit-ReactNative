@@ -15,7 +15,7 @@ import LocalControls from './Controls/LocalControls';
 const AgoraUIKit: React.FC<PropsInterface> = (props) => {
   return (
     <PropsProvider value={props}>
-      <View>
+      <View style={{backgroundColor: '#000', flex: 1}}>
         <RtcConfigure>
           <MaxUidConsumer>
             {(maxUsers) => (
@@ -30,7 +30,7 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
             <MinUidConsumer>
               {(minUsers) =>
                 minUsers.map((user) => (
-                  <MinVideoView user={user} key={user.uid} />
+                  <MinVideoView showOverlay user={user} key={user.uid} />
                 ))
               }
             </MinUidConsumer>

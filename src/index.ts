@@ -26,10 +26,12 @@ export {
   PropsConsumer,
   PropsProvider,
 } from './Contexts/PropsContext';
+
+export { DualStreamMode } from './Contexts/PropsContext';
+
 export type {
   UidInterface,
   ToggleState,
-  DualStreamMode,
   RtcPropsInterface,
   CallbacksInterface,
   CustomCallbacksInterface,

@@ -24,7 +24,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
 
   return (
     <View style={{margin: 5}}>
-      {overlay && showOverlay ? (
+      {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
           {props.user.uid === 'local' ? (
             props.user.video ? (
@@ -34,7 +34,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
                 zOrderMediaOverlay={true}
               />
             ) : (
-              <View style={{flex: 1, backgroundColor: '#000'}} />
+              <View style={{flex: 1, backgroundColor: '#f0f', ...styles.minView, ...(minViewStyles as object)}} />
             )
           ) : (
             <RemoteView

@@ -36,9 +36,9 @@ const Create = ({
         } else {
           engine.current = await RtcEngine.create(rtcProps.appId);
         }
-        console.log(engine.current);
         if (rtcProps.profile) {
           if (Platform.OS === 'web') {
+            // move this to bridge?
             // @ts-ignore
             await engine.current.setVideoProfile(rtcProps.profile);
           } else {
@@ -95,7 +95,7 @@ const Create = ({
         });
 
         engine.current.addListener('RemoteAudioStateChanged', (...args) => {
-          console.log('RemoteAudioStateChanged', args);
+          // console.log('RemoteAudioStateChanged', args);
 
           dispatch({
             type: 'RemoteAudioStateChanged',
@@ -108,7 +108,7 @@ const Create = ({
         });
 
         engine.current.addListener('RemoteVideoStateChanged', (...args) => {
-          console.log('RemoteVideoStateChanged', args);
+          // console.log('RemoteVideoStateChanged', args);
 
           dispatch({
             type: 'RemoteVideoStateChanged',

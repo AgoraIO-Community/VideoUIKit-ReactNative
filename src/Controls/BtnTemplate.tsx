@@ -36,10 +36,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           style={{
             width: '100%',
             height: '100%',
-            tintColor:
-              props.name !== 'callEnd'
-                ? theme || props.color || '#fff'
-                : '#FD0845',
+            tintColor: theme || props.color || '#fff'
           }}
           resizeMode={'contain'}
           source={{uri: icons[props.name]}}
@@ -49,10 +46,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
         style={{
           textAlign: 'center',
           marginTop: 5,
-          color:
-            props.name !== 'callEnd'
-              ? theme || props.color || '#fff'
-              : '#FD0845',
+          color: theme || props.color || '#fff'
         }}>
         {props.btnText}
       </Text>

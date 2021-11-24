@@ -1,7 +1,7 @@
 import {UidInterface} from '../Contexts/PropsContext';
 import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
 
-export default function UserMuteRemoteAudio(
+export default function LocalMuteVideo(
   state: UidStateInterface,
   action: ActionType<'LocalMuteVideo'>,
 ) {

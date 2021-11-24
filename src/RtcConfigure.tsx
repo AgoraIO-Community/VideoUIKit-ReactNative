@@ -165,7 +165,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     <Create dispatch={dispatch}>
       {(engineRef) => (
         <Join
-          precall={!props.callActive}
+          precall={!rtcProps.callActive}
           engineRef={engineRef}
           uidState={uidState}
           dispatch={dispatch}>

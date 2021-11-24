@@ -33,10 +33,10 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
           props.user.uid as number,
           props.user.video === ToggleState.enabled, //If enabled, disable or vice-versa
         );
-        dispatch({
-          type: 'UserMuteRemoteVideo',
-          value: [props.user, props.user.video],
-        });
+        // dispatch({
+        //   type: 'UserMuteRemoteVideo',
+        //   value: [props.user, props.user.video],
+        // });
       }}
     />
   ) : (

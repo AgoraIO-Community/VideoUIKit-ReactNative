@@ -7,10 +7,10 @@ export default function RemoteAudioStateChanged(
 ) {
   let stateUpdate = {};
   let audioState: ToggleState;
-  if (action.value[1] === 0) {
-    audioState = ToggleState.disabled;
-  } else if (action.value[1] === 2) {
+  if (action.value[1] === 2 || action.value[1] === 1) {
     audioState = ToggleState.enabled;
+  } else {
+    audioState = ToggleState.disabled;
   }
   const audioChange = (user: UidInterface) => {
     if (user.uid === action.value[0]) {
