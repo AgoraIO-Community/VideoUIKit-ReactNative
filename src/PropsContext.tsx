@@ -190,6 +190,10 @@ export interface RtcPropsInterface {
    * Enable the camera before joining the call. Only use for initiak(default: true)
    */
   enableVideo?: boolean;
+  /**
+   * Enable the geo fencing functionality
+   */
+   geoFencing?: boolean;
 }
 
 /**

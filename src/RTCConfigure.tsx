@@ -6,7 +6,7 @@ import React, {
   useContext,
   useRef,
 } from 'react';
-import RtcEngine, {ChannelProfile, ClientRole} from 'react-native-agora';
+import RtcEngine, {ChannelProfile, ClientRole, AreaCode} from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from './permission';
 import {
@@ -254,7 +254,14 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         await requestCameraAndAudioPermission();
       }
       try {
-        engine.current = await RtcEngine.create(rtcProps.appId);
+        if(rtcProps.geoFencing && (Platform.OS === 'android' || Platform.OS === 'ios' )){
+          engine.current = await RtcEngine.createWithConfig({
+            appId: rtcProps.appId,
+            areaCode: AreaCode.GLOB ^ AreaCode.CN,
+          });
+        }else{
+          engine.current = await RtcEngine.create(rtcProps.appId);
+        }
         console.log(engine.current);
         await engine.current.enableVideo();
 
