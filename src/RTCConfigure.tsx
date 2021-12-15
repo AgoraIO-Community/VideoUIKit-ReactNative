@@ -226,7 +226,9 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           audioState = true;
         }
         const audioChange = (user: UidInterface) => {
-          if (user.uid == action.value[0]) {
+          // updated condition to prevent undefined value to set in the state
+          // so it will retain the previous state value
+          if (user.uid == action.value[0] && audioState !== undefined) {
             user.audio = audioState;
             user.video = user.video;
           }
@@ -246,7 +248,9 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           videoState = true;
         }
         const videoChange = (user: UidInterface) => {
-          if (user.uid == action.value[0]) {
+          //updated condition to check undefined for preventing blinking issue in native - mobile
+          //so it will prevent the previous state vaule
+          if (user.uid == action.value[0] && videoState !== undefined) {
             user.video = videoState;
             user.audio = user.audio;
           }
