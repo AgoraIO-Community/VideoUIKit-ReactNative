@@ -5,6 +5,7 @@
     "name": "Vineeth Srinivasn",
     "email": "vineeth@agora.io"
   },
+  "main": "./src/index.ts",
   "description": "Agora react native UI KIT. Rapidly integrate video calling into your React Native application with built in UI Elements.",
   "scripts": {
     "android": "react-native run-android",
