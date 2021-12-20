@@ -1,7 +1,7 @@
 import React, {useContext, createContext} from 'react';
 import MaxUidContext from './MaxUidContext';
 import MinUidContext from './MinUidContext';
-import {UidInterface} from './RtcContext';
+import {UidInterface} from './PropsContext';
 
 export const LocalContext = createContext<UidInterface>({} as UidInterface);
 export const LocalProvider = LocalContext.Provider;

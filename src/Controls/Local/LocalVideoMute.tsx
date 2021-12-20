@@ -1,27 +1,60 @@
 import React, {useContext} from 'react';
-import PropsContext from '../../PropsContext';
-import RtcContext, {DispatchType} from '../../RtcContext';
+import PropsContext, {ToggleState} from '../../Contexts/PropsContext';
+import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import {LocalContext} from '../../LocalUserContext';
+import {LocalContext} from '../../Contexts/LocalUserContext';
 
 function LocalVideoMute() {
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {muteLocalVideo} = localBtnStyles || {};
-  const {dispatch} = useContext(RtcContext);
+  const {RtcEngine, dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
 
   return (
     <BtnTemplate
-      name={local.video ? 'videocam' : 'videocamOff'}
+      name={local.video === ToggleState.enabled ? 'videocam' : 'videocamOff'}
       btnText={'Video'}
       style={{...styles.localBtn, ...(muteLocalVideo as object)}}
-      onPress={() => {
-        (dispatch as DispatchType<'LocalMuteVideo'>)({
-          type: 'LocalMuteVideo',
-          value: [local.video],
-        });
+      onPress={async () => {
+        const localState = local.video;
+        // Don't do anything if it is in a transitional state
+        if (
+          localState === ToggleState.enabled ||
+          localState === ToggleState.disabled
+        ) {
+          // Disable UI
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [
+              localState === ToggleState.enabled
+                ? ToggleState.disabling
+                : ToggleState.enabling,
+            ],
+          });
+
+          try {
+            await RtcEngine.muteLocalVideoStream(
+              localState === ToggleState.enabled ? true : false,
+            );
+            console.log('muted video', localState);
+            // Enable UI
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [
+                localState === ToggleState.enabled
+                  ? ToggleState.disabled
+                  : ToggleState.enabled,
+              ],
+            });
+          } catch (e) {
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [localState],
+            });
+          }
+        }
       }}
     />
   );

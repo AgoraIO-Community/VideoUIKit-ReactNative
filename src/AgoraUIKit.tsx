@@ -1,11 +1,11 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import RtcConfigure from './RTCConfigure';
-import MaxVideoView from './MaxVideoView';
-import MinVideoView from './MinVideoView';
-import {MinUidConsumer} from './MinUidContext';
-import {MaxUidConsumer} from './MaxUidContext';
-import {PropsProvider, PropsInterface} from './PropsContext';
+import RtcConfigure from './RtcConfigure';
+import MaxVideoView from './Views/MaxVideoView';
+import MinVideoView from './Views/MinVideoView';
+import {MinUidConsumer} from './Contexts/MinUidContext';
+import {MaxUidConsumer} from './Contexts/MaxUidContext';
+import {PropsProvider, PropsInterface} from './Contexts/PropsContext';
 
 import styles from './Style';
 import LocalControls from './Controls/LocalControls';
@@ -15,7 +15,7 @@ import LocalControls from './Controls/LocalControls';
 const AgoraUIKit: React.FC<PropsInterface> = (props) => {
   return (
     <PropsProvider value={props}>
-      <View>
+      <View style={{backgroundColor: '#000', flex: 1}}>
         <RtcConfigure>
           <MaxUidConsumer>
             {(maxUsers) => (
@@ -30,7 +30,7 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
             <MinUidConsumer>
               {(minUsers) =>
                 minUsers.map((user) => (
-                  <MinVideoView user={user} key={user.uid} />
+                  <MinVideoView showOverlay user={user} key={user.uid} />
                 ))
               }
             </MinUidConsumer>

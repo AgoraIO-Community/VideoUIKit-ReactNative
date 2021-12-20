@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import PropsContext from '../PropsContext';
-import {UidInterface} from '../RtcContext';
+import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import styles from '../Style';
 import RemoteAudioMute from './Remote/RemoteAudioMute';
 import RemoteSwap from './Remote/RemoteSwap';

@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
-import RtcContext, {DispatchType, UidInterface} from '../../RtcContext';
+import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import PropsContext from '../../PropsContext';
+import PropsContext, {UidInterface} from '../../Contexts/PropsContext';
 
 interface RemoteSwapInterface {
   user: UidInterface;
@@ -23,7 +23,7 @@ const RemoteSwap: React.FC<RemoteSwapInterface> = (props) => {
           : {}
       }
       onPress={() => {
-        (dispatch as DispatchType<'SwapVideo'>)({
+        dispatch({
           type: 'SwapVideo',
           value: [props.user],
         });

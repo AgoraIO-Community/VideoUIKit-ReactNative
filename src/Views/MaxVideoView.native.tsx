@@ -1,9 +1,8 @@
 import React, {useContext} from 'react';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
-import styles from './Style';
-import PropsContext from './PropsContext';
-import {UidInterface} from './RtcContext';
-import {View, Text, Image} from 'react-native';
+import styles from '../Style';
+import PropsContext, {UidInterface} from '../Contexts/PropsContext';
+import {View} from 'react-native';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
@@ -29,27 +28,16 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     ) : (
       <View style={{flex: 1, backgroundColor: '#000'}} />
     )
+  ) : props.user.video ? (
+    <RemoteView
+      style={{...styles.fullView, ...(maxViewStyles as object)}}
+      uid={props.user.uid as number}
+      renderMode={VideoRenderMode.Fit}
+    />
+  ) : Fallback ? (
+    <Fallback />
   ) : (
-    <>
-      <div style={{flex: 1, display: props.user.video ? 'flex' : 'none'}}>
-        <RemoteView
-          style={{...styles.fullView, ...(maxViewStyles as object)}}
-          uid={props.user.uid as number}
-          renderMode={VideoRenderMode.Fit}
-        />
-      </div>
-      {props.user.video ? (
-        <></>
-      ) : (
-        <>
-          {Fallback ? (
-            <Fallback />
-          ) : (
-            <View style={{flex: 1, backgroundColor: '#000'}} />
-          )}
-        </>
-      )}
-    </>
+    <View style={{flex: 1, backgroundColor: '#000'}} />
   );
 };
 

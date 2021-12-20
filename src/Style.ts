@@ -36,7 +36,7 @@ export default StyleSheet.create({
   },
   minContainer: {
     position: 'absolute',
-    top: 0,
+    top: 15,
     left: 0,
     padding: 0,
     margin: 0,
@@ -44,7 +44,7 @@ export default StyleSheet.create({
   },
   Controls: {
     position: 'absolute',
-    bottom: 70,
+    top: dimensions.height - 120,
     left: 0,
     width: dimensions.width,
     height: 70,
@@ -92,7 +92,7 @@ export default StyleSheet.create({
   remoteBtnContainer: {
     width: '100%',
     display: 'flex',
-    marginVertical: '25%',
+    marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'center',
     alignSelf: 'center',
