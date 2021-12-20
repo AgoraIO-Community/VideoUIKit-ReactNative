@@ -13,7 +13,7 @@ export default function RemoteVideoStateChanged(
     videoState = ToggleState.enabled;
   }
   const videoChange = (user: UidInterface) => {
-    if (user.uid === action.value[0]) {
+    if (user.uid === action.value[0] && videoState !== undefined) {
       user.video = videoState;
     }
     return user;
