@@ -10,9 +10,9 @@
 *********************************************
 */
 import React, {useContext} from 'react';
-import {Image, StyleProp, ViewStyle, View, Text} from 'react-native';
+import {Image, StyleProp, ViewStyle} from 'react-native';
 import icons, {IconsInterface} from './Icons';
-import PropsContext from './../PropsContext';
+import PropsContext from './../Contexts/PropsContext';
 import useImageDelay from './../../../src/hooks/useImageDelay';
 import isSafariBrowser from '../../../src/utils/isSafariBrowser';
 
