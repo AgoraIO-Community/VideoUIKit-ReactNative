@@ -5,18 +5,30 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 
-function LocalVideoMute() {
+interface Props {
+  btnText?: string;
+  variant?: 'outlined' | 'text';
+}
+
+function LocalVideoMute(props: Props) {
+  const {btnText = 'Video', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
-  const {localBtnStyles} = styleProps || {};
+  const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalVideo} = localBtnStyles || {};
+  const {muteRemoteVideo} = remoteBtnStyles || {};
   const {RtcEngine, dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
 
   return (
     <BtnTemplate
       name={local.video === ToggleState.enabled ? 'videocam' : 'videocamOff'}
-      btnText={'Video'}
-      style={{...styles.localBtn, ...(muteLocalVideo as object)}}
+      btnText={btnText}
+      style={{
+        ...styles.localBtn,
+        ...(variant === 'Outlined'
+          ? (muteLocalVideo as object)
+          : (muteRemoteVideo as object)),
+      }}
       onPress={async () => {
         const localState = local.video;
         // Don't do anything if it is in a transitional state
@@ -49,6 +61,7 @@ function LocalVideoMute() {
               ],
             });
           } catch (e) {
+            console.log('error while dispatching');
             dispatch({
               type: 'LocalMuteVideo',
               value: [localState],

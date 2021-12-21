@@ -27,7 +27,7 @@ export {
   PropsProvider,
 } from './Contexts/PropsContext';
 
-export { DualStreamMode } from './Contexts/PropsContext';
+export {DualStreamMode} from './Contexts/PropsContext';
 
 export type {
   UidInterface,
@@ -63,3 +63,5 @@ export {default as RemoteAudioMute} from './Controls/Remote/RemoteAudioMute';
 export {default as RemoteSwap} from './Controls/Remote/RemoteSwap';
 export {default as RemoteVideoMute} from './Controls/Remote/RemoteVideoMute';
 export {default as RemoteControls} from './Controls/RemoteControls';
+
+export {default as ImageIcon} from './Controls/ImageIcon';
