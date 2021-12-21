@@ -45,7 +45,7 @@ const initialState: UidStateInterface = {
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   const {callbacks, rtcProps} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
-    rtcProps.initialDualStreamMode || DualStreamMode.DYNAMIC,
+    rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
 
   const reducer = (
