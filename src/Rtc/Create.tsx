@@ -27,7 +27,7 @@ const Create = ({
         await requestCameraAndAudioPermission();
       }
       try {
-        if (Platform.OS === 'android' || Platform.OS === 'ios') {
+        if (rtcProps.geoFencing === true && (Platform.OS === 'android' || Platform.OS === 'ios')) {
           engine.current = await RtcEngine.createWithAreaCode(
             rtcProps.appId,
             // eslint-disable-next-line no-bitwise

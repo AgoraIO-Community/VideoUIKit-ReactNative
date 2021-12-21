@@ -72,6 +72,7 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
+  geoFencing?: boolean
 }
 
 export interface CallbacksInterface {
