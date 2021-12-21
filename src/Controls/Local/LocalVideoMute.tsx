@@ -15,8 +15,8 @@ function LocalVideoMute(props: Props) {
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalVideo} = localBtnStyles || {};
-  const {muteRemoteAudio} = remoteBtnStyles || {};
-  const {dispatch} = useContext(RtcContext);
+  const {muteRemoteVideo} = remoteBtnStyles || {};
+  const {RtcEngine, dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
 
   return (
@@ -27,7 +27,7 @@ function LocalVideoMute(props: Props) {
         ...styles.localBtn,
         ...(variant === 'Outlined'
           ? (muteLocalVideo as object)
-          : (muteRemoteAudio as object)),
+          : (muteRemoteVideo as object)),
       }}
       onPress={async () => {
         const localState = local.video;
@@ -61,6 +61,7 @@ function LocalVideoMute(props: Props) {
               ],
             });
           } catch (e) {
+            console.log('error while dispatching');
             dispatch({
               type: 'LocalMuteVideo',
               value: [localState],
