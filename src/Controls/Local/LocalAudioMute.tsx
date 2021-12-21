@@ -5,18 +5,29 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 
-function LocalAudioMute() {
+interface Props {
+  btnText?: string;
+  variant?: 'outlined' | 'text';
+}
+function LocalAudioMute(props: Props) {
+  const {btnText = 'Audio', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
-  const {localBtnStyles} = styleProps || {};
+  const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalAudio} = localBtnStyles || {};
+  const {muteRemoteAudio} = remoteBtnStyles || {};
   const {RtcEngine, dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
 
   return (
     <BtnTemplate
       name={local.audio === ToggleState.enabled ? 'mic' : 'micOff'}
-      btnText={'Audio'}
-      style={{...styles.localBtn, ...(muteLocalAudio as object)}}
+      btnText={btnText}
+      style={{
+        ...styles.localBtn,
+        ...(variant === 'Outlined'
+          ? (muteLocalAudio as object)
+          : (muteRemoteAudio as object)),
+      }}
       onPress={async () => {
         const localState = local.audio;
         // Don't do anything if it is in a transitional state
