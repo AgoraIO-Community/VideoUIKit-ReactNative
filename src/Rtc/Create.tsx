@@ -6,7 +6,12 @@ import RtcEngine, {
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
 import {DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {ToggleState} from '../Contexts/PropsContext';
+import PropsContext, {
+  ClientRole,
+  mode,
+  role,
+  ToggleState,
+} from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
 const Create = ({
@@ -34,7 +39,10 @@ const Create = ({
             AreaCode.GLOB ^ AreaCode.CN,
           );
         } else {
-          engine.current = await RtcEngine.create(rtcProps.appId);
+          engine.current = await RtcEngine.create(
+            rtcProps.appId,
+            rtcProps.role,
+          );
         }
         if (rtcProps.profile) {
           if (Platform.OS === 'web') {
@@ -50,7 +58,24 @@ const Create = ({
           }
         }
         try {
-          await engine.current.enableVideo();
+          if (rtcProps.mode === mode.Live) {
+            if (rtcProps.role === role.Audience) {
+              engine.current.setClientRole(ClientRole.Audience);
+              dispatch({
+                type: 'LocalMuteAudio',
+                value: [ToggleState.disabled],
+              });
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.disabled],
+              });
+            } else {
+              engine.current.setClientRole(ClientRole.Broadcaster);
+              await engine.current.enableVideo();
+            }
+          } else {
+            await engine.current.enableVideo();
+          }
         } catch (e) {
           dispatch({
             type: 'LocalMuteAudio',
@@ -95,8 +120,6 @@ const Create = ({
         });
 
         engine.current.addListener('RemoteAudioStateChanged', (...args) => {
-          // console.log('RemoteAudioStateChanged', args);
-
           dispatch({
             type: 'RemoteAudioStateChanged',
             value: args,
@@ -108,8 +131,6 @@ const Create = ({
         });
 
         engine.current.addListener('RemoteVideoStateChanged', (...args) => {
-          // console.log('RemoteVideoStateChanged', args);
-
           dispatch({
             type: 'RemoteVideoStateChanged',
             value: args,
