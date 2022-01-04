@@ -4,7 +4,7 @@ import RemoteLiveStreamRequestApprove from './Remote/RemoteLiveStreamRequestAppr
 import RemoteLiveStreamRequestReject from './Remote/RemoteLiveStreamRequestReject';
 
 interface LiveStreamHostControlsInterface {
-  user?: UidInterface;
+  user: UidInterface;
 }
 
 const LiveStreamHostControls: React.FC<LiveStreamHostControlsInterface> = (
