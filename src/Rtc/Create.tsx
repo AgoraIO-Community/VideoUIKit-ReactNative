@@ -6,12 +6,7 @@ import RtcEngine, {
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
 import {DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {
-  ClientRole,
-  mode,
-  role,
-  ToggleState,
-} from '../Contexts/PropsContext';
+import PropsContext, {mode, role, ToggleState} from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
 const Create = ({
@@ -59,18 +54,7 @@ const Create = ({
         }
         try {
           if (rtcProps.mode === mode.Live) {
-            if (rtcProps.role === role.Audience) {
-              engine.current.setClientRole(ClientRole.Audience);
-              dispatch({
-                type: 'LocalMuteAudio',
-                value: [ToggleState.disabled],
-              });
-              dispatch({
-                type: 'LocalMuteVideo',
-                value: [ToggleState.disabled],
-              });
-            } else {
-              engine.current.setClientRole(ClientRole.Broadcaster);
+            if (rtcProps.role === role.Host) {
               await engine.current.enableVideo();
             }
           } else {
