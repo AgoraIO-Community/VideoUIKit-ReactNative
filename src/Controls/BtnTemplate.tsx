@@ -64,6 +64,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           textAlign: 'center',
           marginTop: 5,
           color: theme || props.color || '#fff',
+          opacity: disabled ? 0.4 : 1
         }}>
         {props.btnText}
       </Text>
