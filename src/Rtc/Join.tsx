@@ -1,7 +1,13 @@
 import React, {useEffect, useContext, useRef} from 'react';
 import RtcEngine from 'react-native-agora';
 import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {ToggleState} from '../Contexts/PropsContext';
+import PropsContext, {
+  ToggleState,
+  mode,
+  role,
+  ChannelProfile,
+  ClientRole,
+} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
 const Join: React.FC<{
@@ -25,13 +31,33 @@ const Join: React.FC<{
       }
     }
     const videoState = uidState.max[0].video;
+
     async function join() {
+      /* Live Streaming */
+      if (rtcProps.mode === mode.Live) {
+        // await engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+        await engine.setClientRole(
+          rtcProps.role === role.Audience
+            ? ClientRole.Audience
+            : ClientRole.Broadcaster,
+        );
+      } else {
+        // await engine.setChannelProfile(ChannelProfile.Communication);
+      }
+      /* enableAudioVideoTrack */
+      // if (rtcProps.enableAudioVideoTrack === false) {
+      //   engine?.muteLocalVideoStream(true);
+      //   engine?.muteLocalAudioStream(true);
+      // } else {
+      //   engine?.muteLocalVideoStream(false);
+      //   engine?.muteLocalAudioStream(false);
+      // }
+
       if (
         rtcProps.encryption &&
         rtcProps.encryption.key &&
         rtcProps.encryption.mode
       ) {
-        console.log('using channel encryption', rtcProps.encryption);
         await engine.enableEncryption(true, {
           encryptionKey: rtcProps.encryption.key,
           encryptionMode: rtcProps.encryption.mode,
@@ -48,6 +74,7 @@ const Join: React.FC<{
           value: [ToggleState.disabled],
         });
       }
+
       await engine.joinChannel(
         rtcProps.token || null,
         rtcProps.channel,

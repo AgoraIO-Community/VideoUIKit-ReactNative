@@ -6,7 +6,13 @@ import RtcEngine, {
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
 import {DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {mode, role, ToggleState} from '../Contexts/PropsContext';
+import PropsContext, {
+  mode,
+  role,
+  ToggleState,
+  ClientRole,
+  ChannelProfile,
+} from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
 const Create = ({
@@ -34,10 +40,7 @@ const Create = ({
             AreaCode.GLOB ^ AreaCode.CN,
           );
         } else {
-          engine.current = await RtcEngine.create(
-            rtcProps.appId,
-            rtcProps.role,
-          );
+          engine.current = await RtcEngine.create(rtcProps.appId);
         }
         if (rtcProps.profile) {
           if (Platform.OS === 'web') {
@@ -53,11 +56,7 @@ const Create = ({
           }
         }
         try {
-          if (rtcProps.mode === mode.Live) {
-            if (rtcProps.role === role.Host) {
-              await engine.current.enableVideo();
-            }
-          } else {
+          if (rtcProps.enableAudioVideoTrack) {
             await engine.current.enableVideo();
           }
         } catch (e) {
@@ -129,7 +128,26 @@ const Create = ({
     return () => {
       engine.current!.destroy();
     };
-  }, []);
+  }, [rtcProps.appId]);
+
+  useEffect(() => {
+    const toggleRole = async () => {
+      if (rtcProps.mode === mode.Live) {
+        await engine.current?.setClientRole(
+          rtcProps.role === role.Audience
+            ? ClientRole.Audience
+            : ClientRole.Broadcaster,
+        );
+      }
+      if (rtcProps.role == role.Host) {
+        await engine.current.enableVideo();
+      }
+    };
+    if (ready) {
+      toggleRole();
+    }
+  }, [ready, rtcProps.role]);
+
   return (
     <>
       {

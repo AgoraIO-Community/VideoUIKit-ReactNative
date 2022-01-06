@@ -35,8 +35,14 @@ const initialState: UidStateInterface = {
   max: [
     {
       uid: 'local',
-      audio: ToggleState.enabled,
-      video: ToggleState.enabled,
+      audio: ToggleState.disabled,
+      video: ToggleState.disabled,
+      // audio: rtcProps.enableAudioVideoTrack
+      //   ? ToggleState.enabled
+      //   : ToggleState.disabled,
+      // video: rtcProps.enableAudioVideoTrack
+      //   ? ToggleState.enabled
+      //   : ToggleState.disabled,
       streamType: 'high',
     },
   ],

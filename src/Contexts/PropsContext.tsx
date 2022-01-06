@@ -101,6 +101,7 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
+  enableAudioVideoTrack: boolean;
 }
 
 export interface CallbacksInterface {
