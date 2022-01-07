@@ -50,10 +50,11 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           style={{
             width: '100%',
             height: '100%',
-            tintColor:
-              props.name !== 'callEnd' && props.name !== 'recordingActiveIcon'
+            opacity: disabled ?  0.4 : 1,
+            tintColor: disabled ? 'grey' :
+              (props.name !== 'callEnd' && props.name !== 'recordingActiveIcon'
                 ? theme || props.color || '#fff'
-                : '#FD0845',
+                : '#FD0845'),
           }}
           resizeMode={'contain'}
           source={{uri: icons[props.name]}}
@@ -63,7 +64,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
         style={{
           textAlign: 'center',
           marginTop: 5,
-          color: theme || props.color || '#fff',
+          color: disabled ? 'grey' : (theme || props.color || '#fff'),
           opacity: disabled ? 0.4 : 1
         }}>
         {props.btnText}

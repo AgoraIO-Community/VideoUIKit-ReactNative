@@ -13,7 +13,7 @@ function SwitchCamera() {
   const local = useContext(LocalContext);
   return (
     <BtnTemplate
-      name={local.video === ToggleState.enabled ? 'switchCamera' :'switchCameraDisabled'}
+      name={'switchCamera'}
       style={{...styles.localBtn, ...(switchCamera as object)}}
       btnText={'Switch'}
       disabled={local.video === ToggleState.enabled ? false : true}
