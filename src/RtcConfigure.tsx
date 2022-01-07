@@ -30,29 +30,29 @@ import {
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 
-const initialState: UidStateInterface = {
-  min: [],
-  max: [
-    {
-      uid: 'local',
-      audio: ToggleState.disabled,
-      video: ToggleState.disabled,
-      // audio: rtcProps.enableAudioVideoTrack
-      //   ? ToggleState.enabled
-      //   : ToggleState.disabled,
-      // video: rtcProps.enableAudioVideoTrack
-      //   ? ToggleState.enabled
-      //   : ToggleState.disabled,
-      streamType: 'high',
-    },
-  ],
-};
-
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   const {callbacks, rtcProps} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
+
+  const initialState: UidStateInterface = {
+    min: [],
+    max: [
+      {
+        uid: 'local',
+        // audio: ToggleState.enabled,
+        // video: ToggleState.enabled,
+        audio: rtcProps.enableAudioVideoTrack
+          ? ToggleState.enabled
+          : ToggleState.disabled,
+        video: rtcProps.enableAudioVideoTrack
+          ? ToggleState.enabled
+          : ToggleState.disabled,
+        streamType: 'high',
+      },
+    ],
+  };
 
   const reducer = (
     state: UidStateInterface,
