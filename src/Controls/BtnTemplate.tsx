@@ -52,7 +52,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
             height: '100%',
             tintColor:
               props.name !== 'callEnd' && props.name !== 'recordingActiveIcon'
-                ? theme || props.color || '#fff'
+                ? props.color || theme || '#fff'
                 : '#FD0845',
           }}
           resizeMode={'contain'}
