@@ -5,7 +5,6 @@ import PropsContext, {
   ToggleState,
   mode,
   role,
-  ChannelProfile,
   ClientRole,
 } from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
@@ -44,14 +43,6 @@ const Join: React.FC<{
       } else {
         // await engine.setChannelProfile(ChannelProfile.Communication);
       }
-      /* enableAudioVideoTrack */
-      // if (rtcProps.enableAudioVideoTrack === false) {
-      //   engine?.muteLocalVideoStream(true);
-      //   engine?.muteLocalAudioStream(true);
-      // } else {
-      //   engine?.muteLocalVideoStream(false);
-      //   engine?.muteLocalAudioStream(false);
-      // }
 
       if (
         rtcProps.encryption &&
