@@ -133,16 +133,8 @@ const Create = ({
   useEffect(() => {
     const toggleRole = async () => {
       if (rtcProps.mode === mode.Live) {
-        try {
-          await engine.current?.setClientRole(
-            rtcProps.role === role.Audience
-              ? ClientRole.Audience
-              : ClientRole.Broadcaster,
-          );
-        } catch (error) {
-          console.error('Unable to set client role');
-        }
         if (rtcProps.role == role.Host) {
+          await engine.current?.setClientRole(ClientRole.Broadcaster);
           // This creates local audio and video track
           await engine.current?.enableVideo();
           // This unpublishes the current track
@@ -171,6 +163,7 @@ const Create = ({
             type: 'LocalMuteVideo',
             value: [ToggleState.disabled],
           });
+          await engine.current?.setClientRole(ClientRole.Audience);
         }
       }
     };
