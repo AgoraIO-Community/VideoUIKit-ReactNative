@@ -11,7 +11,6 @@ import PropsContext, {
   role,
   ToggleState,
   ClientRole,
-  ChannelProfile,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
@@ -25,6 +24,7 @@ const Create = ({
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
+  const firstUpdate = useRef(true);
 
   useEffect(() => {
     async function init() {
@@ -133,20 +133,54 @@ const Create = ({
   useEffect(() => {
     const toggleRole = async () => {
       if (rtcProps.mode === mode.Live) {
-        await engine.current?.setClientRole(
-          rtcProps.role === role.Audience
-            ? ClientRole.Audience
-            : ClientRole.Broadcaster,
-        );
-      }
-      if (rtcProps.role == role.Host) {
-        await engine.current.enableVideo();
+        try {
+          await engine.current?.setClientRole(
+            rtcProps.role === role.Audience
+              ? ClientRole.Audience
+              : ClientRole.Broadcaster,
+          );
+        } catch (error) {
+          console.error('Unable to set client role');
+        }
+        if (rtcProps.role == role.Host) {
+          // This creates local audio and video track
+          await engine.current?.enableVideo();
+          // This unpublishes the current track
+          await engine.current?.muteLocalAudioStream(true);
+          await engine.current?.muteLocalVideoStream(true);
+          // This updates the uid interface
+          dispatch({
+            type: 'LocalMuteAudio',
+            value: [ToggleState.disabled],
+          });
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [ToggleState.disabled],
+          });
+        }
+        if (rtcProps.role === role.Audience) {
+          // To switch the user role back to "audience", call unpublish first
+          // Otherwise the setClientRole method call fails and throws an exception.
+          await engine.current?.muteLocalAudioStream(true);
+          await engine.current?.muteLocalVideoStream(true);
+          dispatch({
+            type: 'LocalMuteAudio',
+            value: [ToggleState.disabled],
+          });
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [ToggleState.disabled],
+          });
+        }
       }
     };
-    if (ready) {
-      toggleRole();
+    // The first update current skips the render of this block for the first time
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
     }
-  }, [ready, rtcProps.role]);
+    toggleRole();
+  }, [rtcProps.role]);
 
   return (
     <>
