@@ -16,7 +16,6 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
   const {maxViewStyles} = styleProps || {};
   const Fallback = props.fallback;
-  console.log('MaxVideoView', props);
   return props.user.uid === 'local' ? (
     props.user.video ? (
       <LocalView
