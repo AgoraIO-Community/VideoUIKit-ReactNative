@@ -14,6 +14,7 @@ function EndCall() {
     <BtnTemplate
       name={'callEnd'}
       btnText={'Hang Up'}
+      color='#FD0845'
       style={{...styles.endCall, ...(endCall as object)}}
       onPress={() =>
         dispatch({
