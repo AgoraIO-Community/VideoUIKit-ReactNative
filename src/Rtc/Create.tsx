@@ -24,7 +24,8 @@ const Create = ({
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
-  const firstUpdate = useRef(true);
+  const isVideoEnabledRef = useRef<boolean>(false);
+  const firstUpdate = useRef<boolean>(true);
 
   useEffect(() => {
     async function init() {
@@ -56,7 +57,7 @@ const Create = ({
           }
         }
         try {
-          if (rtcProps.enableAudioVideoTrack) {
+          if (rtcProps.role === role.Host) {
             await engine.current.enableVideo();
           }
         } catch (e) {
@@ -135,20 +136,37 @@ const Create = ({
       if (rtcProps.mode === mode.Live) {
         if (rtcProps.role == role.Host) {
           await engine.current?.setClientRole(ClientRole.Broadcaster);
-          // This creates local audio and video track
-          await engine.current?.enableVideo();
-          // This unpublishes the current track
-          await engine.current?.muteLocalAudioStream(true);
-          await engine.current?.muteLocalVideoStream(true);
-          // This updates the uid interface
-          dispatch({
-            type: 'LocalMuteAudio',
-            value: [ToggleState.disabled],
-          });
-          dispatch({
-            type: 'LocalMuteVideo',
-            value: [ToggleState.disabled],
-          });
+          // isVideoEnabledRef checks if the permission is already taken once
+          if (!isVideoEnabledRef.current) {
+            try {
+              // This creates local audio and video track
+              await engine.current?.enableVideo();
+              isVideoEnabledRef.current = true;
+            } catch (error) {
+              dispatch({
+                type: 'LocalMuteAudio',
+                value: [ToggleState.disabled],
+              });
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.disabled],
+              });
+            }
+          }
+          if (isVideoEnabledRef.current) {
+            // This unpublishes the current track
+            await engine.current?.muteLocalAudioStream(true);
+            await engine.current?.muteLocalVideoStream(true);
+            // This updates the uid interface
+            dispatch({
+              type: 'LocalMuteAudio',
+              value: [ToggleState.disabled],
+            });
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [ToggleState.disabled],
+            });
+          }
         }
         if (rtcProps.role === role.Audience) {
           // To switch the user role back to "audience", call unpublish first
@@ -167,7 +185,7 @@ const Create = ({
         }
       }
     };
-    // The first update current skips the render of this block for the first time
+    // The firstUpdateCurrent ref skips the render of this block for the first time
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;

@@ -11,6 +11,7 @@ import PropsContext, {
   RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
+  role,
 } from './Contexts/PropsContext';
 import {MinUidProvider} from './Contexts/MinUidContext';
 import {MaxUidProvider} from './Contexts/MaxUidContext';
@@ -41,14 +42,14 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     max: [
       {
         uid: 'local',
-        // audio: ToggleState.enabled,
-        // video: ToggleState.enabled,
-        audio: rtcProps.enableAudioVideoTrack
-          ? ToggleState.enabled
-          : ToggleState.disabled,
-        video: rtcProps.enableAudioVideoTrack
-          ? ToggleState.enabled
-          : ToggleState.disabled,
+        audio:
+          rtcProps.role === role.Host
+            ? ToggleState.enabled
+            : ToggleState.disabled,
+        video:
+          rtcProps.role === role.Host
+            ? ToggleState.enabled
+            : ToggleState.disabled,
         streamType: 'high',
       },
     ],

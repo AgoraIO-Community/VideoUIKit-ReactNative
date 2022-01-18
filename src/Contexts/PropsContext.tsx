@@ -92,7 +92,7 @@ export interface RtcPropsInterface {
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
   mode?: mode /* Select between livestreaming and communication mode for the SDK. (default: communication) */;
-  role: role /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
+  role?: role /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
   callActive?: boolean;
   encryption?: {
     key: string;
@@ -101,7 +101,6 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
-  enableAudioVideoTrack: boolean;
 }
 
 export interface CallbacksInterface {
@@ -133,6 +132,7 @@ const initialValue: PropsInterface = {
   rtcProps: {
     appId: '',
     channel: '',
+    role: role.Host,
   },
 };
 
