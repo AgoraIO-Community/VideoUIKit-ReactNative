@@ -14,14 +14,28 @@ import icons, {IconsInterface} from './Icons';
 import useImageDelay from '../../../src/hooks/useImageDelay';
 import isSafariBrowser from '../../../src/utils/isSafariBrowser';
 
-interface BtnTemplateInterface {
-  name: keyof IconsInterface;
+type Only<T, U> = {[P in keyof T]: T[P]} &
+  Omit<{[P in keyof U]?: never}, keyof T>;
+
+type Either<T, U> = Only<T, U> | Only<U, T>;
+
+interface BtnTemplateBasicInterface {
   color?: string;
   onPress?: TouchableOpacityProps['onPress'];
   style?: StyleProp<ViewStyle>;
   btnText?: string;
   disabled?: boolean;
 }
+interface BtnTemplateInterfaceWithName extends BtnTemplateBasicInterface {
+  name?: keyof IconsInterface;
+}
+interface BtnTemplateInterfaceWithIcon extends BtnTemplateBasicInterface {
+  icon?: any;
+}
+type BtnTemplateInterface = Either<
+  BtnTemplateInterfaceWithIcon,
+  BtnTemplateInterfaceWithName
+>;
 
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {disabled = false} = props;
@@ -56,7 +70,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
                 : '#FD0845',
           }}
           resizeMode={'contain'}
-          source={{uri: icons[props.name]}}
+          source={{uri: props.name ? icons[props.name] : props.icon}}
         />
       </View>
       <Text
