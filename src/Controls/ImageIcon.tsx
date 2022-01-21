@@ -40,10 +40,7 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
         {
           width: '100%',
           height: '100%',
-          tintColor:
-            props.name !== 'callEnd' && props.name !== 'recordingActiveIcon'
-              ? props.color || theme || '#fff'
-              : '#FD0845',
+          tintColor: props.color || theme || '#fff'              
         },
         props.style as object,
       ]}
