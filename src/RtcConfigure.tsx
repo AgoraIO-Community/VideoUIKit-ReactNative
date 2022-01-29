@@ -12,6 +12,7 @@ import PropsContext, {
   CallbacksInterface,
   DualStreamMode,
   ClientRole,
+  ChannelProfile,
 } from './Contexts/PropsContext';
 import {MinUidProvider} from './Contexts/MinUidContext';
 import {MaxUidProvider} from './Contexts/MaxUidContext';
@@ -32,7 +33,7 @@ import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
-  const {callbacks, rtcProps} = useContext(PropsContext);
+  const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
@@ -43,13 +44,15 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       {
         uid: 'local',
         audio:
-          rtcProps?.role == ClientRole.Broadcaster
-            ? ToggleState.enabled
-            : ToggleState.disabled,
+          mode == ChannelProfile.LiveBroadcasting &&
+          rtcProps?.role == ClientRole.Audience
+            ? ToggleState.disabled
+            : ToggleState.enabled,
         video:
-          rtcProps?.role == ClientRole.Broadcaster
-            ? ToggleState.enabled
-            : ToggleState.disabled,
+          mode == ChannelProfile.LiveBroadcasting &&
+          rtcProps?.role == ClientRole.Audience
+            ? ToggleState.disabled
+            : ToggleState.enabled,
         streamType: 'high',
       },
     ],

@@ -43,7 +43,7 @@ const Create = ({
           engine.current = await RtcEngine.create(rtcProps.appId);
         }
         /* Live Streaming */
-        if (mode === ChannelProfile.LiveBroadcasting) {
+        if (mode == ChannelProfile.LiveBroadcasting) {
           await engine.current.setChannelProfile(
             ChannelProfile.LiveBroadcasting,
           );
@@ -68,20 +68,26 @@ const Create = ({
             });
           }
         }
-        try {
-          if (rtcProps.role === ClientRole.Broadcaster) {
+
+        if (
+          !(
+            mode == ChannelProfile.LiveBroadcasting &&
+            rtcProps.role == ClientRole.Audience
+          )
+        ) {
+          try {
             await engine.current.enableVideo();
+          } catch (e) {
+            dispatch({
+              type: 'LocalMuteAudio',
+              value: [ToggleState.disabled],
+            });
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [ToggleState.disabled],
+            });
+            console.error('No devices', e);
           }
-        } catch (e) {
-          dispatch({
-            type: 'LocalMuteAudio',
-            value: [ToggleState.disabled],
-          });
-          dispatch({
-            type: 'LocalMuteVideo',
-            value: [ToggleState.disabled],
-          });
-          console.error('No devices', e);
         }
 
         engine.current.addListener(
@@ -145,7 +151,7 @@ const Create = ({
 
   useEffect(() => {
     const toggleRole = async () => {
-      if (mode === ChannelProfile.LiveBroadcasting) {
+      if (mode == ChannelProfile.LiveBroadcasting) {
         if (rtcProps.role == ClientRole.Broadcaster) {
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
