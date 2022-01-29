@@ -42,6 +42,19 @@ const Create = ({
         } else {
           engine.current = await RtcEngine.create(rtcProps.appId);
         }
+        /* Live Streaming */
+        if (mode === ChannelProfile.LiveBroadcasting) {
+          await engine.current.setChannelProfile(
+            ChannelProfile.LiveBroadcasting,
+          );
+          await engine.current.setClientRole(
+            rtcProps.role === ClientRole.Audience
+              ? ClientRole.Audience
+              : ClientRole.Broadcaster,
+          );
+        } else {
+          await engine.current.setChannelProfile(ChannelProfile.Communication);
+        }
         if (rtcProps.profile) {
           if (Platform.OS === 'web') {
             // move this to bridge?

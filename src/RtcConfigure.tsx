@@ -43,11 +43,11 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       {
         uid: 'local',
         audio:
-          rtcProps.role == ClientRole.Broadcaster
+          rtcProps?.role == ClientRole.Broadcaster
             ? ToggleState.enabled
             : ToggleState.disabled,
         video:
-          rtcProps.role == ClientRole.Broadcaster
+          rtcProps?.role == ClientRole.Broadcaster
             ? ToggleState.enabled
             : ToggleState.disabled,
         streamType: 'high',

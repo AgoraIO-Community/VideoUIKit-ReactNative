@@ -31,18 +31,6 @@ const Join: React.FC<{
     const videoState = uidState.max[0].video;
 
     async function join() {
-      /* Live Streaming */
-      if (mode === ChannelProfile.LiveBroadcasting) {
-        // await engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-        await engine.setClientRole(
-          rtcProps.role === ClientRole.Audience
-            ? ClientRole.Audience
-            : ClientRole.Broadcaster,
-        );
-      } else {
-        // await engine.setChannelProfile(ChannelProfile.Communication);
-      }
-
       if (
         rtcProps.encryption &&
         rtcProps.encryption.key &&
