@@ -7,10 +7,9 @@ import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
 import {DispatchType} from '../Contexts/RtcContext';
 import PropsContext, {
-  mode,
-  role,
   ToggleState,
   ClientRole,
+  ChannelProfile,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
@@ -22,7 +21,7 @@ const Create = ({
   children: (engine: React.MutableRefObject<RtcEngine>) => JSX.Element;
 }) => {
   const [ready, setReady] = useState(false);
-  const {callbacks, rtcProps} = useContext(PropsContext);
+  const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef<boolean>(true);
@@ -57,7 +56,7 @@ const Create = ({
           }
         }
         try {
-          if (rtcProps.role === role.Host) {
+          if (rtcProps.role === ClientRole.Broadcaster) {
             await engine.current.enableVideo();
           }
         } catch (e) {
@@ -133,8 +132,8 @@ const Create = ({
 
   useEffect(() => {
     const toggleRole = async () => {
-      if (rtcProps.mode === mode.Live) {
-        if (rtcProps.role == role.Host) {
+      if (mode === ChannelProfile.LiveBroadcasting) {
+        if (rtcProps.role == ClientRole.Broadcaster) {
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
           if (!isVideoEnabledRef.current) {
@@ -168,7 +167,7 @@ const Create = ({
             });
           }
         }
-        if (rtcProps.role === role.Audience) {
+        if (rtcProps.role == ClientRole.Audience) {
           // To switch the user role back to "audience", call unpublish first
           // Otherwise the setClientRole method call fails and throws an exception.
           await engine.current?.muteLocalAudioStream(true);

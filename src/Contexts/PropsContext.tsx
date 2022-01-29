@@ -4,30 +4,22 @@ import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcE
 import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
 
-/** * User role for live streaming mode */
+/* User role for live streaming mode */
 export enum ClientRole {
-  /** 1: A host can both send and receive streams. */
+  /* 1: A host can both send and receive streams. */
   Broadcaster = 1,
-  /** 2: The default role. An audience can only receive streams.*/
+  /* 2: The default role. An audience can only receive streams. */
   Audience = 2,
 }
 
-/** * Mode for RTC (Live or Broadcast) */
+/* Mode for RTC (Live or Broadcast) */
 export enum ChannelProfile {
-  /** * 0: (Default) The Communication profile. Use this profile in one-on-one calls or group calls, where all users can talk freely. */
+  /** 0: (Default) The Communication profile.
+   *  Use this profile in one-on-one calls or group calls, where all users can talk freely. */
   Communication = 0,
-  /** * 1: The Live-Broadcast profile. Users in a live-broadcast channel have a role as either host or audience. A host can both send and receive streams; an audience can only receive streams. */
+  /**  1: The Live-Broadcast profile.
+   *   Users in a live-broadcast channel have a role as either host or audience. A host can both send and receive streams; an audience can only receive streams. */
   LiveBroadcasting = 1,
-}
-
-export enum mode {
-  Live = 'live',
-  Communication = 'rtc',
-}
-
-export enum role {
-  Host = 'host',
-  Audience = 'audience',
 }
 
 // disabled is intentionally kept as the 1st item in the enum.
@@ -91,8 +83,7 @@ export interface RtcPropsInterface {
   dual?: boolean | null;
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
-  mode?: mode /* Select between livestreaming and communication mode for the SDK. (default: communication) */;
-  role?: role /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
+  role?: ClientRole /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
   callActive?: boolean;
   encryption?: {
     key: string;
@@ -126,13 +117,13 @@ export interface PropsInterface {
   rtcProps: RtcPropsInterface;
   styleProps?: Partial<StylePropInterface>;
   callbacks?: Partial<CallbacksInterface>;
+  mode?: ChannelProfile;
 }
 
 const initialValue: PropsInterface = {
   rtcProps: {
     appId: '',
     channel: '',
-    role: role.Host,
   },
 };
 

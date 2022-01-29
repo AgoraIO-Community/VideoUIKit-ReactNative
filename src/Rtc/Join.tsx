@@ -3,9 +3,8 @@ import RtcEngine from 'react-native-agora';
 import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
 import PropsContext, {
   ToggleState,
-  mode,
-  role,
   ClientRole,
+  ChannelProfile,
 } from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
@@ -16,7 +15,7 @@ const Join: React.FC<{
   dispatch: DispatchType;
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
-  const {rtcProps} = useContext(PropsContext);
+  const {rtcProps, mode} = useContext(PropsContext);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -33,10 +32,10 @@ const Join: React.FC<{
 
     async function join() {
       /* Live Streaming */
-      if (rtcProps.mode === mode.Live) {
+      if (mode === ChannelProfile.LiveBroadcasting) {
         // await engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
         await engine.setClientRole(
-          rtcProps.role === role.Audience
+          rtcProps.role === ClientRole.Audience
             ? ClientRole.Audience
             : ClientRole.Broadcaster,
         );

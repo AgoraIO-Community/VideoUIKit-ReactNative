@@ -38,6 +38,8 @@ export type {
   PropsInterface,
 } from './Contexts/PropsContext';
 
+export {ClientRole, ChannelProfile} from './Contexts/PropsContext';
+
 export {
   default as RtcContext,
   RtcConsumer,
