@@ -187,8 +187,10 @@ const Create = ({
           }
         }
         if (rtcProps.role == ClientRole.Audience) {
-          // To switch the user role back to "audience", call unpublish first
-          // Otherwise the setClientRole method call fails and throws an exception.
+          /**
+           * To switch the user role back to "audience", call unpublish first
+           * Otherwise the setClientRole method call fails and throws an exception.
+           */
           await engine.current?.muteLocalAudioStream(true);
           await engine.current?.muteLocalVideoStream(true);
           dispatch({
