@@ -1,11 +1,7 @@
 import React, {useEffect, useContext, useRef} from 'react';
 import RtcEngine from 'react-native-agora';
 import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {
-  ToggleState,
-  ClientRole,
-  ChannelProfile,
-} from '../Contexts/PropsContext';
+import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
 const Join: React.FC<{
@@ -15,7 +11,7 @@ const Join: React.FC<{
   dispatch: DispatchType;
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
-  const {rtcProps, mode} = useContext(PropsContext);
+  const {rtcProps} = useContext(PropsContext);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -29,13 +25,13 @@ const Join: React.FC<{
       }
     }
     const videoState = uidState.max[0].video;
-
     async function join() {
       if (
         rtcProps.encryption &&
         rtcProps.encryption.key &&
         rtcProps.encryption.mode
       ) {
+        console.log('using channel encryption', rtcProps.encryption);
         await engine.enableEncryption(true, {
           encryptionKey: rtcProps.encryption.key,
           encryptionMode: rtcProps.encryption.mode,
