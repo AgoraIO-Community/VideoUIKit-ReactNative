@@ -48,7 +48,6 @@ const Join: React.FC<{
           value: [ToggleState.disabled],
         });
       }
-
       await engine.joinChannel(
         rtcProps.token || null,
         rtcProps.channel,
