@@ -42,7 +42,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
 
   if (isSafariBrowser()) {
     // This fixes the tint issue in safari browser
-    useImageDelay(imageRef, 10, '');
+    useImageDelay(imageRef, 10, '', props?.color);
   }
 
   return (

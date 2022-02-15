@@ -40,7 +40,7 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
     // This hook renders the image after a delay to fix
     // tint issue in safari browser
     if (props?.name) {
-      useImageDelay(imageRef, 10, props.name);
+      useImageDelay(imageRef, 10, props.name, props?.color);
     }
   }
 
