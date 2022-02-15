@@ -15,12 +15,21 @@ import icons, {IconsInterface} from './Icons';
 import PropsContext from './../Contexts/PropsContext';
 import useImageDelay from './../../../src/hooks/useImageDelay';
 import isSafariBrowser from '../../../src/utils/isSafariBrowser';
+import {Either} from './types';
 
-interface ImageIconInterface {
-  name: keyof IconsInterface;
+interface BaseInterface {
   color?: string;
   style?: StyleProp<ViewStyle>;
 }
+
+interface BaseInterfaceWithName extends BaseInterface {
+  name?: keyof IconsInterface;
+}
+interface BaseInterfaceWithIcon extends BaseInterface {
+  icon?: any;
+}
+
+type ImageIconInterface = Either<BaseInterfaceWithName, BaseInterfaceWithIcon>;
 
 const ImageIcon: React.FC<ImageIconInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
@@ -30,7 +39,9 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
   if (isSafariBrowser()) {
     // This hook renders the image after a delay to fix
     // tint issue in safari browser
-    useImageDelay(imageRef, 10, props.name);
+    if (props?.name) {
+      useImageDelay(imageRef, 10, props.name);
+    }
   }
 
   return (
@@ -40,12 +51,12 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
         {
           width: '100%',
           height: '100%',
-          tintColor: props.color || theme || '#fff'              
+          tintColor: props.color || theme || '#fff',
         },
         props.style as object,
       ]}
       resizeMode={'contain'}
-      source={{uri: icons[props.name]}}
+      source={{uri: props.name ? icons[props.name] : props.icon}}
     />
   );
 };

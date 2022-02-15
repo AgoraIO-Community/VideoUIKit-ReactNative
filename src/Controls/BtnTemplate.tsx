@@ -13,11 +13,7 @@ import styles from '../Style';
 import icons, {IconsInterface} from './Icons';
 import useImageDelay from '../../../src/hooks/useImageDelay';
 import isSafariBrowser from '../../../src/utils/isSafariBrowser';
-
-type Only<T, U> = {[P in keyof T]: T[P]} &
-  Omit<{[P in keyof U]?: never}, keyof T>;
-
-type Either<T, U> = Only<T, U> | Only<U, T>;
+import {Either} from './types';
 
 interface BtnTemplateBasicInterface {
   color?: string;
