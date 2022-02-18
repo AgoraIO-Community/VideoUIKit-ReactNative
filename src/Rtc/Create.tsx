@@ -51,16 +51,28 @@ const Create = ({
         }
         try {
           await engine.current.enableVideo();
-        } catch (e) {
           dispatch({
             type: 'LocalMuteAudio',
-            value: [ToggleState.disabled],
+            value: [ToggleState.enabled],
           });
           dispatch({
             type: 'LocalMuteVideo',
-            value: [ToggleState.disabled],
+            value: [ToggleState.enabled],
           });
-          console.error('No devices', e);
+        } catch (e) {
+          if (!e.status?.audioError) {
+            dispatch({
+              type: 'LocalMuteAudio',
+              value: [ToggleState.enabled],
+            });
+          }
+          if (!e.status?.videoError) {
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [ToggleState.enabled],
+            });
+          }
+          console.error('No devices', e.message);
         }
 
         engine.current.addListener(
