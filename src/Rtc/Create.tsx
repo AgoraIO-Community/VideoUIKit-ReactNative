@@ -72,11 +72,13 @@ const Create = ({
         if (
           !(
             mode == ChannelProfile.LiveBroadcasting &&
-            rtcProps.role == ClientRole.Audience
+            rtcProps.role == ClientRole.Audience &&
+            Platform.OS === 'web'
           )
         ) {
           try {
             await engine.current.enableVideo();
+            isVideoEnabledRef.current = true;
           } catch (e) {
             dispatch({
               type: 'LocalMuteAudio',
