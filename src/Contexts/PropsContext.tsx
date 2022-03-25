@@ -72,6 +72,9 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
+  lifecycle?: {
+    useBeforeJoin?: () => () => Promise<void>
+  }
 }
 
 export interface CallbacksInterface {

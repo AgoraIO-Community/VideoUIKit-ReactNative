@@ -12,6 +12,7 @@ const Join: React.FC<{
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
+  const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin ? rtcProps.lifecycle.useBeforeJoin() : null; 
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -48,6 +49,15 @@ const Join: React.FC<{
           value: [ToggleState.disabled],
         });
       }
+
+      try {
+        if(beforeJoin){
+          await beforeJoin();
+        }  
+      } catch (error) {
+        console.error('FPE:Error on executing useBeforeJoin',error);
+      }
+
       await engine.joinChannel(
         rtcProps.token || null,
         rtcProps.channel,
