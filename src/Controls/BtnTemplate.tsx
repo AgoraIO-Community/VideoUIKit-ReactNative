@@ -7,12 +7,12 @@ import {
   ViewStyle,
   Text,
   View,
+  Platform,
 } from 'react-native';
 import PropsContext from '../Contexts/PropsContext';
 import styles from '../Style';
 import icons, {IconsInterface} from './Icons';
-import useImageDelay from '../../../src/hooks/useImageDelay';
-import isSafariBrowser from '../../../src/utils/isSafariBrowser';
+import useImageDelay from '../hooks/useImageDelay';
 import {Either} from './types';
 
 interface BtnTemplateBasicInterface {
@@ -40,10 +40,8 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
 
   const imageRef = React.useRef(null);
 
-  if (isSafariBrowser()) {
-    // This fixes the tint issue in safari browser
-    useImageDelay(imageRef, 10, '', props?.color);
-  }
+  // This fixes the tint issue in safari browser
+  useImageDelay(imageRef, 10, '', props?.color || '');
 
   return (
     <TouchableOpacity
@@ -56,7 +54,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           props.style as object,
         ]}>
         <Image
-          ref={imageRef}
+          ref={Platform.OS === 'web' ? imageRef : undefined}
           style={{
             width: '100%',
             height: '100%',

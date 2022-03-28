@@ -10,11 +10,10 @@
 *********************************************
 */
 import React, {useContext} from 'react';
-import {Image, StyleProp, ViewStyle} from 'react-native';
+import {Image, Platform, StyleProp, ViewStyle} from 'react-native';
 import icons, {IconsInterface} from './Icons';
 import PropsContext from './../Contexts/PropsContext';
-import useImageDelay from './../../../src/hooks/useImageDelay';
-import isSafariBrowser from '../../../src/utils/isSafariBrowser';
+import useImageDelay from '../hooks/useImageDelay';
 import {Either} from './types';
 
 interface BaseInterface {
@@ -36,17 +35,11 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
   const {theme} = styleProps || {};
   const imageRef = React.useRef(null);
 
-  if (isSafariBrowser()) {
-    // This hook renders the image after a delay to fix
-    // tint issue in safari browser
-    if (props?.name) {
-      useImageDelay(imageRef, 10, props.name, props?.color);
-    }
-  }
+  useImageDelay(imageRef, 10, props?.name || '', props?.color);
 
   return (
     <Image
-      ref={imageRef}
+      ref={Platform.OS === 'web' ? imageRef : undefined}
       style={[
         {
           width: '100%',
