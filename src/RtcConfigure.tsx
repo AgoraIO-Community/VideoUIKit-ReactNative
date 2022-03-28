@@ -11,6 +11,8 @@ import PropsContext, {
   RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
+  ClientRole,
+  ChannelProfile,
 } from './Contexts/PropsContext';
 import {MinUidProvider} from './Contexts/MinUidContext';
 import {MaxUidProvider} from './Contexts/MaxUidContext';
@@ -30,23 +32,32 @@ import {
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 
-const initialLocalState: UidStateInterface = {
-  min: [],
-  max: [
-    {
-      uid: 'local',
-      audio: ToggleState.enabled,
-      video: ToggleState.enabled,
-      streamType: 'high',
-    },
-  ],
-};
-
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
-  const {callbacks, rtcProps} = useContext(PropsContext);
+  const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
+
+  const initialLocalState: UidStateInterface = {
+    min: [],
+    max: [
+      {
+        uid: 'local',
+        audio:
+          mode == ChannelProfile.LiveBroadcasting &&
+          rtcProps?.role == ClientRole.Audience
+            ? ToggleState.disabled
+            : ToggleState.enabled,
+        video:
+          mode == ChannelProfile.LiveBroadcasting &&
+          rtcProps?.role == ClientRole.Audience
+            ? ToggleState.disabled
+            : ToggleState.enabled,
+        streamType: 'high',
+      },
+    ],
+  };
+
   const [initialState, setInitialState] = React.useState(
     JSON.parse(JSON.stringify(initialLocalState)),
   );
