@@ -38,7 +38,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
 
-  const initialState: UidStateInterface = {
+  const initialLocalState: UidStateInterface = {
     min: [],
     max: [
       {
@@ -57,6 +57,14 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       },
     ],
   };
+
+  const [initialState, setInitialState] = React.useState(
+    JSON.parse(JSON.stringify(initialLocalState)),
+  );
+
+  React.useEffect(() => {
+    setInitialState(JSON.parse(JSON.stringify(initialLocalState)));
+  }, []);
 
   const reducer = (
     state: UidStateInterface,
