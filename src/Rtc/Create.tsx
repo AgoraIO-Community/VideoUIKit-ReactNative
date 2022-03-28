@@ -24,7 +24,7 @@ const Create = ({
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
-  const firstUpdate = useRef<boolean>(true);
+  const firstUpdate = useRef(true);
 
   useEffect(() => {
     async function init() {
@@ -69,9 +69,17 @@ const Create = ({
           }
         }
 
+        /**
+         * API enableVideo :
+         * On Web -> Asks permissions and then creates microphone and camera tracks
+         * On Native -> Used to start the call in video module
+         * The following condition allows enableVideo API to run in all the conditions
+         * except when mode is livestreaming && user is attendee && running on web,
+         * thereby not asking permissions and not creating tracks for attendees
+         */
         if (
           !(
-            mode == ChannelProfile.LiveBroadcasting &&
+            mode === ChannelProfile.LiveBroadcasting &&
             rtcProps.role == ClientRole.Audience &&
             Platform.OS === 'web'
           )
