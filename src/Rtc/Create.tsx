@@ -19,12 +19,19 @@ const Create = ({
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
-
+  const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate ? rtcProps.lifecycle.useBeforeCreate() : null; 
   useEffect(() => {
     async function init() {
       if (Platform.OS === 'android') {
         //Request required permissions from Android
         await requestCameraAndAudioPermission();
+      }
+      try {
+        if(beforeCreate){
+          await beforeCreate();
+        }  
+      } catch (error) {
+        console.error('FPE:Error on executing useBeforeCreate',error);
       }
       try {
         if (Platform.OS === 'android' || Platform.OS === 'ios') {
