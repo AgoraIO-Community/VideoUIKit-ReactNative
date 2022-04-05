@@ -3,6 +3,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
+import {UidStateInterface} from './RtcContext';
 
 /* User role for live streaming mode */
 export enum ClientRole {
@@ -34,13 +35,32 @@ export enum ToggleState {
 export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
-export interface UidInterface {
+interface DefaultUidInterface {
   // TODO: refactor local to 0 and remove string.
   uid: number | string;
   audio: ToggleState;
   video: ToggleState;
   streamType: 'high' | 'low';
+  type: 'rtc';
 }
+
+export interface UserUidInterface<T> {
+  type: T extends DefaultUidInterface['type'] ? never : T
+}
+
+interface UserEnteredInterface extends UserUidInterface<string> {
+  [key: string] :any,
+}
+
+interface DefaultUidInterface {
+  uid: number | string;
+  audio: ToggleState;
+  video: ToggleState;
+  streamType: 'high' | 'low';
+  type: 'rtc';
+}
+
+export type UidInterface = DefaultUidInterface | UserEnteredInterface;
 
 interface remoteBtnStylesInterface {
   muteRemoteAudio?: StyleProp<ViewStyle>;
@@ -113,6 +133,9 @@ export interface CallbacksInterface {
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
+  SetState(
+    param: UidStateInterface | ((p: UidStateInterface) => UidStateInterface),
+  ): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;
