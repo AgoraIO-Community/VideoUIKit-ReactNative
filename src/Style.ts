@@ -27,8 +27,8 @@ export default StyleSheet.create({
     color: '#fff',
   },
   fullView: {
-    width: dimensions.width,
-    height: dimensions.height,
+    width: '100%',
+    height: '100%',
   },
   minView: {
     width: 240,
@@ -71,8 +71,8 @@ export default StyleSheet.create({
     top: 5,
   },
   controlBtn: {
-    width: 46,
-    height: 46,
+    width: 40,
+    height: 40,
     backgroundColor: 'rgba(255,255,255,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -107,8 +107,8 @@ export default StyleSheet.create({
     borderRadius: 30,
     borderWidth: 4 * StyleSheet.hairlineWidth,
     borderColor: '#ff0000',
-    width: 60,
-    height: 60,
+    width: 48,
+    height: 48,
     backgroundColor: '#ff0000',
   },
 });

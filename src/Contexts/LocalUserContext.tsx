@@ -16,6 +16,7 @@ const LocalUserContext: React.FC<LocalUserContextInterface> = (props) => {
   const min = useContext(MinUidContext);
   // if(min && min[0] && max )
   let localUser: UidInterface = max[0].uid === 'local' ? max[0] : min[0];
+  console.log('!localUser', localUser);
   return (
     <LocalContext.Provider value={localUser}>
       {props.children}

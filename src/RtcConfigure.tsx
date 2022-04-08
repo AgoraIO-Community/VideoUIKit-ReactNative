@@ -1,4 +1,10 @@
-import React, {useState, useReducer, useContext, useCallback} from 'react';
+import React, {
+  useState,
+  useReducer,
+  useContext,
+  useCallback,
+  useRef,
+} from 'react';
 import {
   RtcProvider,
   UidStateInterface,
@@ -17,7 +23,6 @@ import PropsContext, {
 import {MinUidProvider} from './Contexts/MinUidContext';
 import {MaxUidProvider} from './Contexts/MaxUidContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
-
 import {
   LocalMuteAudio,
   LocalMuteVideo,
@@ -33,7 +38,9 @@ import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
-  const {callbacks, rtcProps, mode} = useContext(PropsContext);
+  const {callbacks, rtcProps} = useContext(PropsContext);
+  const rtcUidRef = useRef<number>();
+  const [rtcChannelJoined, setRtcChannelJoined] = useState(false);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
@@ -44,12 +51,12 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       {
         uid: 'local',
         audio:
-          mode == ChannelProfile.LiveBroadcasting &&
+          rtcProps.mode == ChannelProfile.LiveBroadcasting &&
           rtcProps?.role == ClientRole.Audience
             ? ToggleState.disabled
             : ToggleState.enabled,
         video:
-          mode == ChannelProfile.LiveBroadcasting &&
+          rtcProps.mode == ChannelProfile.LiveBroadcasting &&
           rtcProps?.role == ClientRole.Audience
             ? ToggleState.disabled
             : ToggleState.enabled,
@@ -180,7 +187,10 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   );
 
   return (
-    <Create dispatch={dispatch}>
+    <Create
+      dispatch={dispatch}
+      rtcUidRef={rtcUidRef}
+      setRtcChannelJoined={setRtcChannelJoined}>
       {(engineRef) => (
         <Join
           precall={!rtcProps.callActive}
@@ -190,6 +200,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           <RtcProvider
             value={{
               RtcEngine: engineRef.current,
+              rtcUidRef,
+              rtcChannelJoined,
               dispatch,
               setDualStreamMode,
             }}>

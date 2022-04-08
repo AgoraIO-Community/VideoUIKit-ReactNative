@@ -4,6 +4,7 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
+import muteAudio from './muteAudioFunction';
 
 interface Props {
   btnText?: string;
@@ -16,11 +17,13 @@ function LocalAudioMute(props: Props) {
   const {muteLocalAudio} = localBtnStyles || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};
   const {RtcEngine, dispatch} = useContext(RtcContext);
-  const local = useContext(LocalContext);
+  const localUser = useContext(LocalContext);
+
+  const mute = () => muteAudio(localUser, dispatch, RtcEngine);
 
   return (
     <BtnTemplate
-      name={local.audio === ToggleState.enabled ? 'mic' : 'micOff'}
+      name={localUser.audio === ToggleState.enabled ? 'mic' : 'micOff'}
       btnText={btnText}
       style={{
         ...styles.localBtn,
@@ -28,45 +31,7 @@ function LocalAudioMute(props: Props) {
           ? (muteLocalAudio as object)
           : (muteRemoteAudio as object)),
       }}
-      onPress={async () => {
-        const localState = local.audio;
-        // Don't do anything if it is in a transitional state
-        if (
-          localState === ToggleState.enabled ||
-          localState === ToggleState.disabled
-        ) {
-          // Disable UI
-          dispatch({
-            type: 'LocalMuteAudio',
-            value: [
-              localState === ToggleState.enabled
-                ? ToggleState.disabling
-                : ToggleState.enabling,
-            ],
-          });
-
-          try {
-            await RtcEngine.muteLocalAudioStream(
-              localState === ToggleState.enabled,
-            );
-            // Enable UI
-            dispatch({
-              type: 'LocalMuteAudio',
-              value: [
-                localState === ToggleState.enabled
-                  ? ToggleState.disabled
-                  : ToggleState.enabled,
-              ],
-            });
-          } catch (e) {
-            console.error(e);
-            dispatch({
-              type: 'LocalMuteAudio',
-              value: [localState],
-            });
-          }
-        }
-      }}
+      onPress={mute}
     />
   );
 }

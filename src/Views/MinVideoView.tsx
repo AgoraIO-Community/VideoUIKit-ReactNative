@@ -34,7 +34,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
                 zOrderMediaOverlay={true}
               />
             ) : (
-              <View style={{flex: 1, backgroundColor: '#f0f', ...styles.minView, ...(minViewStyles as object)}} />
+              <View style={{flex: 1, ...styles.minView, ...(minViewStyles as object)}} />
             )
           ) : (
             <RemoteView

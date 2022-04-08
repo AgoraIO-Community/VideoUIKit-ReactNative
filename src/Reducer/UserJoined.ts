@@ -39,9 +39,9 @@ export default function UserJoined(
       };
     }
 
-    console.log('new user joined!\n', state, stateUpdate, {
-      dualStreamMode,
-    });
+    // console.log('new user joined!\n', state, stateUpdate, {
+    //   dualStreamMode,
+    // });
   }
   return stateUpdate;
 }

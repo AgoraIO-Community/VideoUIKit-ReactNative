@@ -3,6 +3,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
+import {rtmCallbacks} from './Contexts/RtmContext';
 
 /* User role for live streaming mode */
 export enum ClientRole {
@@ -63,6 +64,12 @@ interface StylePropInterface {
   BtnTemplateStyles?: StyleProp<ViewStyle>;
   maxViewStyles?: StyleProp<ViewStyle>;
   minViewStyles?: StyleProp<ViewStyle>;
+  UIKitContainer?: StyleProp<ViewStyle>;
+  gridVideoView?: StyleProp<ViewStyle>;
+  /**
+   * Style for the small view container
+   */
+  minViewContainer?: StyleProp<ViewStyle>;
   remoteBtnStyles?: remoteBtnStylesInterface;
   remoteBtnContainer?: StyleProp<ViewStyle>;
   localBtnStyles?: localBtnStylesInterface;
@@ -75,14 +82,32 @@ export enum DualStreamMode {
   DYNAMIC,
 }
 
+/**
+ * Select a pre built layout
+ */
+export enum layout {
+  /**
+   * 0: Grid layout: each user occupies a cell in the grid
+   */
+  grid = 0,
+  /**
+   * 2: Pinned layout: MaxUser occupies the main view, the other users are in a floating view on top
+   */
+  pin = 1,
+}
 export interface RtcPropsInterface {
   appId: string;
   channel: string;
   uid?: number;
   token?: string | null;
+  /**
+   * URL for token server, manages fetching and updating tokens automatically. Must follow the schema here - https://github.com/AgoraIO-Community/agora-token-service/
+   */
+  tokenUrl?: string;
   dual?: boolean | null;
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
+  mode?: ChannelProfile;
   role?: ClientRole /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
   callActive?: boolean;
   encryption?: {
@@ -91,7 +116,40 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES128XTS
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
+    /**
+     * Disable Agora RTM, this also disables the use of usernames and remote mute functionality
+     */
+    disableRtm?: boolean;
   };
+  /**
+   * Choose between grid layout and pinned layout. (default: pinned layout)
+   */
+  layout?: layout;
+}
+/**
+ * Props object for customising the UI Kit signalling functionality
+ */
+export interface RtmPropsInterface {
+  /**
+   * Username for the RTM Client, this value can be accessed using the userData object
+   */
+  username?: string;
+  /**
+   * Token used to join an RTM channel when using secured mode (default: null)
+   */
+  token?: string | undefined;
+  /**
+   * UID for local user to join the RTM channel (default: uses the RTC UID)
+   */
+  uid?: string;
+  /**
+   * Show a pop up with option to accept mute request instead of directly muting the remote user (default: true), if set to false you cannot unmute users.
+   */
+  showPopUpBeforeRemoteMute?: boolean;
+  /**
+   * Display RTM usernames in the Videocall (default: false)
+   */
+  displayUsername?: boolean;
 }
 
 export interface CallbacksInterface {
@@ -115,9 +173,13 @@ export type CustomCallbacksInterface = CallbacksInterface;
 
 export interface PropsInterface {
   rtcProps: RtcPropsInterface;
+  rtmProps?: RtmPropsInterface;
   styleProps?: Partial<StylePropInterface>;
   callbacks?: Partial<CallbacksInterface>;
-  mode?: ChannelProfile;
+  /**
+   * Callbacks for different functions of the UI Kit
+   */
+  rtmCallbacks?: rtmCallbacks;
 }
 
 const initialValue: PropsInterface = {

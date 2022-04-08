@@ -15,13 +15,17 @@ import quality from '../Utils/quality';
 
 const Create = ({
   dispatch,
+  rtcUidRef,
+  setRtcChannelJoined,
   children,
 }: {
   dispatch: DispatchType;
-  children: (engine: React.MutableRefObject<RtcEngine>) => JSX.Element;
+  rtcUidRef: React.MutableRefObject<number | undefined>;
+  setRtcChannelJoined: React.Dispatch<React.SetStateAction<boolean>>;
+  children: (engine: React.MutableRefObject<RtcEngine>) => React.ReactElement;
 }) => {
   const [ready, setReady] = useState(false);
-  const {callbacks, rtcProps, mode} = useContext(PropsContext);
+  const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
@@ -43,7 +47,7 @@ const Create = ({
           engine.current = await RtcEngine.create(rtcProps.appId);
         }
         /* Live Streaming */
-        if (mode == ChannelProfile.LiveBroadcasting) {
+        if (rtcProps.mode == ChannelProfile.LiveBroadcasting) {
           await engine.current.setChannelProfile(
             ChannelProfile.LiveBroadcasting,
           );
@@ -79,7 +83,7 @@ const Create = ({
          */
         if (
           !(
-            mode === ChannelProfile.LiveBroadcasting &&
+            rtcProps.mode === ChannelProfile.LiveBroadcasting &&
             rtcProps.role == ClientRole.Audience &&
             Platform.OS === 'web'
           )
@@ -103,6 +107,8 @@ const Create = ({
         engine.current.addListener(
           'JoinChannelSuccess',
           async (channel, uid, elapsed) => {
+            rtcUidRef.current = uid;
+            setRtcChannelJoined(true);
             //Invoke the callback
             console.log('UIkit enabling dual stream', rtcProps.dual);
             if (rtcProps.dual) {
@@ -110,6 +116,7 @@ const Create = ({
               await engine.current!.enableDualStreamMode(rtcProps.dual);
               // await engine.current.setRemoteSubscribeFallbackOption(1);
             }
+            rtcUidRef.current = uid;
             callbacks?.JoinChannelSuccess &&
               callbacks.JoinChannelSuccess(channel, uid, elapsed);
           },
@@ -161,7 +168,7 @@ const Create = ({
 
   useEffect(() => {
     const toggleRole = async () => {
-      if (mode == ChannelProfile.LiveBroadcasting) {
+      if (rtcProps.mode == ChannelProfile.LiveBroadcasting) {
         if (rtcProps.role == ClientRole.Broadcaster) {
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
@@ -183,16 +190,28 @@ const Create = ({
           }
           if (isVideoEnabledRef.current) {
             // This unpublishes the current track
-            await engine.current?.muteLocalAudioStream(true);
-            await engine.current?.muteLocalVideoStream(true);
+            //   await engine.current?.muteLocalAudioStream(true);
+            //   await engine.current?.muteLocalVideoStream(true);
+            //   // This updates the uid interface
+            //   dispatch({
+            //     type: 'LocalMuteAudio',
+            //     value: [ToggleState.disabled],
+            //   });
+            //   dispatch({
+            //     type: 'LocalMuteVideo',
+            //     value: [ToggleState.disabled],
+            //   });
+            // }
+            await engine.current?.muteLocalAudioStream(false);
+            await engine.current?.muteLocalVideoStream(false);
             // This updates the uid interface
             dispatch({
               type: 'LocalMuteAudio',
-              value: [ToggleState.disabled],
+              value: [ToggleState.enabled],
             });
             dispatch({
               type: 'LocalMuteVideo',
-              value: [ToggleState.disabled],
+              value: [ToggleState.enabled],
             });
           }
         }
