@@ -68,7 +68,7 @@ export default StyleSheet.create({
   controlBtn: {
     width: 40,
     height: 40,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
   },

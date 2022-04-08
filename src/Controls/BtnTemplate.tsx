@@ -9,9 +9,9 @@ import {
   View,
   Platform,
 } from 'react-native';
-import PropsContext from '../Contexts/PropsContext';
+import PropsContext, {IconsInterface} from '../Contexts/PropsContext';
 import styles from '../Style';
-import icons, {IconsInterface} from './Icons';
+import icons from './Icons';
 import useImageDelay from '../hooks/useImageDelay';
 import {Either} from './types';
 
