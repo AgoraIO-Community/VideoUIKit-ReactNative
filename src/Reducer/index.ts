@@ -7,3 +7,4 @@ export {default as LocalMuteAudio} from './LocalMuteAudio';
 export {default as LocalMuteVideo} from './LocalMuteVideo';
 export {default as RemoteAudioStateChanged} from './RemoteAudioStateChanged';
 export {default as RemoteVideoStateChanged} from './RemoteVideoStateChanged';
+export {default as BecomeAudience} from './BecomeAudience';

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef, FC} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import RtcEngine, {
   VideoEncoderConfiguration,
   AreaCode,
@@ -15,18 +15,23 @@ import quality from '../Utils/quality';
 
 const Create = ({
   dispatch,
+  rtcUidRef,
+  setRtcChannelJoined,
   children,
 }: {
   dispatch: DispatchType;
-  children: (engine: React.MutableRefObject<RtcEngine>) => JSX.Element;
+  rtcUidRef: React.MutableRefObject<number | undefined>;
+  setRtcChannelJoined: React.Dispatch<React.SetStateAction<boolean>>;
+  children: (engine: React.MutableRefObject<RtcEngine>) => React.ReactElement;
 }) => {
   const [ready, setReady] = useState(false);
-  const {callbacks, rtcProps, mode} = useContext(PropsContext);
+  const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
   useEffect(() => {
+    // using == instead of === for web compatibility: strings vs. numbers in the enum
     async function init() {
       if (Platform.OS === 'android') {
         //Request required permissions from Android
@@ -43,7 +48,7 @@ const Create = ({
           engine.current = await RtcEngine.create(rtcProps.appId);
         }
         /* Live Streaming */
-        if (mode == ChannelProfile.LiveBroadcasting) {
+        if (rtcProps.mode == ChannelProfile.LiveBroadcasting) {
           await engine.current.setChannelProfile(
             ChannelProfile.LiveBroadcasting,
           );
@@ -79,7 +84,7 @@ const Create = ({
          */
         if (
           !(
-            mode === ChannelProfile.LiveBroadcasting &&
+            rtcProps.mode === ChannelProfile.LiveBroadcasting &&
             rtcProps.role == ClientRole.Audience &&
             Platform.OS === 'web'
           )
@@ -103,6 +108,8 @@ const Create = ({
         engine.current.addListener(
           'JoinChannelSuccess',
           async (channel, uid, elapsed) => {
+            rtcUidRef.current = uid;
+            setRtcChannelJoined(true);
             //Invoke the callback
             console.log('UIkit enabling dual stream', rtcProps.dual);
             if (rtcProps.dual) {
@@ -110,6 +117,7 @@ const Create = ({
               await engine.current!.enableDualStreamMode(rtcProps.dual);
               // await engine.current.setRemoteSubscribeFallbackOption(1);
             }
+            rtcUidRef.current = uid;
             callbacks?.JoinChannelSuccess &&
               callbacks.JoinChannelSuccess(channel, uid, elapsed);
           },
@@ -157,11 +165,12 @@ const Create = ({
     return () => {
       engine.current!.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rtcProps.appId]);
 
   useEffect(() => {
     const toggleRole = async () => {
-      if (mode == ChannelProfile.LiveBroadcasting) {
+      if (rtcProps.mode == ChannelProfile.LiveBroadcasting) {
         if (rtcProps.role == ClientRole.Broadcaster) {
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
@@ -182,21 +191,36 @@ const Create = ({
             }
           }
           if (isVideoEnabledRef.current) {
-            // This unpublishes the current track
-            await engine.current?.muteLocalAudioStream(true);
-            await engine.current?.muteLocalVideoStream(true);
-            // This updates the uid interface
-            dispatch({
-              type: 'LocalMuteAudio',
-              value: [ToggleState.disabled],
-            });
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [ToggleState.disabled],
-            });
+            // fix -> add prop to make this auto publish after toggleRole
+            if (rtcProps.enableMediaOnHost === false) {
+              // This unpublishes the current track
+              await engine.current?.muteLocalAudioStream(true);
+              await engine.current?.muteLocalVideoStream(true);
+              // This updates the uid interface
+              dispatch({
+                type: 'LocalMuteAudio',
+                value: [ToggleState.disabled],
+              });
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.disabled],
+              });
+            } else {
+              await engine.current?.muteLocalAudioStream(false);
+              await engine.current?.muteLocalVideoStream(false);
+              dispatch({
+                type: 'LocalMuteAudio',
+                value: [ToggleState.enabled],
+              });
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.enabled],
+              });
+            }
           }
         }
         if (rtcProps.role == ClientRole.Audience) {
+          dispatch({type: 'BecomeAudience', value: []});
           /**
            * To switch the user role back to "audience", call unpublish first
            * Otherwise the setClientRole method call fails and throws an exception.
@@ -221,6 +245,7 @@ const Create = ({
       return;
     }
     toggleRole();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rtcProps.role]);
 
   return (
