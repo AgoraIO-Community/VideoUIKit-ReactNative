@@ -5,7 +5,7 @@ import styles from '../Style';
 import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
-
+import ImageIcon from '../Controls/ImageIcon';
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
@@ -13,12 +13,13 @@ interface MinViewInterface {
   user: UidInterface;
   color?: string;
   showOverlay?: boolean;
+  Fallback?: React.ComponentType;
 }
 
 const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const [overlay, setOverlay] = useState(false);
   const {styleProps} = useContext(PropsContext);
-  const {minViewStyles, theme, remoteBtnStyles} = styleProps || {};
+  const {theme, remoteBtnStyles} = styleProps || {};
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
 
@@ -26,44 +27,10 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
     <View style={{margin: 5}}>
       {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
-          {props.user.uid === 'local' ? (
-            props.user.video ? (
-              <LocalView
-                style={{...styles.minView, ...(minViewStyles as object)}}
-                renderMode={VideoRenderMode.Hidden}
-                zOrderMediaOverlay={true}
-              />
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  ...styles.minView,
-                  ...(minViewStyles as object),
-                }}
-              />
-            )
-          ) : (
-            <RemoteView
-              style={{...styles.minView, ...(minViewStyles as object)}}
-              uid={props.user.uid as number}
-              renderMode={VideoRenderMode.Hidden}
-              zOrderMediaOverlay={true}
-            />
-          )}
+          <UserVideoWithFallback user={props.user} Fallback={props.Fallback} />
         </TouchableOpacity>
-      ) : props.user.uid === 'local' ? (
-        <LocalView
-          style={{...styles.minView, ...(minViewStyles as object)}}
-          renderMode={VideoRenderMode.Hidden}
-          zOrderMediaOverlay={true}
-        />
       ) : (
-        <RemoteView
-          style={{...styles.minView, ...(minViewStyles as object)}}
-          uid={props.user.uid as number}
-          renderMode={VideoRenderMode.Hidden}
-          zOrderMediaOverlay={true}
-        />
+        <UserVideoWithFallback user={props.user} />
       )}
 
       {overlay && showOverlay ? (
@@ -86,6 +53,47 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
         <></>
       )}
     </View>
+  );
+};
+
+const UserVideoWithFallback = (props: {
+  user: UidInterface;
+  Fallback?: React.ComponentType;
+}) => {
+  const {Fallback, user} = props;
+  const {styleProps} = useContext(PropsContext);
+  const {minViewStyles} = styleProps || {};
+
+  return user.video ? (
+    <UserVideo user={user} />
+  ) : Fallback ? (
+    <Fallback />
+  ) : (
+    <View style={{...styles.minViewFallback, ...(minViewStyles as object)}}>
+      <ImageIcon
+        name={'videocamOff'}
+        style={{width: 50, height: 50, alignSelf: 'center', opacity: 0.5}}
+      />
+    </View>
+  );
+};
+
+const UserVideo = (props: {user: UidInterface}) => {
+  const {styleProps} = useContext(PropsContext);
+  const {minViewStyles} = styleProps || {};
+  return props.user.uid === 'local' ? (
+    <LocalView
+      style={{...styles.minView, ...(minViewStyles as object)}}
+      renderMode={VideoRenderMode.Hidden}
+      zOrderMediaOverlay={true}
+    />
+  ) : (
+    <RemoteView
+      style={{...styles.minView, ...(minViewStyles as object)}}
+      uid={props.user.uid as number}
+      renderMode={VideoRenderMode.Hidden}
+      zOrderMediaOverlay={true}
+    />
   );
 };
 

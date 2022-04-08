@@ -13,7 +13,7 @@ import RtcConfigure from './src/RtcConfigure';
 import BtnTemplate from './src/Controls/BtnTemplate';
 import PinnedVideo from './src/Views/PinnedVideo';
 import GridVideo from './src/Views/GridVideo';
-
+import ImageIcon from './src/Controls/ImageIcon';
 export {
   Endcall,
   LocalAudioMute,
@@ -30,4 +30,5 @@ export {
   BtnTemplate,
   PinnedVideo,
   GridVideo,
+  ImageIcon,
 };

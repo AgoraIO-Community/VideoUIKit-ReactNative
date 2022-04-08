@@ -5,7 +5,7 @@
     "name": "Ekaansh Arora",
     "email": "ekaansh@agora.io"
   },
-  "main": "./src/index.ts",
+  "main": "./index.ts",
   "contributors": [
     {
       "name": "Vineeth S",
@@ -30,6 +30,6 @@
   "peerDependencies": {
     "react": "*",
     "react-native": ">=0.62.2",
-    "react-native-agora": "^3.0.1-rc.4"
+    "react-native-agora": "^3.0.1"
   }
 }

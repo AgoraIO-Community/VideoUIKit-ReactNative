@@ -28,6 +28,12 @@ export default StyleSheet.create({
     width: 240,
     height: 135,
   },
+  minViewFallback: {
+    width: 240,
+    justifyContent: 'center',
+    height: 135,
+    backgroundColor: '#111',
+  },
   minContainer: {
     position: 'absolute',
     top: 15,

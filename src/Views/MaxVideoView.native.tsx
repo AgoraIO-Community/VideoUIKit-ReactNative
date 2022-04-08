@@ -3,6 +3,7 @@ import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import {View} from 'react-native';
+import ImageIcon from '../Controls/ImageIcon';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
@@ -28,7 +29,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     ) : Fallback ? (
       <Fallback />
     ) : (
-      <View style={{flex: 1, backgroundColor: '#000'}} />
+      <DefaultFallback />
     )
   ) : props.user.video ? (
     <RemoteView
@@ -39,7 +40,18 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   ) : Fallback ? (
     <Fallback />
   ) : (
-    <View style={{flex: 1, backgroundColor: '#000'}} />
+    <DefaultFallback />
+  );
+};
+
+const DefaultFallback = () => {
+  return (
+    <View style={{flex: 1, backgroundColor: '#000', justifyContent: 'center'}}>
+      <ImageIcon
+        name={'videocamOff'}
+        style={{width: 50, height: 50, alignSelf: 'center', opacity: 0.5}}
+      />
+    </View>
   );
 };
 

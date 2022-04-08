@@ -11,8 +11,8 @@
 */
 import React, {useContext} from 'react';
 import {Image, Platform, StyleProp, ViewStyle} from 'react-native';
-import icons, {IconsInterface} from './Icons';
-import PropsContext from './../Contexts/PropsContext';
+import icons from './Icons';
+import PropsContext, {IconsInterface} from './../Contexts/PropsContext';
 import useImageDelay from '../hooks/useImageDelay';
 import {Either} from './types';
 

@@ -56,13 +56,19 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
         <Image
           ref={Platform.OS === 'web' ? imageRef : undefined}
           style={{
-            width: '100%',
-            height: '100%',
+            width: iconSize || 25,
+            height: iconSize || 25,
             opacity: disabled ? 0.4 : 1,
             tintColor: disabled ? 'grey' : props.color || theme || '#fff',
           }}
           resizeMode={'contain'}
-          source={{uri: props.name ? icons[props.name] : props.icon}}
+          source={{
+            uri: props.name
+              ? customIcon?.[props.name]
+                ? customIcon[props.name]
+                : icons[props.name]
+              : props.icon,
+          }}
         />
       </View>
       <Text
