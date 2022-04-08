@@ -1,19 +1,25 @@
 {
   "name": "agora-rn-uikit",
-  "version": "0.2.1",
+  "version": "3.3.0",
   "author": {
-    "name": "Vineeth Srinivasn",
-    "email": "vineeth@agora.io"
+    "name": "Ekaansh Arora",
+    "email": "ekaansh@agora.io"
   },
   "main": "./src/index.ts",
+  "contributors": [
+    {
+      "name": "Vineeth S",
+      "email": "vineeth@agora.io"
+    }
+  ],
+  "license": "MIT",
+  "files": [
+    "Components.ts",
+    "Contexts.ts",
+    "index.ts",
+    "/src/**/*"
+  ],
   "description": "Agora react native UI KIT. Rapidly integrate video calling into your React Native application with built in UI Elements.",
-  "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit"
@@ -22,36 +28,8 @@
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
   },
   "peerDependencies": {
-    "react": "^16.9.0",
-    "react-native": "^0.61.5",
+    "react": "*",
+    "react-native": ">=0.62.2",
     "react-native-agora": "^3.0.1-rc.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
-    "@react-native-community/eslint-config": "^1.0.0",
-    "@types/jest": "^24.0.24",
-    "@types/react-native": "^0.62.0",
-    "@types/react-test-renderer": "16.9.2",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^2.27.0",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.5.1",
-    "jest": "^24.9.0",
-    "metro-react-native-babel-preset": "^0.58.0",
-    "react-test-renderer": "16.11.0",
-    "prettier": "^2.0.4",
-    "typescript": "^3.8.3"
-  },
-  "jest": {
-    "preset": "react-native",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
   }
 }

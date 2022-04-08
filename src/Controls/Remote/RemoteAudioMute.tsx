@@ -2,14 +2,17 @@ import React, {useContext} from 'react';
 import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import PropsContext, {ToggleState, UidInterface} from '../../Contexts/PropsContext';
+import PropsContext, {
+  ToggleState,
+  UidInterface,
+} from '../../Contexts/PropsContext';
 
 interface RemoteAudioMuteInterface {
   user: UidInterface;
 }
 
 const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
-  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const {RtcEngine} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles} = styleProps || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};

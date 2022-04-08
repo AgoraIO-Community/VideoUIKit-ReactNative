@@ -13,9 +13,9 @@ interface RemoteVideoMuteInterface {
 }
 
 const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
-  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const {RtcEngine} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
-  const {remoteBtnStyles} = styleProps || {};
+  const {remoteBtnStyles, theme} = styleProps || {};
   const {muteRemoteVideo} = remoteBtnStyles || {};
 
   return props.user.uid !== 'local' ? (
@@ -25,7 +25,11 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
       }
       style={
         props.rightButton
-          ? {...styles.rightRemoteBtn, ...(muteRemoteVideo as object)}
+          ? {
+              ...styles.rightRemoteBtn,
+              borderColor: theme ? theme : styles.leftRemoteBtn.borderColor,
+              ...(muteRemoteVideo as object),
+            }
           : {...(muteRemoteVideo as object)}
       }
       onPress={() => {

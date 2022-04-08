@@ -7,7 +7,7 @@ import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
 import RemoteControls from './RemoteControls';
 import {MaxUidConsumer} from '../Contexts/MaxUidContext';
-import PropsContext, {ClientRole} from '../Contexts/PropsContext';
+import PropsContext, {ClientRole, layout} from '../Contexts/PropsContext';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
@@ -32,8 +32,14 @@ function Controls(props: ControlsPropsInterface) {
       {showButton ? (
         <MaxUidConsumer>
           {(users) => (
-            <View style={{...styles.Controls, top: styles.Controls.top - 100}}>
-              <RemoteControls user={users[0]} showRemoteSwap={false} />
+            <View
+              style={{
+                ...styles.Controls,
+                bottom: styles.Controls.bottom + 70,
+              }}>
+              {rtcProps.layout !== layout.grid && (
+                <RemoteControls user={users[0]} showRemoteSwap={false} />
+              )}
             </View>
           )}
         </MaxUidConsumer>

@@ -11,7 +11,9 @@ interface MaxViewInterface {
   user: UidInterface;
   fallback?: React.ComponentType;
 }
-
+/**
+ * MaxVideoView takes in a user and renders the video
+ */
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
   const {maxViewStyles} = styleProps || {};

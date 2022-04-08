@@ -36,7 +36,7 @@ type BtnTemplateInterface = Either<
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {disabled = false} = props;
   const {styleProps} = useContext(PropsContext);
-  const {BtnTemplateStyles, theme} = styleProps || {};
+  const {BtnTemplateStyles, theme, iconSize, customIcon} = styleProps || {};
 
   const imageRef = React.useRef(null);
 

@@ -1,10 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
-
-let dimensions = {
-  //get dimensions of the device to use in view styles
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   max: {
@@ -40,13 +34,13 @@ export default StyleSheet.create({
     left: 0,
     padding: 0,
     margin: 0,
-    width: dimensions.width,
+    // height: 135,
   },
   Controls: {
     position: 'absolute',
-    top: dimensions.height - 120,
+    bottom: 25,
     left: 0,
-    width: dimensions.width,
+    width: '100%',
     height: 70,
     zIndex: 10,
     display: 'flex',
@@ -58,11 +52,12 @@ export default StyleSheet.create({
     ...(StyleSheet.absoluteFill as object),
     backgroundColor: 'black',
     opacity: 0.7,
+    height: '100%',
   },
   minCloseBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     width: 46,
     height: 46,
     borderRadius: 23,
@@ -81,13 +76,13 @@ export default StyleSheet.create({
     borderTopLeftRadius: 23,
     borderBottomLeftRadius: 23,
     borderRightWidth: 4 * StyleSheet.hairlineWidth,
-    borderRightColor: '#007aff',
+    borderColor: '#fff',
   },
   rightRemoteBtn: {
     borderTopRightRadius: 23,
     borderBottomRightRadius: 23,
     borderLeftWidth: 4 * StyleSheet.hairlineWidth,
-    borderLeftColor: '#007aff',
+    borderColor: '#fff',
   },
   remoteBtnContainer: {
     width: '100%',
