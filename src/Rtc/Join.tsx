@@ -48,12 +48,27 @@ const Join: React.FC<{
           value: [ToggleState.disabled],
         });
       }
-      await engine.joinChannel(
-        rtcProps.token || null,
-        rtcProps.channel,
-        null,
-        rtcProps.uid || 0,
-      );
+      const UID = rtcProps.uid || 0;
+      if (rtcProps.tokenUrl) {
+        fetch(
+          `${rtcProps.tokenUrl}/rtc/${rtcProps.channel}/publisher/uid/${UID}`,
+        )
+          .then((response) => {
+            response.json().then((data) => {
+              engine.joinChannel(data.rtcToken, rtcProps.channel, null, UID);
+            });
+          })
+          .catch(function (err) {
+            console.log('Fetch Error', err);
+          });
+      } else {
+        await engine.joinChannel(
+          rtcProps.token || null,
+          rtcProps.channel,
+          null,
+          UID,
+        );
+      }
       if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
         dispatch({
           type: 'LocalMuteVideo',
@@ -86,6 +101,7 @@ const Join: React.FC<{
         leave();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     rtcProps.channel,
     rtcProps.uid,

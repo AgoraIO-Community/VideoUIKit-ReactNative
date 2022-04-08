@@ -150,6 +150,24 @@ const Create = ({
           console.log('Error: ', e);
         });
 
+        if (rtcProps.tokenUrl) {
+          engine.current.addListener('TokenPrivilegeWillExpire', (...args) => {
+            const UID = rtcProps.uid || 0;
+            console.log('TokenPrivilegeWillExpire: ', args, UID);
+            fetch(
+              `${rtcProps.tokenUrl}/rtc/${rtcProps.channel}/publisher/uid/${UID}`,
+            )
+              .then((response) => {
+                response.json().then((data) => {
+                  engine.current?.renewToken(data.rtcToken);
+                });
+              })
+              .catch(function (err) {
+                console.log('Fetch Error', err);
+              });
+          });
+        }
+
         engine.current.addListener('RemoteVideoStateChanged', (...args) => {
           dispatch({
             type: 'RemoteVideoStateChanged',
