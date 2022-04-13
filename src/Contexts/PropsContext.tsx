@@ -77,20 +77,20 @@ export enum DualStreamMode {
 
 export interface RtcPropsInterface {
   appId: string;
-  channel: string | null;
-  rtm?: string | null;
-  uid?: number | null;
-  screenShareUid?: number | null;
+  channel: string;
+  rtm?: string;
+  uid?: number;
+  screenShareUid?: number;
   token?: string | null;
   screenShareToken?: string | null;
-  dual?: boolean | null;
+  dual?: boolean;
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
   role?: ClientRole /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
   callActive?: boolean;
   encryption?: {
-    key: string | null;
-    screenKey: string | null;
+    key: string;
+    screenKey: string;
     mode:
       | EncryptionMode.AES128XTS
       | EncryptionMode.AES256XTS
