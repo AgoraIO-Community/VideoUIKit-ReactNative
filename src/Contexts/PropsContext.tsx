@@ -83,7 +83,7 @@ export interface RtcPropsInterface {
   screenShareUid?: number;
   token?: string | null;
   screenShareToken?: string | null;
-  dual?: boolean;
+  dual?: boolean | null;
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
   role?: ClientRole /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
