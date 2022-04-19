@@ -1,7 +1,11 @@
 import React, {useEffect, useContext, useRef} from 'react';
 import RtcEngine from 'react-native-agora';
 import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {ToggleState} from '../Contexts/PropsContext';
+import PropsContext, {
+  ToggleState,
+  ClientRole,
+  ChannelProfile,
+} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
 const Join: React.FC<{
@@ -11,7 +15,8 @@ const Join: React.FC<{
   dispatch: DispatchType;
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
-  const {rtcProps} = useContext(PropsContext);
+  const {rtcProps, mode} = useContext(PropsContext);
+  const isVideoEnabledRef = useRef<boolean>(false);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -93,6 +98,68 @@ const Join: React.FC<{
     precall,
     rtcProps.encryption,
   ]);
+
+  useEffect(() => {
+    const toggleRole = async () => {
+      if (mode == ChannelProfile.LiveBroadcasting) {
+        if (rtcProps.role == ClientRole.Broadcaster) {
+          await engineRef.current?.setClientRole(ClientRole.Broadcaster);
+          // isVideoEnabledRef checks if the permission is already taken once
+          if (!isVideoEnabledRef.current) {
+            try {
+              // This creates local audio and video track
+              await engineRef.current?.enableVideo();
+              isVideoEnabledRef.current = true;
+            } catch (error) {
+              dispatch({
+                type: 'LocalMuteAudio',
+                value: [ToggleState.disabled],
+              });
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.disabled],
+              });
+            }
+          }
+          if (isVideoEnabledRef.current) {
+            // This unpublishes the current track
+            await engineRef.current?.muteLocalAudioStream(true);
+            await engineRef.current?.muteLocalVideoStream(true);
+            // This updates the uid interface
+            dispatch({
+              type: 'LocalMuteAudio',
+              value: [ToggleState.disabled],
+            });
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [ToggleState.disabled],
+            });
+          }
+        }
+        if (rtcProps.role == ClientRole.Audience) {
+          /**
+           * To switch the user role back to "audience", call unpublish first
+           * Otherwise the setClientRole method call fails and throws an exception.
+           */
+          await engineRef.current?.muteLocalAudioStream(true);
+          await engineRef.current?.muteLocalVideoStream(true);
+          dispatch({
+            type: 'LocalMuteAudio',
+            value: [ToggleState.disabled],
+          });
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [ToggleState.disabled],
+          });
+          await engineRef.current?.setClientRole(ClientRole.Audience);
+        }
+      }
+    };
+    if (joinState.current) {
+      toggleRole();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rtcProps.role]);
 
   return <>{children}</>;
 };
