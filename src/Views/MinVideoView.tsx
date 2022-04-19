@@ -6,6 +6,8 @@ import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import ImageIcon from '../Controls/ImageIcon';
+import Username from './Usernames';
+
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
@@ -18,7 +20,7 @@ interface MinViewInterface {
 
 const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const [overlay, setOverlay] = useState(false);
-  const {styleProps} = useContext(PropsContext);
+  const {styleProps, rtcProps} = useContext(PropsContext);
   const {theme, remoteBtnStyles} = styleProps || {};
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
@@ -52,6 +54,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
       ) : (
         <></>
       )}
+      {!rtcProps.disableRtm && <Username user={props.user} />}
     </View>
   );
 };

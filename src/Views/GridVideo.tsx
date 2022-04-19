@@ -77,27 +77,6 @@ const GridVideo: React.FC = () => {
                     key={users[ridx * dims.c + cidx].uid}
                   />
                 )}
-                {/* <View
-                  style={{
-                    marginTop: -25,
-                    backgroundColor: '#ffffffbb',
-                    alignSelf: 'flex-start',
-                    paddingHorizontal: 8,
-                    height: 25,
-                  }}>
-                  <Text
-                    textBreakStrategy={'simple'}
-                    style={{
-                      color: '#333',
-                      lineHeight: 25,
-                      fontWeight: '700',
-                      width: '100%',
-                      alignSelf: 'stretch',
-                      textAlign: 'center',
-                    }}>
-                    {users[ridx * dims.c + cidx].uid}
-                  </Text>
-                </View> */}
               </View>
             </View>
           ))}

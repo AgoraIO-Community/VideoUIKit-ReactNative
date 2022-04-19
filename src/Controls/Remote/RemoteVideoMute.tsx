@@ -35,7 +35,7 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
           : {...(muteRemoteVideo as object)}
       }
       onPress={() => {
-        sendMuteRequest(mutingDevice.microphone, user.uid as number, !isMuted);
+        sendMuteRequest(mutingDevice.camera, user.uid as number, !isMuted);
       }}
     />
   ) : (

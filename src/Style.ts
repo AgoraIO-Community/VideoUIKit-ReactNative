@@ -58,6 +58,7 @@ export default StyleSheet.create({
     ...(StyleSheet.absoluteFill as object),
     backgroundColor: 'black',
     opacity: 0.7,
+    zIndex: 2,
     height: '100%',
   },
   minCloseBtn: {

@@ -113,7 +113,7 @@ interface rtmContext {
   /**
    * RTM usernames
    */
-  usernames: {};
+  usernames: Record<string, string>;
   /**
    * state to display pop up on remote mute request
    */

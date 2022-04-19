@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
+import {StyleProp, TextStyle, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {EncryptionMode, VideoRenderMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
-import {rtmCallbacks} from './Contexts/RtmContext';
+import {rtmCallbacks} from '../Contexts/RtmContext';
 
 export enum DualStreamMode {
   HIGH,
@@ -187,6 +187,10 @@ export interface StylePropInterface {
    * Applies style to the pop up container showing the remote mute request
    */
   popUpContainer?: StyleProp<ViewStyle>;
+  /**
+   * Applies style to the username text (shown if displayUsername rtcProp is true)
+   */
+  usernameText?: StyleProp<TextStyle>;
 }
 
 /**

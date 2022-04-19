@@ -186,7 +186,7 @@ const RtmConfigure = (props: any) => {
     await joinChannel();
     setRtmStatus(rtmStatusEnum.connected);
     setUsernames((p) => {
-      return {...p, 0: rtmProps?.username};
+      return {...p, 'local': rtmProps?.username};
     });
     sendChannelMessage(createUserData());
   };
