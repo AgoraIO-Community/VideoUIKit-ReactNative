@@ -23,8 +23,6 @@ const Create = ({
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
-  const isVideoEnabledRef = useRef<boolean>(false);
-  const firstUpdate = useRef(true);
 
   useEffect(() => {
     async function init() {
@@ -158,70 +156,6 @@ const Create = ({
       engine.current!.destroy();
     };
   }, [rtcProps.appId]);
-
-  useEffect(() => {
-    const toggleRole = async () => {
-      if (mode == ChannelProfile.LiveBroadcasting) {
-        if (rtcProps.role == ClientRole.Broadcaster) {
-          await engine.current?.setClientRole(ClientRole.Broadcaster);
-          // isVideoEnabledRef checks if the permission is already taken once
-          if (!isVideoEnabledRef.current) {
-            try {
-              // This creates local audio and video track
-              await engine.current?.enableVideo();
-              isVideoEnabledRef.current = true;
-            } catch (error) {
-              dispatch({
-                type: 'LocalMuteAudio',
-                value: [ToggleState.disabled],
-              });
-              dispatch({
-                type: 'LocalMuteVideo',
-                value: [ToggleState.disabled],
-              });
-            }
-          }
-          if (isVideoEnabledRef.current) {
-            // This unpublishes the current track
-            await engine.current?.muteLocalAudioStream(true);
-            await engine.current?.muteLocalVideoStream(true);
-            // This updates the uid interface
-            dispatch({
-              type: 'LocalMuteAudio',
-              value: [ToggleState.disabled],
-            });
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [ToggleState.disabled],
-            });
-          }
-        }
-        if (rtcProps.role == ClientRole.Audience) {
-          /**
-           * To switch the user role back to "audience", call unpublish first
-           * Otherwise the setClientRole method call fails and throws an exception.
-           */
-          await engine.current?.muteLocalAudioStream(true);
-          await engine.current?.muteLocalVideoStream(true);
-          dispatch({
-            type: 'LocalMuteAudio',
-            value: [ToggleState.disabled],
-          });
-          dispatch({
-            type: 'LocalMuteVideo',
-            value: [ToggleState.disabled],
-          });
-          await engine.current?.setClientRole(ClientRole.Audience);
-        }
-      }
-    };
-    // The firstUpdateCurrent ref skips the render of this block for the first time
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-    toggleRole();
-  }, [rtcProps.role]);
 
   return (
     <>
