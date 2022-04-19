@@ -3,7 +3,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {EncryptionMode, VideoRenderMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
-// import {rtmCallbacks} from './Contexts/RtmContext';
+import {rtmCallbacks} from './Contexts/RtmContext';
 
 export enum DualStreamMode {
   HIGH,
@@ -183,6 +183,10 @@ export interface StylePropInterface {
    * Applies style to the global view containing the UI Kit
    */
   UIKitContainer?: StyleProp<ViewStyle>;
+  /**
+   * Applies style to the pop up container showing the remote mute request
+   */
+  popUpContainer?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -243,7 +247,6 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
-
   /**
    * Disable Agora RTM, this also disables the use of usernames and remote mute functionality
    */
@@ -330,13 +333,13 @@ export type CustomCallbacksInterface = CallbacksInterface;
 
 export interface PropsInterface {
   rtcProps: RtcPropsInterface;
-  // rtmProps?: RtmPropsInterface;
+  rtmProps?: RtmPropsInterface;
   styleProps?: Partial<StylePropInterface>;
   callbacks?: Partial<CallbacksInterface>;
   /**
    * Callbacks for different functions of the UI Kit
    */
-  // rtmCallbacks?: rtmCallbacks;
+  rtmCallbacks?: rtmCallbacks;
 }
 
 const initialValue: PropsInterface = {

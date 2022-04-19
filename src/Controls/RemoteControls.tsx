@@ -14,10 +14,12 @@ interface RemoteControlsInterface {
 }
 
 const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {
-  const {styleProps} = useContext(PropsContext);
+  const {styleProps, rtcProps} = useContext(PropsContext);
   const {remoteBtnContainer} = styleProps || {};
 
-  return (
+  return rtcProps.disableRtm ? (
+    <></>
+  ) : (
     <View
       style={{...styles.remoteBtnContainer, ...(remoteBtnContainer as object)}}>
       {props.showMuteRemoteAudio !== false ? (

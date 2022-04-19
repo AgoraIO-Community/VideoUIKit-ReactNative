@@ -12,26 +12,36 @@ import {
 import LocalControls from './Controls/LocalControls';
 import GridVideo from './Views/GridVideo';
 import PinnedVideo from './Views/PinnedVideo';
+import RtmConfigure from './RtmConfigure';
 import LocalUserContext from './Contexts/LocalUserContext';
+import PopUp from './Controls/Remote/RemoteMutePopUp';
 
 const AgoraUIKit: React.FC<PropsInterface> = (props) => {
   const {layout} = props.rtcProps;
   return (
     <PropsProvider value={props}>
-      <View
-        style={[
-          {backgroundColor: '#000', flex: 1},
-          props.styleProps?.UIKitContainer,
-        ]}>
+      <View style={[containerStyle, props.styleProps?.UIKitContainer]}>
         <RtcConfigure>
           <LocalUserContext>
-            {layout === layoutEnum.grid ? <GridVideo /> : <PinnedVideo />}
-            <LocalControls />
+            {props.rtcProps.disableRtm ? (
+              <>
+                {layout === layoutEnum.grid ? <GridVideo /> : <PinnedVideo />}
+                <LocalControls />
+              </>
+            ) : (
+              <RtmConfigure>
+                {layout === layoutEnum.grid ? <GridVideo /> : <PinnedVideo />}
+                <LocalControls />
+                <PopUp />
+              </RtmConfigure>
+            )}
           </LocalUserContext>
         </RtcConfigure>
       </View>
     </PropsProvider>
   );
 };
+
+const containerStyle = {backgroundColor: '#000', flex: 1};
 
 export default AgoraUIKit;

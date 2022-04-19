@@ -1,9 +1,14 @@
 import React, {useContext} from 'react';
-import PropsContext, {ToggleState} from '../../Contexts/PropsContext';
+import PropsContext, {
+  ToggleState,
+  UidInterface,
+} from '../../Contexts/PropsContext';
 import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
+import {DispatchType} from '../../Contexts/RtcContext';
+import RtcEngineType from 'react-native-agora';
 
 interface Props {
   btnText?: string;
@@ -29,48 +34,53 @@ function LocalVideoMute(props: Props) {
           ? (muteLocalVideo as object)
           : (muteRemoteVideo as object)),
       }}
-      onPress={async () => {
-        const localState = local.video;
-        // Don't do anything if it is in a transitional state
-        if (
-          localState === ToggleState.enabled ||
-          localState === ToggleState.disabled
-        ) {
-          // Disable UI
-          dispatch({
-            type: 'LocalMuteVideo',
-            value: [
-              localState === ToggleState.enabled
-                ? ToggleState.disabling
-                : ToggleState.enabling,
-            ],
-          });
-
-          try {
-            await RtcEngine.muteLocalVideoStream(
-              localState === ToggleState.enabled ? true : false,
-            );
-            console.log('muted video', localState);
-            // Enable UI
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [
-                localState === ToggleState.enabled
-                  ? ToggleState.disabled
-                  : ToggleState.enabled,
-              ],
-            });
-          } catch (e) {
-            console.log('error while dispatching');
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [localState],
-            });
-          }
-        }
-      }}
+      onPress={() => muteVideo(local, dispatch, RtcEngine)}
     />
   );
 }
+
+export const muteVideo = async (
+  local: UidInterface,
+  dispatch: DispatchType,
+  RtcEngine: RtcEngineType,
+) => {
+  const localState = local.video;
+  // Don't do anything if it is in a transitional state
+  if (
+    localState === ToggleState.enabled ||
+    localState === ToggleState.disabled
+  ) {
+    // Disable UI
+    dispatch({
+      type: 'LocalMuteVideo',
+      value: [
+        localState === ToggleState.enabled
+          ? ToggleState.disabling
+          : ToggleState.enabling,
+      ],
+    });
+
+    try {
+      await RtcEngine.muteLocalVideoStream(localState === ToggleState.enabled);
+      // Enable UI
+      dispatch({
+        type: 'LocalMuteVideo',
+        value: [
+          localState === ToggleState.enabled
+            ? ToggleState.disabled
+            : ToggleState.enabled,
+        ],
+      });
+    } catch (e) {
+      console.error(e);
+      dispatch({
+        type: 'LocalMuteVideo',
+        value: [localState],
+      });
+    }
+  } else {
+    console.log('LocalMuteVideo in transition', local, ToggleState);
+  }
+};
 
 export default LocalVideoMute;
