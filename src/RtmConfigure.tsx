@@ -1,5 +1,3 @@
-// fix localUid precedence, rtcuid, rtmuid, timenow, etc.
-
 import React, {useState, useContext, useEffect, useRef} from 'react';
 import RtmClient, {
   ConnectionChangeReason,
@@ -25,6 +23,8 @@ import {LocalContext} from './Contexts/LocalUserContext';
 import {Platform} from 'react-native';
 import {RtmClientEvents} from 'agora-react-native-rtm/lib/typescript/src/RtmEngine';
 
+const rtmClient = new RtmClient();
+
 /**
  * React component that contains the RTM logic. It manages the usernames, remote mute requests and provides data to the children components by wrapping them with context providers.
  */
@@ -38,7 +38,7 @@ const RtmConfigure = (props: any) => {
   const {rtcUidRef, rtcChannelJoined} = useContext(RtcContext);
   const {rtmCallbacks} = useContext(PropsContext);
   const [uidMap, setUidMap] = useState<Record<number, string>>({});
-  const [usernames, setUsernames] = useState<Object>({});
+  const [usernames, setUsernames] = useState<Record<string, string> | {}>({});
   const [userDataMap, setUserDataMap] = useState<Object>({});
   const [popUpState, setPopUpState] = useState<popUpStateEnum>(
     popUpStateEnum.closed,
@@ -70,11 +70,7 @@ const RtmConfigure = (props: any) => {
       }
     } else {
       try {
-        console.log('!myRtmUid', rtmProps?.uid || String(localUid.current));
-        await rtmClient?.loginV2(
-          rtmProps?.uid || String(localUid.current),
-          // rtmProps?.token || null,
-        );
+        await rtmClient?.loginV2(rtmProps?.uid || String(localUid.current));
         timerValueRef.current = 5;
       } catch (error) {
         setTimeout(async () => {
@@ -87,7 +83,6 @@ const RtmConfigure = (props: any) => {
 
   const joinChannel = async () => {
     console.log('join RTM');
-    await rtcUidRef;
     try {
       await rtmClient?.joinChannel(rtcProps.channel);
       timerValueRef.current = 5;
@@ -103,18 +98,6 @@ const RtmConfigure = (props: any) => {
     setRtmStatus(rtmStatusEnum.initialising);
     localUid.current = String(rtcUidRef.current);
     await rtmClient.createInstance(rtcProps.appId);
-    // not sure why this is here, fix
-    // localuid can be
-    // 0 -> rtcengine assigns
-    // same as user rtcUid
-    // user rtmUid
-    // rtcProps.uid
-    //   ? (localUid.current = String(rtcProps.uid))
-    //   : (localUid.current = String(timeNow()));
-
-    // rtmClient.on('error', (e) => {
-    //   console.log('!error', e);
-    // });
 
     rtmClient.addListener('ConnectionStateChanged', (state, reason) => {
       console.log(
@@ -159,10 +142,11 @@ const RtmConfigure = (props: any) => {
 
     /* handle RTM callbacks */
     if (rtmCallbacks) {
-      Object.keys(rtmCallbacks.channel).map((callback) => {
-        if (rtmCallbacks.channel) {
+      Object.keys(rtmCallbacks).map((callback) => {
+        if (rtmCallbacks) {
           rtmClient?.addListener(
             callback as keyof RtmClientEvents,
+            // @ts-ignore - need to extend Rtm lib and infer event type
             rtmCallbacks[callback],
           );
         }
@@ -186,7 +170,7 @@ const RtmConfigure = (props: any) => {
     await joinChannel();
     setRtmStatus(rtmStatusEnum.connected);
     setUsernames((p) => {
-      return {...p, 'local': rtmProps?.username};
+      return {...p, ['local']: rtmProps?.username};
     });
     sendChannelMessage(createUserData());
   };
@@ -201,7 +185,7 @@ const RtmConfigure = (props: any) => {
       uikit: {
         platform: Platform.OS,
         framework: 'reactnative',
-        version: '0.1.0',
+        version: '4.0.0',
       },
       agora: {
         rtm: rtmVersion,
@@ -385,7 +369,6 @@ const RtmConfigure = (props: any) => {
 
 // const timeNow = () => new Date().getTime();
 
-const rtmClient = new RtmClient();
 let rtmVersion: string;
 let rtcVersion: string;
 

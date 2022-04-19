@@ -18,7 +18,7 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles, theme} = styleProps || {};
   const {muteRemoteVideo} = remoteBtnStyles || {};
-  const isMuted = user.audio === ToggleState.disabled;
+  const isMuted = user.video === ToggleState.disabled;
 
   return user.uid !== 0 && uidMap[user.uid as number] ? (
     <BtnTemplate
