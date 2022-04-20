@@ -52,14 +52,6 @@ interface UserEnteredInterface extends UserUidInterface<string> {
   [key: string] :any,
 }
 
-interface DefaultUidInterface {
-  uid: number | string;
-  audio: ToggleState;
-  video: ToggleState;
-  streamType: 'high' | 'low';
-  type: 'rtc';
-}
-
 export type UidInterface = DefaultUidInterface | UserEnteredInterface;
 
 interface remoteBtnStylesInterface {
