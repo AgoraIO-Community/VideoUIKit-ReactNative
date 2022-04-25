@@ -60,19 +60,25 @@ const Create = ({
             value: [ToggleState.enabled],
           });
         } catch (e) {
-          if (!e.status?.audioError) {
-            dispatch({
-              type: 'LocalMuteAudio',
-              value: [ToggleState.enabled],
-            });
+          if ((e as any).status) {
+            if (!(e as any).status.audioError) {
+              dispatch({
+                type: 'LocalMuteAudio',
+                value: [ToggleState.enabled],
+              });
+            } else {
+              console.error('No audio device', (e as any).status.audioError);
+            }
+            if (!(e as any).status.videoError) {
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.enabled],
+              });
+            } else {
+              console.error('No video device', (e as any).status.videoError);
+            }
           }
-          if (!e.status?.videoError) {
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [ToggleState.enabled],
-            });
-          }
-          console.error('No devices', e.message);
+          console.error('No devices', e);
         }
 
         engine.current.addListener(
