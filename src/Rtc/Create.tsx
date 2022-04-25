@@ -167,18 +167,41 @@ const Create = ({
           // isVideoEnabledRef checks if the permission is already taken once
           if (!isVideoEnabledRef.current) {
             try {
-              // This creates local audio and video track
-              await engine.current?.enableVideo();
-              isVideoEnabledRef.current = true;
-            } catch (error) {
+              await engine.current.enableVideo();
               dispatch({
                 type: 'LocalMuteAudio',
-                value: [ToggleState.disabled],
+                value: [ToggleState.enabled],
               });
               dispatch({
                 type: 'LocalMuteVideo',
-                value: [ToggleState.disabled],
+                value: [ToggleState.enabled],
               });
+            } catch (e) {
+              if ((e as any).status) {
+                if (!(e as any).status.audioError) {
+                  dispatch({
+                    type: 'LocalMuteAudio',
+                    value: [ToggleState.enabled],
+                  });
+                } else {
+                  console.error(
+                    'No audio device',
+                    (e as any).status.audioError,
+                  );
+                }
+                if (!(e as any).status.videoError) {
+                  dispatch({
+                    type: 'LocalMuteVideo',
+                    value: [ToggleState.enabled],
+                  });
+                } else {
+                  console.error(
+                    'No video device',
+                    (e as any).status.videoError,
+                  );
+                }
+              }
+              console.error('No devices', e);
             }
           }
           if (isVideoEnabledRef.current) {
