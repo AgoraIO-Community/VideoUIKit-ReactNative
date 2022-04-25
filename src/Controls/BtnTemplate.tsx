@@ -7,21 +7,31 @@ import {
   ViewStyle,
   Text,
   View,
+  Platform,
 } from 'react-native';
 import PropsContext from '../Contexts/PropsContext';
 import styles from '../Style';
 import icons, {IconsInterface} from './Icons';
-import useImageDelay from '../../../src/hooks/useImageDelay';
-import isSafariBrowser from '../../../src/utils/isSafariBrowser';
+import useImageDelay from '../hooks/useImageDelay';
+import {Either} from './types';
 
-interface BtnTemplateInterface {
-  name: keyof IconsInterface;
+interface BtnTemplateBasicInterface {
   color?: string;
   onPress?: TouchableOpacityProps['onPress'];
   style?: StyleProp<ViewStyle>;
   btnText?: string;
   disabled?: boolean;
 }
+interface BtnTemplateInterfaceWithName extends BtnTemplateBasicInterface {
+  name?: keyof IconsInterface;
+}
+interface BtnTemplateInterfaceWithIcon extends BtnTemplateBasicInterface {
+  icon?: any;
+}
+type BtnTemplateInterface = Either<
+  BtnTemplateInterfaceWithIcon,
+  BtnTemplateInterfaceWithName
+>;
 
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {disabled = false} = props;
@@ -30,10 +40,8 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
 
   const imageRef = React.useRef(null);
 
-  if (isSafariBrowser()) {
-    // This fixes the tint issue in safari browser
-    useImageDelay(imageRef, 10, '');
-  }
+  // This fixes the tint issue in safari browser
+  useImageDelay(imageRef, 10, '', props?.color || '');
 
   return (
     <TouchableOpacity
@@ -46,23 +54,23 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           props.style as object,
         ]}>
         <Image
-          ref={imageRef}
+          ref={Platform.OS === 'web' ? imageRef : undefined}
           style={{
             width: '100%',
             height: '100%',
-            opacity: disabled ?  0.4 : 1,
-            tintColor: disabled ? 'grey' : ( props.color || theme || '#fff')
+            opacity: disabled ? 0.4 : 1,
+            tintColor: disabled ? 'grey' : props.color || theme || '#fff',
           }}
           resizeMode={'contain'}
-          source={{uri: icons[props.name]}}
+          source={{uri: props.name ? icons[props.name] : props.icon}}
         />
       </View>
       <Text
         style={{
           textAlign: 'center',
           marginTop: 5,
-          color: disabled ? 'grey' : (props.color || theme || '#fff'),
-          opacity: disabled ? 0.4 : 1
+          color: disabled ? 'grey' : props.color || theme || '#fff',
+          opacity: disabled ? 0.4 : 1,
         }}>
         {props.btnText}
       </Text>
