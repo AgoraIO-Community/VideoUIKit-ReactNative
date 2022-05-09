@@ -177,28 +177,27 @@ const Create = ({
                 value: [ToggleState.enabled],
               });
             } catch (e) {
-              if ((e as any).status) {
-                if (!(e as any).status.audioError) {
+              const {status} = e as any;
+
+              if (status) {
+                const {audioError, videoError} = status;
+
+                if (!audioError) {
                   dispatch({
                     type: 'LocalMuteAudio',
                     value: [ToggleState.enabled],
                   });
                 } else {
-                  console.error(
-                    'No audio device',
-                    (e as any).status.audioError,
-                  );
+                  console.error('No audio device', audioError);
                 }
-                if (!(e as any).status.videoError) {
+
+                if (!videoError) {
                   dispatch({
                     type: 'LocalMuteVideo',
                     value: [ToggleState.enabled],
                   });
                 } else {
-                  console.error(
-                    'No video device',
-                    (e as any).status.videoError,
-                  );
+                  console.error('No video device', videoError);
                 }
               }
               console.error('No devices', e);
