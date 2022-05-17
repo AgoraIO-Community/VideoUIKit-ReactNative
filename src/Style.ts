@@ -113,4 +113,10 @@ export default StyleSheet.create({
     height: 48,
     backgroundColor: '#ff0000',
   },
+  placeholderIcon: {
+    width: 50,
+    height: 50,
+    alignSelf: 'center',
+    opacity: 0.5,
+  },
 });

@@ -21,7 +21,7 @@ interface MinViewInterface {
 const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const [overlay, setOverlay] = useState(false);
   const {styleProps, rtcProps} = useContext(PropsContext);
-  const {theme, remoteBtnStyles} = styleProps || {};
+  const {theme, remoteBtnStyles, customIcon} = styleProps || {};
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
 
@@ -46,7 +46,9 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
                 height: 25,
                 tintColor: theme || props.color || '#fff',
               }}
-              source={{uri: icons.close}}
+              source={{
+                uri: customIcon?.close ? customIcon.close : icons.close,
+              }}
             />
           </TouchableOpacity>
           <RemoteControls showRemoteSwap={true} user={props.user} />
@@ -65,17 +67,17 @@ const UserVideoWithFallback = (props: {
 }) => {
   const {Fallback, user} = props;
   const {styleProps} = useContext(PropsContext);
-  const {minViewStyles} = styleProps || {};
+  const {videoPlaceholderContainer, videoPlaceholderIcon} = styleProps || {};
 
   return user.video ? (
     <UserVideo user={user} />
   ) : Fallback ? (
     <Fallback />
   ) : (
-    <View style={{...styles.minViewFallback, ...(minViewStyles as object)}}>
+    <View style={[styles.minViewFallback, videoPlaceholderContainer]}>
       <ImageIcon
         name={'videocamOff'}
-        style={{width: 50, height: 50, alignSelf: 'center', opacity: 0.5}}
+        style={[styles.placeholderIcon, videoPlaceholderIcon]}
       />
     </View>
   );

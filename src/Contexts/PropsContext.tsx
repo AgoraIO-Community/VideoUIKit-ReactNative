@@ -191,6 +191,14 @@ export interface StylePropInterface {
    * Applies style to the username text (shown if displayUsername rtcProp is true)
    */
   usernameText?: StyleProp<TextStyle>;
+  /**
+   * Applies style to the video placeholder component that's rendered in place when a user video is muted
+   */
+  videoPlaceholderContainer?: StyleProp<TextStyle>;
+  /**
+   * Applies style to the video placeholder component icon (rendered when a user video is muted)
+   */
+  videoPlaceholderIcon?: StyleProp<TextStyle>;
 }
 
 /**
@@ -307,6 +315,10 @@ export interface CallbacksInterface {
    * Callback for when a user swaps video in pinned layout
    */
   SwapVideo(user: UidInterface): void;
+  /**
+   * Callback for when a user swaps video in pinned layout
+   */
+  ActiveSpeaker(uid: number | string): void;
   /**
    * Callback for when a user mutes a remote user's audio
    */

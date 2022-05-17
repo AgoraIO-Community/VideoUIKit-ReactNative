@@ -103,6 +103,11 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
           stateUpdate = swapVideo(state, action.value[0]);
         }
         break;
+      case 'ActiveSpeaker':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = ActiveSpeaker(state, action.value[0]);
+        }
+        break;
       case 'UserMuteRemoteAudio':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = UserMuteRemoteAudio(state, action);
@@ -188,6 +193,16 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     },
     [dualStreamMode],
   );
+
+  const ActiveSpeaker = (state: UidStateInterface, uid: number | string) => {
+    let ele = state.min.find((e) => e.uid === uid);
+    if (ele) {
+      return swapVideo(state, ele);
+    } else {
+      return state;
+    }
+  };
+
   const [uidState, dispatch]: [UidStateInterface, DispatchType] = useReducer(
     reducer,
     initialState,

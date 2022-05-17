@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import ImageIcon from '../Controls/ImageIcon';
 import Username from './Usernames';
 
@@ -51,14 +51,24 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
 };
 
 const DefaultFallback = () => {
+  const {styleProps} = useContext(PropsContext);
+  const {videoPlaceholderContainer} = styleProps || {};
   return (
-    <View style={{flex: 1, backgroundColor: '#000', justifyContent: 'center'}}>
+    <View style={[style.placeholderContainer, videoPlaceholderContainer]}>
       <ImageIcon
         name={'videocamOff'}
-        style={{width: 50, height: 50, alignSelf: 'center', opacity: 0.5}}
+        style={[styles.placeholderIcon, styleProps?.videoPlaceholderIcon]}
       />
     </View>
   );
 };
+
+const style = StyleSheet.create({
+  placeholderContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+    justifyContent: 'center',
+  },
+});
 
 export default MaxVideoView;

@@ -110,6 +110,21 @@ const Join: React.FC<{
     rtcProps.encryption,
   ]);
 
+  useEffect(() => {
+    const handleActive = (uid: number) => {
+      console.log('speaker is ', uid);
+      dispatch({type: 'ActiveSpeaker', value: [uid]});
+    };
+    if (rtcProps.activeSpeaker === true) {
+      engineRef.current.enableAudioVolumeIndication(200, 3, false);
+      engineRef.current?.addListener('ActiveSpeaker', handleActive);
+    } else {
+      engineRef.current.enableAudioVolumeIndication(0, 3, false);
+      engineRef.current?.removeListener('ActiveSpeaker', handleActive);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rtcProps.activeSpeaker]);
+
   return <>{children}</>;
 };
 
