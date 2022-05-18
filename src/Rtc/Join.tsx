@@ -115,12 +115,15 @@ const Join: React.FC<{
       console.log('speaker is ', uid);
       dispatch({type: 'ActiveSpeaker', value: [uid]});
     };
+    let sub;
     if (rtcProps.activeSpeaker === true) {
       engineRef.current.enableAudioVolumeIndication(200, 3, false);
-      engineRef.current?.addListener('ActiveSpeaker', handleActive);
+      sub = engineRef.current?.addListener('ActiveSpeaker', handleActive);
     } else {
       engineRef.current.enableAudioVolumeIndication(0, 3, false);
-      engineRef.current?.removeListener('ActiveSpeaker', handleActive);
+      if (sub) {
+        engineRef.current?.removeListener('ActiveSpeaker', handleActive, sub);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rtcProps.activeSpeaker]);

@@ -17,23 +17,27 @@ const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {
   const {styleProps, rtcProps} = useContext(PropsContext);
   const {remoteBtnContainer} = styleProps || {};
 
-  return rtcProps.disableRtm ? (
-    <></>
-  ) : (
+  return (
     <View
       style={{...styles.remoteBtnContainer, ...(remoteBtnContainer as object)}}>
-      {props.showMuteRemoteAudio !== false ? (
-        <RemoteAudioMute user={props.user} />
-      ) : (
+      {rtcProps.disableRtm ? (
         <></>
-      )}
-      {props.showMuteRemoteVideo !== false ? (
-        <RemoteVideoMute
-          rightButton={!props.showRemoteSwap}
-          user={props.user}
-        />
       ) : (
-        <></>
+        <>
+          {props.showMuteRemoteAudio !== false ? (
+            <RemoteAudioMute user={props.user} />
+          ) : (
+            <></>
+          )}
+          {props.showMuteRemoteVideo !== false ? (
+            <RemoteVideoMute
+              rightButton={!props.showRemoteSwap}
+              user={props.user}
+            />
+          ) : (
+            <></>
+          )}
+        </>
       )}
       {props.showRemoteSwap !== false ? (
         <RemoteSwap user={props.user} />

@@ -31,7 +31,6 @@ const layout = (len: number, isDesktop: boolean = true) => {
 };
 
 const GridVideo: React.FC = () => {
-  console.log('re render grid');
   const max = useContext(MaxUidContext);
   const min = useContext(MinUidContext);
   const {rtcProps, styleProps} = useContext(PropsContext);
