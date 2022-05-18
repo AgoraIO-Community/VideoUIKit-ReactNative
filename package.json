@@ -37,6 +37,7 @@
     "docs": "typedoc && cp 'UI Kit.png' './docs/UI Kit.png'"
   },
   "devDependencies": {
-    "typedoc": "^0.22.15"
+    "typedoc": "^0.22.15",
+    "typedoc-plugin-missing-exports": "^0.22.6"
   }
 }
