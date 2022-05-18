@@ -7,7 +7,7 @@ import RtcConfigure from './RtcConfigure';
 import {
   PropsProvider,
   PropsInterface,
-  layout as layoutEnum,
+  Layout,
   AgoraUIKitProps,
 } from './Contexts/PropsContext';
 import LocalControls from './Controls/LocalControls';
@@ -30,12 +30,12 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
           <LocalUserContext>
             {props.rtcProps.disableRtm ? (
               <>
-                {layout === layoutEnum.grid ? <GridVideo /> : <PinnedVideo />}
+                {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
                 <LocalControls />
               </>
             ) : (
               <RtmConfigure>
-                {layout === layoutEnum.grid ? <GridVideo /> : <PinnedVideo />}
+                {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
                 <LocalControls />
                 <PopUp />
               </RtmConfigure>

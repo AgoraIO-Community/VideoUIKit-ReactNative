@@ -4,7 +4,7 @@
 import AgoraUIKit from './src/AgoraUIKit';
 export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
 export {
-  layout,
+  Layout,
   DualStreamMode,
   ChannelProfile,
   ClientRole,
@@ -14,10 +14,12 @@ export {default as icons} from './src/Controls/Icons';
 export type {
   IconsInterface,
   UidInterface,
-  RtcPropsInterface,
+  AgoraUIKitProps,
+  ConnectionData,
+  Settings,
   StylePropInterface,
-  CallbacksInterface,
-  PropsInterface,
+  rtcCallbacks,
 } from './src/Contexts/PropsContext';
+export type {rtmCallbacks} from './src/Contexts/RtmContext';
 
 export default AgoraUIKit;

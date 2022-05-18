@@ -7,7 +7,7 @@ import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
 import RemoteControls from './RemoteControls';
 import {MaxUidConsumer} from '../Contexts/MaxUidContext';
-import PropsContext, {ClientRole, layout} from '../Contexts/PropsContext';
+import PropsContext, {ClientRole, Layout} from '../Contexts/PropsContext';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
@@ -37,7 +37,7 @@ function Controls(props: ControlsPropsInterface) {
                 ...styles.Controls,
                 bottom: styles.Controls.bottom + 70,
               }}>
-              {rtcProps.layout !== layout.grid && (
+              {rtcProps.layout !== Layout.Grid && (
                 <RemoteControls user={users[0]} showRemoteSwap={false} />
               )}
             </View>

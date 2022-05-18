@@ -33,15 +33,15 @@ export enum ChannelProfile {
 /**
  * Select a pre built layout
  */
-export enum layout {
+export enum Layout {
   /**
    * 0: Grid layout: each user occupies a cell in the grid
    */
-  grid = 0,
+  Grid = 0,
   /**
-   * 2: Pinned layout: MaxUser occupies the main view, the other users are in a floating view on top
+   * 1: Pinned layout: MaxUser occupies the main view, the other users are in a floating view on top
    */
-  pin = 1,
+  Pin = 1,
 }
 
 // disabled is intentionally kept as the 1st item in the enum.
@@ -245,7 +245,7 @@ export interface RtcSettings {
   /**
    * Choose between grid layout and pinned layout. (default: pinned layout)
    */
-  layout?: layout;
+  layout?: Layout;
   /**
    * Set local user's role between audience and host. Use with mode set to livestreaming. (default: host)
    */
@@ -404,13 +404,14 @@ export interface AgoraUIKitProps {
   /**
    * Callbacks for different events of the UI Kit
    */
-  rtcCallbacks?: Partial<CallbacksInterface>;
+  rtcCallbacks?: rtcCallbacks;
   /**
    * Callbacks for the signalling layer
    */
   rtmCallbacks?: rtmCallbacks;
 }
 
+export type rtcCallbacks = Partial<CallbacksInterface>;
 export interface PropsInterface {
   rtcProps: RtcPropsInterface;
   rtmProps?: RtmPropsInterface;
