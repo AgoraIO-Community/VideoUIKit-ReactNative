@@ -3,12 +3,23 @@
  */
 import AgoraUIKit from './src/AgoraUIKit';
 export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
-export {layout, role, mode} from './src/PropsContext';
+export {
+  Layout,
+  DualStreamMode,
+  ChannelProfile,
+  ClientRole,
+  ToggleState,
+} from './src/Contexts/PropsContext';
+export {default as icons} from './src/Controls/Icons';
 export type {
-  RtcPropsInterface,
+  IconsInterface,
+  UidInterface,
+  AgoraUIKitProps,
+  ConnectionData,
+  Settings,
   StylePropInterface,
-  CallbacksInterface,
-  PropsInterface,
-} from './src/PropsContext';
+  rtcCallbacks,
+} from './src/Contexts/PropsContext';
+export type {rtmCallbacks} from './src/Contexts/RtmContext';
 
 export default AgoraUIKit;

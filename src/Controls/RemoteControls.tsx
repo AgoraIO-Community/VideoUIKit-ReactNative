@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import PropsContext from '../PropsContext';
-import {UidInterface} from '../RtcContext';
+import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import styles from '../Style';
 import RemoteAudioMute from './Remote/RemoteAudioMute';
 import RemoteSwap from './Remote/RemoteSwap';
@@ -15,24 +14,30 @@ interface RemoteControlsInterface {
 }
 
 const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {
-  const {styleProps} = useContext(PropsContext);
+  const {styleProps, rtcProps} = useContext(PropsContext);
   const {remoteBtnContainer} = styleProps || {};
 
   return (
     <View
       style={{...styles.remoteBtnContainer, ...(remoteBtnContainer as object)}}>
-      {props.showMuteRemoteAudio !== false ? (
-        <RemoteAudioMute user={props.user} />
-      ) : (
+      {rtcProps.disableRtm ? (
         <></>
-      )}
-      {props.showMuteRemoteVideo !== false ? (
-        <RemoteVideoMute
-          rightButton={!props.showRemoteSwap}
-          user={props.user}
-        />
       ) : (
-        <></>
+        <>
+          {props.showMuteRemoteAudio !== false ? (
+            <RemoteAudioMute user={props.user} />
+          ) : (
+            <></>
+          )}
+          {props.showMuteRemoteVideo !== false ? (
+            <RemoteVideoMute
+              rightButton={!props.showRemoteSwap}
+              user={props.user}
+            />
+          ) : (
+            <></>
+          )}
+        </>
       )}
       {props.showRemoteSwap !== false ? (
         <RemoteSwap user={props.user} />

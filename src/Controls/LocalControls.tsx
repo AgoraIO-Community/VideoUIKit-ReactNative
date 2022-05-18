@@ -6,27 +6,28 @@ import LocalAudioMute from './Local/LocalAudioMute';
 import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
 import RemoteControls from './RemoteControls';
-import {MaxUidConsumer} from '../MaxUidContext';
-import PropsContext, {role} from '../PropsContext';
-import LocalUserContextComponent from '../LocalUserContext';
+import {MaxUidConsumer} from '../Contexts/MaxUidContext';
+import PropsContext, {ClientRole, Layout} from '../Contexts/PropsContext';
 
-function Controls(props: {showButton: Boolean}) {
+interface ControlsPropsInterface {
+  showButton?: boolean;
+}
+
+function Controls(props: ControlsPropsInterface) {
   const {styleProps, rtcProps} = useContext(PropsContext);
-  const {localBtnContainer, maxViewRemoteBtnContainer} = styleProps || {};
+  const {localBtnContainer} = styleProps || {};
   const showButton = props.showButton !== undefined ? props.showButton : true;
   return (
-    <LocalUserContextComponent>
+    <>
       <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
-        {rtcProps.role === role.Audience ? (
-          <EndCall />
-        ) : (
+        {rtcProps.role !== ClientRole.Audience && (
           <>
             <LocalAudioMute />
             <LocalVideoMute />
             <SwitchCamera />
-            <EndCall />
           </>
         )}
+        <EndCall />
       </View>
       {showButton ? (
         <MaxUidConsumer>
@@ -35,16 +36,17 @@ function Controls(props: {showButton: Boolean}) {
               style={{
                 ...styles.Controls,
                 bottom: styles.Controls.bottom + 70,
-                ...(maxViewRemoteBtnContainer as object),
               }}>
-              <RemoteControls user={users[0]} showRemoteSwap={false} />
+              {rtcProps.layout !== Layout.Grid && (
+                <RemoteControls user={users[0]} showRemoteSwap={false} />
+              )}
             </View>
           )}
         </MaxUidConsumer>
       ) : (
         <></>
       )}
-    </LocalUserContextComponent>
+    </>
   );
 }
 

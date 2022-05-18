@@ -1,10 +1,11 @@
 {
   "name": "agora-rn-uikit",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "author": {
     "name": "Ekaansh Arora",
     "email": "ekaansh@agora.io"
   },
+  "main": "./index.ts",
   "contributors": [
     {
       "name": "Vineeth S",
@@ -29,6 +30,14 @@
   "peerDependencies": {
     "react": "*",
     "react-native": ">=0.62.2",
-    "react-native-agora": "^3.0.1-rc.4"
+    "react-native-agora": "^3.7.0",
+    "agora-react-native-rtm": "^1.5.0"
+  },
+  "scripts": {
+    "docs": "typedoc && cp 'UI Kit.png' './docs/UI Kit.png'"
+  },
+  "devDependencies": {
+    "typedoc": "^0.22.15",
+    "typedoc-plugin-missing-exports": "^0.22.6"
   }
 }

@@ -28,13 +28,19 @@ export default StyleSheet.create({
     width: 240,
     height: 135,
   },
+  minViewFallback: {
+    width: 240,
+    justifyContent: 'center',
+    height: 135,
+    backgroundColor: '#111',
+  },
   minContainer: {
     position: 'absolute',
-    top: 0,
+    top: 15,
     left: 0,
     padding: 0,
     margin: 0,
-    height: 135,
+    // height: 135,
   },
   Controls: {
     position: 'absolute',
@@ -52,6 +58,7 @@ export default StyleSheet.create({
     ...(StyleSheet.absoluteFill as object),
     backgroundColor: 'black',
     opacity: 0.7,
+    zIndex: 2,
     height: '100%',
   },
   minCloseBtn: {
@@ -66,8 +73,8 @@ export default StyleSheet.create({
     top: 5,
   },
   controlBtn: {
-    width: 46,
-    height: 46,
+    width: 40,
+    height: 40,
     backgroundColor: 'rgba(0,0,0,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -87,12 +94,10 @@ export default StyleSheet.create({
   remoteBtnContainer: {
     width: '100%',
     display: 'flex',
-    // marginVertical: '25%',
+    marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'center',
     alignSelf: 'center',
-    height: '100%',
-    alignItems: 'center',
   },
   localBtn: {
     borderRadius: 23,
@@ -101,11 +106,17 @@ export default StyleSheet.create({
     backgroundColor: '#007aff',
   },
   endCall: {
-    borderRadius: 23,
+    borderRadius: 30,
     borderWidth: 4 * StyleSheet.hairlineWidth,
-    borderColor: '#f14',
-    width: 46,
-    height: 46,
-    backgroundColor: '#f14',
+    borderColor: '#ff0000',
+    width: 48,
+    height: 48,
+    backgroundColor: '#ff0000',
+  },
+  placeholderIcon: {
+    width: 50,
+    height: 50,
+    alignSelf: 'center',
+    opacity: 0.5,
   },
 });

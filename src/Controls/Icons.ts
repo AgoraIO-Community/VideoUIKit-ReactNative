@@ -1,4 +1,4 @@
-import {IconsInterface} from '../PropsContext';
+import {IconsInterface} from '../Contexts/PropsContext';
 
 const icons: IconsInterface = {
   videocam:

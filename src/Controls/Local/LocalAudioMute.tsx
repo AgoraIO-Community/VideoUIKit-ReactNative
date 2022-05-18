@@ -1,29 +1,85 @@
 import React, {useContext} from 'react';
-import PropsContext from '../../PropsContext';
-import RtcContext, {DispatchType} from '../../RtcContext';
+import PropsContext, {
+  ToggleState,
+  UidInterface,
+} from '../../Contexts/PropsContext';
+import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import {LocalContext} from '../../LocalUserContext';
+import {LocalContext} from '../../Contexts/LocalUserContext';
+import {DispatchType} from '../../Contexts/RtcContext';
+import RtcEngineType from 'react-native-agora';
+interface Props {
+  btnText?: string;
+  variant?: 'outlined' | 'text';
+}
 
-function LocalAudioMute() {
+function LocalAudioMute(props: Props) {
+  const {btnText = 'Audio', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
-  const {localBtnStyles} = styleProps || {};
+  const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalAudio} = localBtnStyles || {};
-  const {dispatch} = useContext(RtcContext);
-  const local = useContext(LocalContext);
+  const {muteRemoteAudio} = remoteBtnStyles || {};
+  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const localUser = useContext(LocalContext);
 
   return (
     <BtnTemplate
-      name={local.audio ? 'mic' : 'micOff'}
-      style={{...styles.localBtn, ...(muteLocalAudio as object)}}
-      onPress={() => {
-        (dispatch as DispatchType<'LocalMuteAudio'>)({
-          type: 'LocalMuteAudio',
-          value: [local.audio],
-        });
+      name={localUser.audio === ToggleState.enabled ? 'mic' : 'micOff'}
+      btnText={btnText}
+      style={{
+        ...styles.localBtn,
+        ...(variant === 'Outlined'
+          ? (muteLocalAudio as object)
+          : (muteRemoteAudio as object)),
       }}
+      onPress={() => muteAudio(localUser, dispatch, RtcEngine)}
     />
   );
 }
+
+export const muteAudio = async (
+  local: UidInterface,
+  dispatch: DispatchType,
+  RtcEngine: RtcEngineType,
+) => {
+  const localState = local.audio;
+  // Don't do anything if it is in a transitional state
+  if (
+    localState === ToggleState.enabled ||
+    localState === ToggleState.disabled
+  ) {
+    // Disable UI
+    dispatch({
+      type: 'LocalMuteAudio',
+      value: [
+        localState === ToggleState.enabled
+          ? ToggleState.disabling
+          : ToggleState.enabling,
+      ],
+    });
+
+    try {
+      await RtcEngine.muteLocalAudioStream(localState === ToggleState.enabled);
+      // Enable UI
+      dispatch({
+        type: 'LocalMuteAudio',
+        value: [
+          localState === ToggleState.enabled
+            ? ToggleState.disabled
+            : ToggleState.enabled,
+        ],
+      });
+    } catch (e) {
+      console.error(e);
+      dispatch({
+        type: 'LocalMuteAudio',
+        value: [localState],
+      });
+    }
+  } else {
+    console.log('LocalMuteAudio in transition', local, ToggleState);
+  }
+};
 
 export default LocalAudioMute;
