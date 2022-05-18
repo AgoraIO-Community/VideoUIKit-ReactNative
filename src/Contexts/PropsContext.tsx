@@ -202,9 +202,9 @@ export interface StylePropInterface {
 }
 
 /**
- * Props object for customising the UI Kit functionality
+ * Props object to setup the  RTC SDK connection
  */
-export interface RtcPropsInterface {
+export interface RtcConnectionData {
   /**
    * Agora App ID - used to authenticate the request
    */
@@ -225,6 +225,12 @@ export interface RtcPropsInterface {
    * (optional) URL for token server, manages fetching and updating tokens automatically. Must follow the schema here - https://github.com/AgoraIO-Community/agora-token-service/
    */
   tokenUrl?: string;
+}
+
+/**
+ * Props object to customize the RTC SDK settings
+ */
+export interface RtcSettings {
   /**
    * Set to true to enable active speaker callback, switches the pinned video to active speaker if you're using the pinned layout. (default: false)
    */
@@ -263,20 +269,20 @@ export interface RtcPropsInterface {
    * Disable Agora RTM, this also disables the use of usernames and remote mute functionality
    */
   disableRtm?: boolean;
-  /**
-   * Enable the mic before joining the call. (default: true)
-   */
-  enableAudio?: boolean;
-  /**
-   * Enable the camera before joining the call. Only use for initiak(default: true)
-   */
-  enableVideo?: boolean;
+  // /**
+  //  * Enable the mic before joining the call. (default: true)
+  //  */
+  // enableAudio?: boolean;
+  // /**
+  //  * Enable the camera before joining the call. Only use for initiak(default: true)
+  //  */
+  // enableVideo?: boolean;
 }
 
 /**
- * Props object for customising the UI Kit signalling functionality
+ * Props object to setup the  RTM SDK connection
  */
-export interface RtmPropsInterface {
+export interface RtmConnectionData {
   /**
    * Username for the RTM Client, this value can be accessed using the userData object
    */
@@ -289,6 +295,12 @@ export interface RtmPropsInterface {
    * UID for local user to join the RTM channel (default: uses the RTC UID)
    */
   uid?: string;
+}
+
+/**
+ * Props object to customize the RTM SDK settings
+ */
+export interface RtmSettings {
   /**
    * Show a pop up with option to accept mute request instead of directly muting the remote user (default: true), if set to false you cannot unmute users.
    */
@@ -298,6 +310,15 @@ export interface RtmPropsInterface {
    */
   displayUsername?: boolean;
 }
+
+/**
+ * Props object for RTC SDK
+ */
+export interface RtcPropsInterface extends RtcSettings, RtcConnectionData {}
+/**
+ * Props object for RTM SDK
+ */
+export interface RtmPropsInterface extends RtmSettings, RtmConnectionData {}
 
 export interface CallbacksInterface {
   /**
@@ -347,14 +368,54 @@ export type CustomCallbacksInterface = CallbacksInterface;
 //   extends RtcEngineEvents,
 //     CustomCallbacksInterface {}
 
+/**
+ * Props to setup the Agora SDK connection
+ */
+export interface ConnectionData
+  extends Omit<RtmConnectionData, 'uid' | 'token'>,
+    Omit<RtcConnectionData, 'uid' | 'token'> {
+  rtcToken?: string;
+  rtcUid?: number;
+  rtmToken?: string;
+  rtmUid?: string;
+}
+
+/**
+ * Props to customize the Agora UIKit
+ */
+export interface Settings extends RtcSettings, RtmSettings {}
+
+/**
+ * Agora UIKit props interface
+ */
+export interface AgoraUIKitProps {
+  /**
+   * Props to setup the Agora SDK connection
+   */
+  connectionData: ConnectionData;
+  /**
+   * Props to customize the Agora UIKit
+   */
+  settings?: Settings;
+  /**
+   * Props to override the default styles for the UI
+   */
+  styleProps?: Partial<StylePropInterface>;
+  /**
+   * Callbacks for different events of the UI Kit
+   */
+  rtcCallbacks?: Partial<CallbacksInterface>;
+  /**
+   * Callbacks for the signalling layer
+   */
+  rtmCallbacks?: rtmCallbacks;
+}
+
 export interface PropsInterface {
   rtcProps: RtcPropsInterface;
   rtmProps?: RtmPropsInterface;
   styleProps?: Partial<StylePropInterface>;
   callbacks?: Partial<CallbacksInterface>;
-  /**
-   * Callbacks for different functions of the UI Kit
-   */
   rtmCallbacks?: rtmCallbacks;
 }
 
