@@ -55,9 +55,12 @@ export type {
 
 export {default as BtnTemplate} from './Controls/BtnTemplate';
 export {default as Endcall} from './Controls/Local/EndCall';
+export type {EndCallProps} from  './Controls/Local/EndCall';
 export {default as FullScreen} from './Controls/Local/FullScreen';
 export {default as LocalAudioMute} from './Controls/Local/LocalAudioMute';
+export type {LocalAudioMuteProps} from './Controls/Local/LocalAudioMute';
 export {default as LocalVideoMute} from './Controls/Local/LocalVideoMute';
+export type {LocalVideoMuteProps} from './Controls/Local/LocalVideoMute';
 export {default as SwitchCamera} from './Controls/Local/SwitchCamera';
 export {default as Controls} from './Controls/LocalControls';
 
