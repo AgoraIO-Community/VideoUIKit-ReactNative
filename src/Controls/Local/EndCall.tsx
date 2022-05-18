@@ -4,11 +4,11 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
-interface Props{
+export interface EndCallProps{
   btnText?: string
 }
 
-function EndCall(props?: Props) {
+function EndCall(props?: EndCallProps) {
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {endCall} = localBtnStyles || {};

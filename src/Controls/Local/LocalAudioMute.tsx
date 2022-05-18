@@ -5,11 +5,11 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 
-interface Props {
+export interface LocalAudioMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
 }
-function LocalAudioMute(props: Props) {
+function LocalAudioMute(props: LocalAudioMuteProps) {
   const {btnText = 'Audio', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};

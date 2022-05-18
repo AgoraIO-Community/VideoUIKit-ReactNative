@@ -5,12 +5,12 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 
-interface Props {
+export interface LocalVideoMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
 }
 
-function LocalVideoMute(props: Props) {
+function LocalVideoMute(props: LocalVideoMuteProps) {
   const {btnText = 'Video', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
