@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useState, useEffect, useContext, useRef, FC} from 'react';
 import RtcEngine, {
   VideoEncoderConfiguration,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useState, useReducer, useContext, useCallback} from 'react';
 import {
   RtcProvider,

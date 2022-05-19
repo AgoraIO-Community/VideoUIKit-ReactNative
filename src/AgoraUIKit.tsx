@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import RtcConfigure from './RtcConfigure';
@@ -22,7 +23,6 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
               <MaxVideoView user={maxUsers[0]} key={maxUsers[0].uid} />
             )}
           </MaxUidConsumer>
-
           <ScrollView
             showsHorizontalScrollIndicator={false}
             horizontal={true}
