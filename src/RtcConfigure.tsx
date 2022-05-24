@@ -55,7 +55,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             ? ToggleState.disabled
             : ToggleState.enabled,
         streamType: 'high',
-        type: 'rtc'
+        contentType: 'rtc'
       },
     ],
   };

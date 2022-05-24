@@ -41,11 +41,11 @@ interface DefaultUidInterface {
   audio: ToggleState;
   video: ToggleState;
   streamType: 'high' | 'low';
-  type: 'rtc';
+  contentType: 'rtc';
 }
 
 export interface UserUidInterface<T> {
-  type: T extends DefaultUidInterface['type'] ? never : T
+  type: T extends DefaultUidInterface['contentType'] ? never : T
 }
 
 interface UserEnteredInterface extends UserUidInterface<string> {
