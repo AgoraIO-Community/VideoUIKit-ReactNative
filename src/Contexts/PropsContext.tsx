@@ -125,6 +125,7 @@ const initialValue: PropsInterface = {
   rtcProps: {
     appId: '',
     channel: '',
+    geoFencing: true
   },
 };
 

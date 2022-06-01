@@ -22,6 +22,7 @@ const Create = ({
 }) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
+  const {geoFencing = true} = rtcProps;
   let engine = useRef<RtcEngine>({} as RtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
@@ -73,7 +74,7 @@ const Create = ({
         await requestCameraAndAudioPermission();
       }
       try {
-        if (rtcProps?.geoFencing === true && (Platform.OS === 'android' || Platform.OS === 'ios')) {
+        if (geoFencing === true && (Platform.OS === 'android' || Platform.OS === 'ios')) {
           engine.current = await RtcEngine.createWithAreaCode(
             rtcProps.appId,
             // eslint-disable-next-line no-bitwise
