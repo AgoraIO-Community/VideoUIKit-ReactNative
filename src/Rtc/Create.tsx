@@ -26,6 +26,46 @@ const Create = ({
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
+  const enableVideoAndAudio = async () => {
+    try {
+      await engine.current.enableVideo();
+      dispatch({
+        type: 'LocalMuteAudio',
+        value: [ToggleState.enabled],
+      });
+      dispatch({
+        type: 'LocalMuteVideo',
+        value: [ToggleState.enabled],
+      });
+    } catch (e) {
+      const {status} = e as any;
+
+      // App Builder web only
+      if (status) {
+        const {audioError, videoError} = status;
+
+        if (!audioError) {
+          dispatch({
+            type: 'LocalMuteAudio',
+            value: [ToggleState.enabled],
+          });
+        } else {
+          console.error('No audio device', audioError);
+        }
+
+        if (!videoError) {
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [ToggleState.enabled],
+          });
+        } else {
+          console.error('No video device', videoError);
+        }
+      }
+      console.error('No devices', e);
+    }
+  };
+
   useEffect(() => {
     async function init() {
       if (Platform.OS === 'android') {
@@ -84,20 +124,8 @@ const Create = ({
             Platform.OS === 'web'
           )
         ) {
-          try {
-            await engine.current.enableVideo();
-            isVideoEnabledRef.current = true;
-          } catch (e) {
-            dispatch({
-              type: 'LocalMuteAudio',
-              value: [ToggleState.disabled],
-            });
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [ToggleState.disabled],
-            });
-            console.error('No devices', e);
-          }
+          await enableVideoAndAudio();
+          isVideoEnabledRef.current = true;
         }
 
         engine.current.addListener(
@@ -166,20 +194,8 @@ const Create = ({
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
           if (!isVideoEnabledRef.current) {
-            try {
-              // This creates local audio and video track
-              await engine.current?.enableVideo();
-              isVideoEnabledRef.current = true;
-            } catch (error) {
-              dispatch({
-                type: 'LocalMuteAudio',
-                value: [ToggleState.disabled],
-              });
-              dispatch({
-                type: 'LocalMuteVideo',
-                value: [ToggleState.disabled],
-              });
-            }
+            await enableVideoAndAudio();
+            isVideoEnabledRef.current = true;
           }
           if (isVideoEnabledRef.current) {
             // This unpublishes the current track

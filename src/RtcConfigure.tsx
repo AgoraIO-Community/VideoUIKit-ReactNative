@@ -43,16 +43,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     max: [
       {
         uid: 'local',
-        audio:
-          mode == ChannelProfile.LiveBroadcasting &&
-          rtcProps?.role == ClientRole.Audience
-            ? ToggleState.disabled
-            : ToggleState.enabled,
-        video:
-          mode == ChannelProfile.LiveBroadcasting &&
-          rtcProps?.role == ClientRole.Audience
-            ? ToggleState.disabled
-            : ToggleState.enabled,
+        audio: ToggleState.disabled,
+        video: ToggleState.disabled,
         streamType: 'high',
       },
     ],
