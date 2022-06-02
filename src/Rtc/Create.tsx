@@ -22,7 +22,7 @@ const Create = ({
 }) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
-  const {geoFencing = true} = rtcProps;
+  const {geoFencing = true} = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
