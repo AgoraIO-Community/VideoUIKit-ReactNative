@@ -28,7 +28,7 @@ interface BtnTemplateInterfaceWithName extends BtnTemplateBasicInterface {
 interface BtnTemplateInterfaceWithIcon extends BtnTemplateBasicInterface {
   icon?: any;
 }
-type BtnTemplateInterface = Either<
+export type BtnTemplateInterface = Either<
   BtnTemplateInterfaceWithIcon,
   BtnTemplateInterfaceWithName
 >;
@@ -62,7 +62,11 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
             tintColor: disabled ? 'grey' : props.color || theme || '#fff',
           }}
           resizeMode={'contain'}
-          source={props.name && icons[props.name] ? {uri: icons[props.name] } : props.icon}
+          source={
+            props.name && icons[props.name]
+              ? {uri: icons[props.name]}
+              : props.icon
+          }
         />
       </View>
       <Text

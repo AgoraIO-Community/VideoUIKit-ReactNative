@@ -5,7 +5,7 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 
-export interface LocalAudioMuteProps {
+interface LocalAudioMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
 }

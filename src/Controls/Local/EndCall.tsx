@@ -4,7 +4,7 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
-export interface EndCallProps{
+interface EndCallProps{
   btnText?: string
 }
 
