@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useState, useEffect, useContext, useRef, FC} from 'react';
 import RtcEngine, {
   VideoEncoderConfiguration,
@@ -23,6 +24,7 @@ const Create = ({
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);
+  const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate ? rtcProps.lifecycle.useBeforeCreate() : null; 
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
@@ -71,6 +73,13 @@ const Create = ({
       if (Platform.OS === 'android') {
         //Request required permissions from Android
         await requestCameraAndAudioPermission();
+      }
+      try {
+        if(beforeCreate){
+          await beforeCreate();
+        }  
+      } catch (error) {
+        console.error('FPE:Error on executing useBeforeCreate',error);
       }
       try {
         if (Platform.OS === 'android' || Platform.OS === 'ios') {

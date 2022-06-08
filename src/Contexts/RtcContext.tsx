@@ -27,6 +27,9 @@ export interface RtcContextInterface {
   RtcEngine: RtcEngine;
   dispatch: DispatchType;
   setDualStreamMode: React.Dispatch<React.SetStateAction<DualStreamMode>>;
+  setUidArray: (
+    param: UidStateInterface | ((p: UidStateInterface) => UidStateInterface),
+  ) => void;
 }
 
 const RtcContext = React.createContext<RtcContextInterface>(

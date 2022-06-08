@@ -4,7 +4,11 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
-function EndCall() {
+interface Props{
+  btnText?: string
+}
+
+function EndCall(props?: Props) {
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {endCall} = localBtnStyles || {};
@@ -13,7 +17,7 @@ function EndCall() {
   return (
     <BtnTemplate
       name={'callEnd'}
-      btnText={'Hang Up'}
+      btnText={props?.btnText || 'Hang Up'}
       color='#FD0845'
       style={{...styles.endCall, ...(endCall as object)}}
       onPress={() =>

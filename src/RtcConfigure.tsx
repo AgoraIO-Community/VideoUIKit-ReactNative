@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useState, useReducer, useContext, useCallback} from 'react';
 import {
   RtcProvider,
@@ -32,6 +33,7 @@ import {
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 
+
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
@@ -46,6 +48,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         audio: ToggleState.disabled,
         video: ToggleState.disabled,
         streamType: 'high',
+        type: 'rtc'
       },
     ],
   };
@@ -66,6 +69,11 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       uids = [...state.max, ...state.min].map((u: UidInterface) => u.uid);
 
     switch (action.type) {
+      case 'SetState':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = action.value[0];
+        }
+        break;
       case 'UpdateDualStreamMode':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = UpdateDualStreamMode(state, action);
@@ -171,6 +179,16 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     initialState,
   );
 
+  const setUidArray = (
+    param: UidStateInterface | ((p: UidStateInterface) => UidStateInterface),
+  ) => {
+    if (typeof param === 'function') {
+      dispatch({type: 'SetState', value: [param(uidState)]});
+    } else {
+      dispatch({type: 'SetState', value: [param]});
+    }
+  };
+
   return (
     <Create dispatch={dispatch}>
       {(engineRef) => (
@@ -184,6 +202,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
               RtcEngine: engineRef.current,
               dispatch,
               setDualStreamMode,
+              setUidArray
             }}>
             <MaxUidProvider value={uidState.max}>
               <MinUidProvider value={uidState.min}>

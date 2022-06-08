@@ -17,7 +17,8 @@ export default function UserJoined(
         uid: action.value[0],
         audio: ToggleState.disabled,
         video: ToggleState.disabled,
-        streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default
+        streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
+        type: 'rtc'
       },
     ];
 

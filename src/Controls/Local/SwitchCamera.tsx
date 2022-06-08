@@ -5,7 +5,11 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
-function SwitchCamera() {
+interface Props{
+  btnText?: string
+}
+
+function SwitchCamera(props?: Props) {
   const {styleProps, callbacks} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {switchCamera} = localBtnStyles || {};
@@ -15,7 +19,7 @@ function SwitchCamera() {
     <BtnTemplate
       name={'switchCamera'}
       style={{...styles.localBtn, ...(switchCamera as object)}}
-      btnText={'Switch'}
+      btnText={props?.btnText ||'Switch'}
       disabled={local.video === ToggleState.enabled ? false : true}
       onPress={() => {
         RtcEngine.switchCamera();
