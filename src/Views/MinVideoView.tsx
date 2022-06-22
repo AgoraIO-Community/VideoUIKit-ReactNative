@@ -21,7 +21,8 @@ interface MinViewInterface {
 const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const [overlay, setOverlay] = useState(false);
   const {styleProps, rtcProps} = useContext(PropsContext);
-  const {theme, remoteBtnStyles, customIcon} = styleProps || {};
+  const {theme, remoteBtnStyles, customIcon, VideoPlaceholderComponent} =
+    styleProps || {};
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
 
@@ -29,7 +30,14 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
     <View style={{margin: 5}}>
       {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
-          <UserVideoWithFallback user={props.user} Fallback={props.Fallback} />
+          <UserVideoWithFallback
+            user={props.user}
+            Fallback={
+              VideoPlaceholderComponent
+                ? VideoPlaceholderComponent
+                : props.Fallback
+            }
+          />
         </TouchableOpacity>
       ) : (
         <UserVideoWithFallback user={props.user} />

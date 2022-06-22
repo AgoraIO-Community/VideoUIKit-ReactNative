@@ -21,7 +21,7 @@ import PopUp from './Controls/Remote/RemoteMutePopUp';
  * Agora UIKit component following the v3 props
  * @returns Renders the UIKit
  */
-const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
+export const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
   const {layout} = props.rtcProps;
   return (
     <PropsProvider value={props}>
@@ -52,8 +52,13 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
  * @returns Renders the UIKit
  */
 const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
-  const {rtcUid, rtcToken, rtmToken, rtmUid, ...restConnectonData} =
-    props.connectionData;
+  const {
+    rtcUid,
+    rtcToken,
+    rtmToken,
+    rtmUid,
+    ...restConnectonData
+  } = props.connectionData;
   const adaptedProps: PropsInterface = {
     rtcProps: {
       uid: rtcUid,

@@ -120,6 +120,10 @@ export interface StylePropInterface {
     min?: VideoRenderMode;
   };
   /**
+   * Override the component that's rendered when a video is muted
+   */
+  VideoPlaceholderComponent?: React.ComponentType<{}>;
+  /**
    * Color tint for icons
    */
   theme?: string;
