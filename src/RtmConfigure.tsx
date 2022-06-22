@@ -28,7 +28,7 @@ const rtmClient = new RtmClient();
 /**
  * React component that contains the RTM logic. It manages the usernames, remote mute requests and provides data to the children components by wrapping them with context providers.
  */
-const RtmConfigure = (props: any) => {
+const RtmConfigure: React.FC = (props) => {
   const {rtcProps, rtmProps} = useContext(PropsContext);
   const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
   const timerValueRef: any = useRef(5);

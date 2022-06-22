@@ -13,17 +13,12 @@ import PropsContext, {
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
-const Create = ({
-  dispatch,
-  rtcUidRef,
-  setRtcChannelJoined,
-  children,
-}: {
+const Create: React.FC<{
   dispatch: DispatchType;
   rtcUidRef: React.MutableRefObject<number | undefined>;
   setRtcChannelJoined: React.Dispatch<React.SetStateAction<boolean>>;
   children: (engine: React.MutableRefObject<RtcEngine>) => React.ReactElement;
-}) => {
+}> = ({dispatch, rtcUidRef, setRtcChannelJoined, children}) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<RtcEngine>({} as RtcEngine);

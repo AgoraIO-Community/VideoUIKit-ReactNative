@@ -4,7 +4,11 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
-function EndCall() {
+/**
+ * React Component that renders the endcall button
+ * @returns Renders the endcall button
+ */
+const EndCall: React.FC = () => {
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {endCall} = localBtnStyles || {};
@@ -24,6 +28,6 @@ function EndCall() {
       }
     />
   );
-}
+};
 
 export default EndCall;

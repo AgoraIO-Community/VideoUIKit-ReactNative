@@ -10,12 +10,12 @@ import {LocalContext} from '../../Contexts/LocalUserContext';
 import {DispatchType} from '../../Contexts/RtcContext';
 import RtcEngineType from 'react-native-agora';
 
-interface Props {
+interface LocalVideoMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
 }
 
-function LocalVideoMute(props: Props) {
+const LocalVideoMute: React.FC<LocalVideoMuteProps> = (props) => {
   const {btnText = 'Video', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
@@ -37,7 +37,7 @@ function LocalVideoMute(props: Props) {
       onPress={() => muteVideo(local, dispatch, RtcEngine)}
     />
   );
-}
+};
 
 export const muteVideo = async (
   local: UidInterface,

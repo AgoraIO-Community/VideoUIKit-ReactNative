@@ -1,3 +1,6 @@
+/**
+ * @module Built-in Components
+ */
 import Endcall from './src/Controls/Local/EndCall';
 import LocalAudioMute from './src/Controls/Local/LocalAudioMute';
 import LocalVideoMute from './src/Controls/Local/LocalVideoMute';
@@ -11,6 +14,7 @@ import MaxVideoView from './src/Views/MaxVideoView';
 import MinVideoView from './src/Views/MinVideoView';
 import RtcConfigure from './src/RtcConfigure';
 import RtmConfigure from './src/RtmConfigure';
+import LocalUserContext from './src/Contexts/LocalUserContext';
 import BtnTemplate from './src/Controls/BtnTemplate';
 import PinnedVideo from './src/Views/PinnedVideo';
 import GridVideo from './src/Views/GridVideo';
@@ -34,6 +38,7 @@ export {
   MinVideoView,
   RtcConfigure,
   RtmConfigure,
+  LocalUserContext,
   BtnTemplate,
   PinnedVideo,
   GridVideo,

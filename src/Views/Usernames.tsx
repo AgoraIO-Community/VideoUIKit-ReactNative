@@ -3,7 +3,9 @@ import RtmContext from '../Contexts/RtmContext';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import {StyleSheet, Text} from 'react-native';
 
-const Username = (props: {user: UidInterface; style?: React.CSSProperties}) => {
+const Username: React.FC<{user: UidInterface; style?: React.CSSProperties}> = (
+  props,
+) => {
   const {usernames} = useContext(RtmContext);
   const {rtmProps, styleProps} = useContext(PropsContext);
   const {user} = props;

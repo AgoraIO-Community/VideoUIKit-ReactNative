@@ -34,7 +34,7 @@
     "agora-react-native-rtm": "^1.5.0"
   },
   "scripts": {
-    "docs": "typedoc && cp 'UI Kit.png' './docs/UI Kit.png'"
+    "docs": "typedoc  --entryPoints index.ts  --entryPoints Components.ts  --entryPoints Contexts.ts && cp 'UI Kit.png' './docs/UI Kit.png'"
   },
   "devDependencies": {
     "typedoc": "^0.22.15",

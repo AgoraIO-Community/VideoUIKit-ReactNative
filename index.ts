@@ -1,5 +1,5 @@
 /**
- * @module agora-rn-uikit
+ * @module Agora UIKit
  */
 import AgoraUIKit from './src/AgoraUIKit';
 export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';

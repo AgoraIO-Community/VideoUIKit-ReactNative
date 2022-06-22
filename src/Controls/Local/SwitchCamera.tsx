@@ -1,11 +1,11 @@
 import React, {useContext} from 'react';
-import PropsContext,{ToggleState} from '../../Contexts/PropsContext';
+import PropsContext, {ToggleState} from '../../Contexts/PropsContext';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 
-function SwitchCamera() {
+const SwitchCamera: React.FC = () => {
   const {styleProps, callbacks} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {switchCamera} = localBtnStyles || {};
@@ -23,6 +23,6 @@ function SwitchCamera() {
       }}
     />
   );
-}
+};
 
 export default SwitchCamera;

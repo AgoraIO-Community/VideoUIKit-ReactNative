@@ -9,12 +9,12 @@ import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 import {DispatchType} from '../../Contexts/RtcContext';
 import RtcEngineType from 'react-native-agora';
-interface Props {
+interface LocalAudioMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
 }
 
-function LocalAudioMute(props: Props) {
+const LocalAudioMute: React.FC<LocalAudioMuteProps> = (props) => {
   const {btnText = 'Audio', variant = 'Outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
@@ -36,7 +36,7 @@ function LocalAudioMute(props: Props) {
       onPress={() => muteAudio(localUser, dispatch, RtcEngine)}
     />
   );
-}
+};
 
 export const muteAudio = async (
   local: UidInterface,
