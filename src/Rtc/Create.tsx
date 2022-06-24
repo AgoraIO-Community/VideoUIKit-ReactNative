@@ -27,7 +27,45 @@ const Create = ({
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
-  const enableVideoAndAudio = async () => {
+  const enableVideoAndAudioWithDisbledState = async () => {
+    try {
+      await engine.current.enableVideo();
+      dispatch({
+        type: 'LocalMuteAudio',
+        value: [ToggleState.disabled],
+      });
+      dispatch({
+        type: 'LocalMuteVideo',
+        value: [ToggleState.disabled],
+      });
+    } catch (error) {
+      const {status} = e as any;
+      // App Builder web only
+      if (status) {
+        const {audioError, videoError} = status;
+
+        if (!audioError) {
+          dispatch({
+            type: 'LocalMuteAudio',
+            value: [ToggleState.disabled],
+          });
+        } else {
+          console.error('No audio device', audioError);
+        }
+
+        if (!videoError) {
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [ToggleState.disabled],
+          });
+        } else {
+          console.error('No video device', videoError);
+        }
+      }
+      console.error('No devices', e);
+    }
+  };
+  const enableVideoAndAudioWithEnabledState = async () => {
     try {
       await engine.current.enableVideo();
       dispatch({
@@ -66,6 +104,16 @@ const Create = ({
       console.error('No devices', e);
     }
   };
+  const enableVideoAndAudio = async () => {
+    if (
+      ChannelProfile.LiveBroadcasting &&
+      rtcProps?.role == ClientRole.Audience
+    ) {
+      enableVideoAndAudioWithDisbledState();
+    } else {
+      enableVideoAndAudioWithEnabledState();
+    }
+  };
 
   useEffect(() => {
     async function init() {
@@ -74,7 +122,10 @@ const Create = ({
         await requestCameraAndAudioPermission();
       }
       try {
-        if (geoFencing === true && (Platform.OS === 'android' || Platform.OS === 'ios')) {
+        if (
+          geoFencing === true &&
+          (Platform.OS === 'android' || Platform.OS === 'ios')
+        ) {
           engine.current = await RtcEngine.createWithAreaCode(
             rtcProps.appId,
             // eslint-disable-next-line no-bitwise
