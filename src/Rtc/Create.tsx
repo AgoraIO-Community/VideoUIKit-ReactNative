@@ -27,7 +27,7 @@ const Create = ({
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
-  const enableVideoAndAudioWithDisbledState = async () => {
+  const enableVideoAndAudioWithDisabledState = async () => {
     try {
       await engine.current.enableVideo();
       dispatch({
@@ -104,12 +104,12 @@ const Create = ({
       console.error('No devices', e);
     }
   };
-  const enableVideoAndAudio = async () => {
+  const enableVideoAndAudioWithInitialStates = async () => {
     if (
       mode == ChannelProfile.LiveBroadcasting &&
       rtcProps?.role == ClientRole.Audience
     ) {
-      enableVideoAndAudioWithDisbledState();
+      enableVideoAndAudioWithDisabledState();
     } else {
       enableVideoAndAudioWithEnabledState();
     }
@@ -176,7 +176,7 @@ const Create = ({
             Platform.OS === 'web'
           )
         ) {
-          await enableVideoAndAudio();
+          await enableVideoAndAudioWithInitialStates();
           isVideoEnabledRef.current = true;
         }
 
@@ -246,7 +246,7 @@ const Create = ({
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
           if (!isVideoEnabledRef.current) {
-            await enableVideoAndAudio();
+            await enableVideoAndAudioWithDisabledState();
             isVideoEnabledRef.current = true;
           }
           if (isVideoEnabledRef.current) {
