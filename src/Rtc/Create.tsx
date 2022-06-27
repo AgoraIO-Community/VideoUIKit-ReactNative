@@ -106,7 +106,7 @@ const Create = ({
   };
   const enableVideoAndAudio = async () => {
     if (
-      ChannelProfile.LiveBroadcasting &&
+      mode == ChannelProfile.LiveBroadcasting &&
       rtcProps?.role == ClientRole.Audience
     ) {
       enableVideoAndAudioWithDisbledState();
