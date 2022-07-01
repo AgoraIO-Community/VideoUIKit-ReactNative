@@ -78,8 +78,11 @@ export enum DualStreamMode {
 export interface RtcPropsInterface {
   appId: string;
   channel: string;
+  rtm?: string;
   uid?: number;
+  screenShareUid?: number;
   token?: string | null;
+  screenShareToken?: string | null;
   dual?: boolean | null;
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
@@ -87,6 +90,7 @@ export interface RtcPropsInterface {
   callActive?: boolean;
   encryption?: {
     key: string;
+    screenKey: string;
     mode:
       | EncryptionMode.AES128XTS
       | EncryptionMode.AES256XTS
