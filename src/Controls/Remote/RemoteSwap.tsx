@@ -1,11 +1,12 @@
 import React, {useContext} from 'react';
-import RtcContext from '../../Contexts/RtcContext';
+import RtcContext, {UidType} from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import PropsContext, {UidInterface} from '../../Contexts/PropsContext';
+import PropsContext from '../../Contexts/PropsContext';
+import useLocalUid from '../../Utils/useLocalUid';
 
 interface RemoteSwapInterface {
-  user: UidInterface;
+  uid: UidType;
 }
 
 const RemoteSwap: React.FC<RemoteSwapInterface> = (props) => {
@@ -13,19 +14,19 @@ const RemoteSwap: React.FC<RemoteSwapInterface> = (props) => {
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles} = styleProps || {};
   const {remoteSwap} = remoteBtnStyles || {};
-
+  const localUid = useLocalUid();
   return (
     <BtnTemplate
       name={'remoteSwap'}
       style={
-        props.user.uid !== 'local'
+        props.uid !== localUid
           ? {...styles.rightRemoteBtn, ...(remoteSwap as object)}
           : {}
       }
       onPress={() => {
         dispatch({
           type: 'SwapVideo',
-          value: [props.user],
+          value: [props.uid],
         });
       }}
     />

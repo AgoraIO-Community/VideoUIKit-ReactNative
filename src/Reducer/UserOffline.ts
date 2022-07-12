@@ -1,21 +1,24 @@
-import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
+import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
 
 export default function UserOffline(
-  state: UidStateInterface,
+  state: RenderStateInterface,
   action: ActionType<'UserOffline'>,
 ) {
-  let stateUpdate = {};
-  if (state.max[0].uid === action.value[0]) {
-    //If max has the remote video
-    let minUpdate = [...state.min];
-    stateUpdate = {
-      max: [minUpdate.pop()],
-      min: minUpdate,
-    };
-  } else {
-    stateUpdate = {
-      min: state.min.filter((user) => user.uid !== action.value[0]),
-    };
-  }
+  // let updatedRenderList = {
+  //   ...state.renderList,
+  // };
+  // //don't delete user data from renderlist
+  // //we will update user data with {offline:true} from RTM user left event
+  // if (updatedRenderList[action.value[0]]) {
+  //   delete updatedRenderList[action.value[0]];
+  // }
+  const updatedRenderPosition = [...state.renderPosition].filter(
+    (uid) => uid !== action.value[0],
+  );
+  const stateUpdate: RenderStateInterface = {
+    renderList: state.renderList,
+    renderPosition: updatedRenderPosition,
+  };
+
   return stateUpdate;
 }

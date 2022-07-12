@@ -1,24 +1,26 @@
 import React, {useContext} from 'react';
+import useLocalUid from '../../Utils/useLocalUid';
 import PropsContext, {
   ToggleState,
-  UidInterface,
+  RenderInterface,
 } from '../../Contexts/PropsContext';
-import RtcContext from '../../Contexts/RtcContext';
+import RtcContext, {UidType} from '../../Contexts/RtcContext';
 import styles from '../../Style';
 import BtnTemplate from '../BtnTemplate';
 
 interface RemoteVideoMuteInterface {
-  user: UidInterface;
+  user: RenderInterface;
+  uid: UidType;
   rightButton: boolean;
 }
 
 const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
-  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const {RtcEngine} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles} = styleProps || {};
   const {muteRemoteVideo} = remoteBtnStyles || {};
-
-  return props.user.uid !== 'local' ? (
+  const localUid = useLocalUid();
+  return props.uid !== localUid ? (
     <BtnTemplate
       name={
         props.user.video === ToggleState.enabled ? 'videocam' : 'videocamOff'
@@ -30,7 +32,7 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
       }
       onPress={() => {
         RtcEngine.muteRemoteVideoStream(
-          props.user.uid as number,
+          props.uid as number,
           props.user.video === ToggleState.enabled, //If enabled, disable or vice-versa
         );
         // dispatch({

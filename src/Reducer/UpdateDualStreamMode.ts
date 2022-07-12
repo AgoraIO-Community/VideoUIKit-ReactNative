@@ -1,46 +1,43 @@
-import {DualStreamMode, UidInterface} from '../Contexts/PropsContext';
-import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
+import {DualStreamMode} from '../Contexts/PropsContext';
+import {
+  ActionType,
+  RenderStateInterface,
+  UidType,
+} from '../Contexts/RtcContext';
 
 export default function UpdateDualStreamMode(
-  state: UidStateInterface,
+  state: RenderStateInterface,
   action: ActionType<'UpdateDualStreamMode'>,
 ) {
   const newMode = action.value[0];
-  let stateUpdate: UidStateInterface;
+  let renderList = {...state.renderList};
+  let stateUpdate: RenderStateInterface;
+  const setHighStreamType = (uid: UidType) => {
+    renderList[uid].streamType = 'high';
+  };
+
+  const setLowStreamType = (uid: UidType) => {
+    renderList[uid].streamType = 'low';
+  };
+
   if (newMode === DualStreamMode.HIGH) {
     // Update everybody to high
-    const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
-      ...user,
-      streamType: 'high',
-    }));
-    const minStateUpdate: UidInterface[] = state.min.map((user) => ({
-      ...user,
-      streamType: 'high',
-    }));
-    stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+    state.renderPosition.forEach(setHighStreamType);
   } else if (newMode === DualStreamMode.LOW) {
     // Update everybody to low
-    const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
-      ...user,
-      streamType: 'low',
-    }));
-    const minStateUpdate: UidInterface[] = state.min.map((user) => ({
-      ...user,
-      streamType: 'low',
-    }));
-    stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+    state.renderPosition.forEach(setLowStreamType);
   } else {
+    const [maxUid, ...minUids] = state.renderPosition;
     // if (newMode === DualStreamMode.DYNAMIC)
     // Max users are high other are low
-    const maxStateUpdate: UidInterface[] = state.max.map((user) => ({
-      ...user,
-      streamType: 'high',
-    }));
-    const minStateUpdate: UidInterface[] = state.min.map((user) => ({
-      ...user,
-      streamType: 'low',
-    }));
-    stateUpdate = {min: minStateUpdate, max: maxStateUpdate};
+    //setting high for maxuid
+    setHighStreamType(maxUid);
+    //setting low for minuids
+    minUids.forEach(setLowStreamType);
   }
+  stateUpdate = {
+    renderList: renderList,
+    renderPosition: [...state.renderPosition],
+  };
   return stateUpdate;
 }

@@ -1,21 +1,26 @@
 import React, {useContext, createContext} from 'react';
-import MaxUidContext from './MaxUidContext';
-import MinUidContext from './MinUidContext';
-import {UidInterface} from './PropsContext';
+import RenderContext from './RenderContext';
+import {RenderInterface} from './PropsContext';
+import {UidType} from './RtcContext';
 
-export const LocalContext = createContext<UidInterface>({} as UidInterface);
+export const LocalContext = createContext<RenderInterface>(
+  {} as RenderInterface,
+);
 export const LocalProvider = LocalContext.Provider;
 export const LocalConsumer = LocalContext.Consumer;
 
 interface LocalUserContextInterface {
   children: React.ReactNode;
+  localUid: UidType;
 }
 
 const LocalUserContext: React.FC<LocalUserContextInterface> = (props) => {
-  const max = useContext(MaxUidContext);
-  const min = useContext(MinUidContext);
-  // if(min && min[0] && max )
-  let localUser: UidInterface = max[0].uid === 'local' ? max[0] : min[0];
+  const {renderList} = useContext(RenderContext);
+  let localUser: RenderInterface = renderList[props?.localUid];
+  if (!localUser) {
+    console.error("Error: we couldn't find the local user data");
+    return null;
+  }
   return (
     <LocalContext.Provider value={localUser}>
       {props.children}

@@ -3,7 +3,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
-import {UidStateInterface} from './RtcContext';
+import {UidType} from './RtcContext';
 
 /* User role for live streaming mode */
 export enum ClientRole {
@@ -35,24 +35,19 @@ export enum ToggleState {
 export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
-interface DefaultUidInterface {
-  // TODO: refactor local to 0 and remove string.
-  uid: number | string;
+export interface DefaultRenderInterface {
   audio: ToggleState;
   video: ToggleState;
   streamType: 'high' | 'low';
-  contentType: 'rtc';
+  type: 'rtc';
 }
-
-export interface UserUidInterface<T> {
-  type: T extends DefaultUidInterface['contentType'] ? never : T
+export interface CustomRenderInterface<T> {
+  type: T extends DefaultRenderInterface['type'] ? never : T;
 }
-
-interface UserEnteredInterface extends UserUidInterface<string> {
-  [key: string] :any,
+interface ExtenedRenderInterface extends CustomRenderInterface<string> {
+  [key: string]: any;
 }
-
-export type UidInterface = DefaultUidInterface | UserEnteredInterface;
+export type RenderInterface = DefaultRenderInterface | ExtenedRenderInterface;
 
 interface remoteBtnStylesInterface {
   muteRemoteAudio?: StyleProp<ViewStyle>;
@@ -105,9 +100,9 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES128ECB;
   };
   lifecycle?: {
-    useBeforeJoin?: () => () => Promise<void>,
-    useBeforeCreate?: () => () => Promise<void>
-  }
+    useBeforeJoin?: () => () => Promise<void>;
+    useBeforeCreate?: () => () => Promise<void>;
+  };
 }
 
 export interface CallbacksInterface {
@@ -117,17 +112,17 @@ export interface CallbacksInterface {
   UpdateDualStreamMode(mode: DualStreamMode): void;
   UserJoined: RtcEngineEvents['UserJoined'];
   UserOffline: RtcEngineEvents['UserOffline'];
-  SwapVideo(user: UidInterface): void;
-  UserMuteRemoteAudio(user: UidInterface, muted: UidInterface['audio']): void;
-  UserMuteRemoteVideo(user: UidInterface, muted: UidInterface['video']): void;
+  SwapVideo(uid: UidType): void;
+  DequeVideo(uid: UidType): void;
+  UserMuteRemoteAudio(uid: UidType, muted: RenderInterface['audio']): void;
+  UserMuteRemoteVideo(uid: UidType, muted: RenderInterface['video']): void;
   LocalMuteAudio(muted: ToggleState): void;
   LocalMuteVideo(muted: ToggleState): void;
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
-  SetState(
-    param: UidStateInterface | ((p: UidStateInterface) => UidStateInterface),
-  ): void;
+  UpdateRenderList(uid: UidType, user: RenderInterface): void;
+  AddCustomContent(uid: UidType, data: any): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;

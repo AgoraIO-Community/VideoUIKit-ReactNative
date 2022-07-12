@@ -1,26 +1,31 @@
 import React, {useContext} from 'react';
-import RtcContext from '../../Contexts/RtcContext';
+import RtcContext, {UidType} from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
-import PropsContext, {ToggleState, UidInterface} from '../../Contexts/PropsContext';
+import PropsContext, {
+  ToggleState,
+  RenderInterface,
+} from '../../Contexts/PropsContext';
+import useLocalUid from '../../Utils/useLocalUid';
 
 interface RemoteAudioMuteInterface {
-  user: UidInterface;
+  user: RenderInterface;
+  uid: UidType;
 }
 
 const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
-  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const {RtcEngine} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles} = styleProps || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};
-
-  return props.user.uid !== 'local' ? (
+  const localUid = useLocalUid();
+  return props.uid !== localUid ? (
     <BtnTemplate
       name={props.user.audio === ToggleState.enabled ? 'mic' : 'micOff'}
       style={{...styles.leftRemoteBtn, ...(muteRemoteAudio as object)}}
       onPress={() => {
         RtcEngine.muteRemoteAudioStream(
-          props.user.uid as number,
+          props.uid as number,
           props.user.audio === ToggleState.enabled,
         );
         // dispatch({

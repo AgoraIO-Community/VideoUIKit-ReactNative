@@ -1,21 +1,18 @@
 import React, {useState, useReducer, useContext, useCallback} from 'react';
 import {
   RtcProvider,
-  UidStateInterface,
+  RenderStateInterface,
   DispatchType,
   ActionType,
+  UidType,
 } from './Contexts/RtcContext';
 import PropsContext, {
   ToggleState,
-  UidInterface,
   RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
-  ClientRole,
-  ChannelProfile,
 } from './Contexts/PropsContext';
-import {MinUidProvider} from './Contexts/MinUidContext';
-import {MaxUidProvider} from './Contexts/MaxUidContext';
+import {RenderProvider} from './Contexts/RenderContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
@@ -31,25 +28,24 @@ import {
 } from './Reducer';
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
-
+import useLocalUid from './Utils/useLocalUid';
 
 const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
-  const {callbacks, rtcProps, mode} = useContext(PropsContext);
+  const {callbacks, rtcProps} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
-
-  const initialLocalState: UidStateInterface = {
-    min: [],
-    max: [
-      {
-        uid: 'local',
+  const localUid = useLocalUid();
+  const initialLocalState: RenderStateInterface = {
+    renderList: {
+      [localUid]: {
         audio: ToggleState.disabled,
         video: ToggleState.disabled,
         streamType: 'high',
-        contentType: 'rtc'
+        type: 'rtc',
       },
-    ],
+    },
+    renderPosition: [localUid],
   };
 
   const [initialState, setInitialState] = React.useState(
@@ -60,17 +56,73 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     setInitialState(JSON.parse(JSON.stringify(initialLocalState)));
   }, []);
 
+  /**
+   *
+   * @param state RenderStateInterface
+   * @param action ActionType<'UpdateRenderList'>
+   * @returns void
+   *
+   * UpdateRenderList will update the renderlist for given uid
+   *
+   */
+  const UpdateRenderList = (
+    state: RenderStateInterface,
+    action: ActionType<'UpdateRenderList'>,
+  ) => {
+    const newState = {
+      ...state,
+      renderList: {
+        ...state.renderList,
+        [action.value[0]]: {
+          ...state.renderList[action.value[0]],
+          ...action.value[1],
+        },
+      },
+    };
+    return newState;
+  };
+
+  /**
+   *
+   * @param state RenderStateInterface
+   * @param action ActionType<'AddCustomContent'>
+   * @returns void
+   *
+   * AddCustomContent use to add new data into render position and render list
+   */
+  const AddCustomContent = (
+    state: RenderStateInterface,
+    action: ActionType<'AddCustomContent'>,
+  ) => {
+    const newState = {
+      ...state,
+      renderPosition: [...state.renderPosition, action.value[0]],
+      renderList: {
+        ...state.renderList,
+        [action.value[0]]: {
+          ...state.renderList[action.value[0]],
+          ...action.value[1],
+        },
+      },
+    };
+    return newState;
+  };
+
   const reducer = (
-    state: UidStateInterface,
+    state: RenderStateInterface,
     action: ActionType<keyof CallbacksInterface>,
   ) => {
     let stateUpdate = {},
-      uids = [...state.max, ...state.min].map((u: UidInterface) => u.uid);
-
+      uids = state.renderPosition;
     switch (action.type) {
-      case 'SetState':
+      case 'AddCustomContent':
         if (actionTypeGuard(action, action.type)) {
-          stateUpdate = action.value[0];
+          stateUpdate = AddCustomContent(state, action);
+        }
+        break;
+      case 'UpdateRenderList':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UpdateRenderList(state, action);
         }
         break;
       case 'UpdateDualStreamMode':
@@ -80,7 +132,13 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         break;
       case 'UserJoined':
         if (actionTypeGuard(action, action.type)) {
-          stateUpdate = UserJoined(state, action, dualStreamMode, uids);
+          stateUpdate = UserJoined(
+            state,
+            action,
+            dualStreamMode,
+            uids,
+            localUid,
+          );
         }
         break;
       case 'UserOffline':
@@ -91,6 +149,11 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
       case 'SwapVideo':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = swapVideo(state, action.value[0]);
+        }
+        break;
+      case 'DequeVideo':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = dequeVideo(state, action.value[0]);
         }
         break;
       case 'UserMuteRemoteAudio':
@@ -105,12 +168,12 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         break;
       case 'LocalMuteAudio':
         if (actionTypeGuard(action, action.type)) {
-          stateUpdate = LocalMuteAudio(state, action);
+          stateUpdate = LocalMuteAudio(state, action, localUid);
         }
         break;
       case 'LocalMuteVideo':
         if (actionTypeGuard(action, action.type)) {
-          stateUpdate = LocalMuteVideo(state, action);
+          stateUpdate = LocalMuteVideo(state, action, localUid);
         }
         break;
       case 'RemoteAudioStateChanged':
@@ -144,49 +207,89 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   };
 
   const swapVideo = useCallback(
-    (state: UidStateInterface, ele: UidInterface) => {
-      let newState: UidStateInterface = {
-        min: [],
-        max: [],
+    (state: RenderStateInterface, newMaxUid: UidType) => {
+      let renderPosition: RenderStateInterface['renderPosition'] = [
+        ...state.renderPosition,
+      ];
+      let renderList: RenderStateInterface['renderList'] = {
+        ...state.renderList,
       };
-      // Remove the minimized element which is being swapped out
-      newState.min = state.min.filter((e) => e !== ele);
+      // Element which is currently maximized
+      const [currentMaxUid] = renderPosition;
 
-      let maxEle = state.max[0]; // Element which is currently maximized
-      let minEle = ele;
+      if (currentMaxUid === newMaxUid) {
+        return {};
+      }
 
       if (dualStreamMode === DualStreamMode.DYNAMIC) {
-        maxEle.streamType = 'low'; // set stream quality to low
-        minEle.streamType = 'high'; // set stream quality to high
-
+        renderList[currentMaxUid].streamType = 'low';
+        renderList[newMaxUid].streamType = 'high';
         // No need to modify the streamType if the mode is not dynamic
       }
 
-      if (maxEle.uid === 'local') {
-        newState.min.unshift(maxEle);
-      } else {
-        newState.min.push(maxEle);
-      }
-      newState.max = [minEle];
+      /**
+       * old logic for swap
+       * if currentMaxUid === localUid then push newMaxId at first position
+       * else push newMaxUid at last position
+       */
 
-      return newState;
+      const newMaxUidOldPosition = renderPosition.findIndex(
+        (i) => i === newMaxUid,
+      );
+
+      renderPosition[0] = newMaxUid;
+      renderPosition[newMaxUidOldPosition] = currentMaxUid;
+
+      return {
+        renderPosition: renderPosition,
+        renderList: renderList,
+      };
     },
     [dualStreamMode],
   );
-  const [uidState, dispatch]: [UidStateInterface, DispatchType] = useReducer(
+
+  /**
+   * deque will
+   */
+  const dequeVideo = useCallback(
+    (state: RenderStateInterface, newMaxUid: UidType) => {
+      let renderPosition: RenderStateInterface['renderPosition'] = [
+        ...state.renderPosition,
+      ];
+      let renderList: RenderStateInterface['renderList'] = {
+        ...state.renderList,
+      };
+      // Element which is currently maximized
+      const [currentMaxUid] = renderPosition;
+
+      if (currentMaxUid === newMaxUid) {
+        return {};
+      }
+
+      if (dualStreamMode === DualStreamMode.DYNAMIC) {
+        renderList[currentMaxUid].streamType = 'low';
+        renderList[newMaxUid].streamType = 'high';
+        // No need to modify the streamType if the mode is not dynamic
+      }
+
+      const minIds = renderPosition.filter(
+        (uid) => uid !== newMaxUid && uid !== currentMaxUid,
+      );
+
+      renderPosition = [newMaxUid, currentMaxUid, ...minIds];
+
+      return {
+        renderPosition: renderPosition,
+        renderList: renderList,
+      };
+    },
+    [dualStreamMode],
+  );
+
+  const [uidState, dispatch]: [RenderStateInterface, DispatchType] = useReducer(
     reducer,
     initialState,
   );
-
-  const setUidArray = (
-    param: UidStateInterface | ((p: UidStateInterface) => UidStateInterface),
-  ) => {
-    if (typeof param === 'function') {
-      dispatch({type: 'SetState', value: [param(uidState)]});
-    } else {
-      dispatch({type: 'SetState', value: [param]});
-    }
-  };
 
   return (
     <Create dispatch={dispatch}>
@@ -201,13 +304,14 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
               RtcEngine: engineRef.current,
               dispatch,
               setDualStreamMode,
-              setUidArray
             }}>
-            <MaxUidProvider value={uidState.max}>
-              <MinUidProvider value={uidState.min}>
-                {props.children}
-              </MinUidProvider>
-            </MaxUidProvider>
+            <RenderProvider
+              value={{
+                renderList: uidState.renderList,
+                renderPosition: uidState.renderPosition,
+              }}>
+              {props.children}
+            </RenderProvider>
           </RtcProvider>
         </Join>
       )}

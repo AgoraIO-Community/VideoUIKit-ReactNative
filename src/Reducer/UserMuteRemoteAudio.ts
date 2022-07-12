@@ -1,20 +1,18 @@
-import {UidInterface} from '../Contexts/PropsContext';
-import {ActionType, UidStateInterface} from '../Contexts/RtcContext';
+import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
 
 export default function UserMuteRemoteAudio(
-  state: UidStateInterface,
+  state: RenderStateInterface,
   action: ActionType<'UserMuteRemoteAudio'>,
 ) {
-  let stateUpdate = {};
-  const audioMute = (user: UidInterface) => {
-    if (user.uid === action.value[0].uid) {
-      user.audio = action.value[1];
-    }
-    return user;
-  };
-  stateUpdate = {
-    min: state.min.map(audioMute),
-    max: state.max.map(audioMute),
+  let stateUpdate: RenderStateInterface = {
+    renderList: {
+      ...state.renderList,
+      [action.value[0]]: {
+        ...state.renderList[action.value[0]],
+        audio: action.value[1],
+      },
+    },
+    renderPosition: [...state.renderPosition],
   };
   return stateUpdate;
 }

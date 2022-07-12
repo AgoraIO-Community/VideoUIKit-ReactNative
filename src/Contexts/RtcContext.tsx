@@ -1,11 +1,17 @@
 import React, {Dispatch} from 'react';
 import {CallbacksInterface} from './PropsContext';
 import RtcEngine from 'react-native-agora';
-import type {DualStreamMode, UidInterface} from './PropsContext';
+import type {DualStreamMode, RenderInterface} from './PropsContext';
 
-export interface UidStateInterface {
-  min: Array<UidInterface>;
-  max: Array<UidInterface>;
+export type UidType = string | number;
+
+export interface RenderObjectInterface {
+  [key: UidType]: RenderInterface;
+}
+
+export interface RenderStateInterface {
+  renderList: RenderObjectInterface;
+  renderPosition: Array<UidType>;
 }
 
 export interface ActionInterface<T extends keyof CallbacksInterface> {
@@ -27,9 +33,6 @@ export interface RtcContextInterface {
   RtcEngine: RtcEngine;
   dispatch: DispatchType;
   setDualStreamMode: React.Dispatch<React.SetStateAction<DualStreamMode>>;
-  setUidArray: (
-    param: UidStateInterface | ((p: UidStateInterface) => UidStateInterface),
-  ) => void;
 }
 
 const RtcContext = React.createContext<RtcContextInterface>(

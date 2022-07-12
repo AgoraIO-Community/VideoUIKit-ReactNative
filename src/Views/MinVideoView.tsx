@@ -4,29 +4,33 @@ import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
-import PropsContext, {UidInterface} from '../Contexts/PropsContext';
+import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
+import {UidType} from '../Contexts/RtcContext';
+import useLocalUid from '../Utils/useLocalUid';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
 interface MinViewInterface {
-  user: UidInterface;
+  uid: UidType;
+  user: RenderInterface;
   color?: string;
   showOverlay?: boolean;
 }
 
 const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const [overlay, setOverlay] = useState(false);
-  const {styleProps} = useContext(PropsContext);
+  const {styleProps, rtcProps} = useContext(PropsContext);
   const {minViewStyles, theme, remoteBtnStyles} = styleProps || {};
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
-
+  const localUid = useLocalUid();
+  const uid = props.uid === rtcProps?.screenShareUid ? 1 : props.uid;
   return (
     <View style={{margin: 5}}>
       {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
-          {props.user.uid === 'local' ? (
+          {uid === localUid ? (
             props.user.video ? (
               <LocalView
                 style={{...styles.minView, ...(minViewStyles as object)}}
@@ -34,18 +38,25 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
                 zOrderMediaOverlay={true}
               />
             ) : (
-              <View style={{flex: 1, backgroundColor: '#f0f', ...styles.minView, ...(minViewStyles as object)}} />
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#f0f',
+                  ...styles.minView,
+                  ...(minViewStyles as object),
+                }}
+              />
             )
           ) : (
             <RemoteView
               style={{...styles.minView, ...(minViewStyles as object)}}
-              uid={props.user.uid as number}
+              uid={uid as number}
               renderMode={VideoRenderMode.Hidden}
               zOrderMediaOverlay={true}
             />
           )}
         </TouchableOpacity>
-      ) : props.user.uid === 'local' ? (
+      ) : uid === localUid ? (
         <LocalView
           style={{...styles.minView, ...(minViewStyles as object)}}
           renderMode={VideoRenderMode.Hidden}
@@ -54,7 +65,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
       ) : (
         <RemoteView
           style={{...styles.minView, ...(minViewStyles as object)}}
-          uid={props.user.uid as number}
+          uid={uid as number}
           renderMode={VideoRenderMode.Hidden}
           zOrderMediaOverlay={true}
         />
@@ -74,7 +85,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
               source={{uri: icons.close}}
             />
           </TouchableOpacity>
-          <RemoteControls showRemoteSwap={true} user={props.user} />
+          <RemoteControls showRemoteSwap={true} user={props.user} uid={uid} />
         </View>
       ) : (
         <></>

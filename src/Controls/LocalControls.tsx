@@ -6,9 +6,10 @@ import LocalAudioMute from './Local/LocalAudioMute';
 import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
 import RemoteControls from './RemoteControls';
-import {MaxUidConsumer} from '../Contexts/MaxUidContext';
+import {RenderConsumer} from '../Contexts/RenderContext';
 import PropsContext from '../Contexts/PropsContext';
 import LocalUserContextComponent from '../Contexts/LocalUserContext';
+import useLocalUid from '../Utils/useLocalUid';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
@@ -16,10 +17,11 @@ interface ControlsPropsInterface {
 
 function Controls(props: ControlsPropsInterface) {
   const {styleProps} = useContext(PropsContext);
+  const localUid = useLocalUid();
   const {localBtnContainer} = styleProps || {};
   const showButton = props.showButton !== undefined ? props.showButton : true;
   return (
-    <LocalUserContextComponent>
+    <LocalUserContextComponent localUid={localUid}>
       <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
         <LocalAudioMute />
         <LocalVideoMute />
@@ -27,13 +29,17 @@ function Controls(props: ControlsPropsInterface) {
         <EndCall />
       </View>
       {showButton ? (
-        <MaxUidConsumer>
-          {(users) => (
+        <RenderConsumer>
+          {({renderList, renderPosition}) => (
             <View style={{...styles.Controls, top: styles.Controls.top - 100}}>
-              <RemoteControls user={users[0]} showRemoteSwap={false} />
+              <RemoteControls
+                user={renderList[renderPosition[0]]}
+                uid={renderPosition[0]}
+                showRemoteSwap={false}
+              />
             </View>
           )}
-        </MaxUidConsumer>
+        </RenderConsumer>
       ) : (
         <></>
       )}

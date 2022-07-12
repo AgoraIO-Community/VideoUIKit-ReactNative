@@ -1,18 +1,20 @@
 import React, {useEffect, useContext, useRef} from 'react';
 import RtcEngine from 'react-native-agora';
-import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
+import {RenderStateInterface, DispatchType} from '../Contexts/RtcContext';
 import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
 const Join: React.FC<{
   precall: boolean;
   engineRef: React.MutableRefObject<RtcEngine>;
-  uidState: UidStateInterface;
+  uidState: RenderStateInterface;
   dispatch: DispatchType;
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
-  const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin ? rtcProps.lifecycle.useBeforeJoin() : null; 
+  const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
+    ? rtcProps.lifecycle.useBeforeJoin()
+    : null;
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -25,7 +27,9 @@ const Join: React.FC<{
         console.error('Cannot leave the channel:', err);
       }
     }
-    const videoState = uidState.max[0].video;
+    const {renderList, renderPosition} = uidState;
+    const [maxUid] = renderPosition;
+    const videoState = renderList[maxUid].video;
     async function join() {
       if (
         rtcProps.encryption &&
@@ -51,11 +55,11 @@ const Join: React.FC<{
       }
 
       try {
-        if(beforeJoin){
+        if (beforeJoin) {
           await beforeJoin();
-        }  
+        }
       } catch (error) {
-        console.error('FPE:Error on executing useBeforeJoin',error);
+        console.error('FPE:Error on executing useBeforeJoin', error);
       }
 
       await engine.joinChannel(
