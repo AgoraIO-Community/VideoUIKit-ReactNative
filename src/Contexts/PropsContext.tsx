@@ -45,11 +45,11 @@ interface DefaultUidInterface {
 }
 
 export interface UserUidInterface<T> {
-  type: T extends DefaultUidInterface['contentType'] ? never : T
+  type: T extends DefaultUidInterface['contentType'] ? never : T;
 }
 
 interface UserEnteredInterface extends UserUidInterface<string> {
-  [key: string] :any,
+  [key: string]: any;
 }
 
 export type UidInterface = DefaultUidInterface | UserEnteredInterface;
@@ -105,9 +105,10 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES128ECB;
   };
   lifecycle?: {
-    useBeforeJoin?: () => () => Promise<void>,
-    useBeforeCreate?: () => () => Promise<void>
-  }
+    useBeforeJoin?: () => () => Promise<void>;
+    useBeforeCreate?: () => () => Promise<void>;
+  };
+  geoFencing?: boolean;
 }
 
 export interface CallbacksInterface {
@@ -143,6 +144,7 @@ const initialValue: PropsInterface = {
   rtcProps: {
     appId: '',
     channel: '',
+    geoFencing: true,
   },
 };
 

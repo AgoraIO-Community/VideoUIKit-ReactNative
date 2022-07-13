@@ -22,12 +22,53 @@ const Create = ({
 }) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
+  const {geoFencing = true} = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
-  const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate ? rtcProps.lifecycle.useBeforeCreate() : null; 
+  const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
+    ? rtcProps.lifecycle.useBeforeCreate()
+    : null;
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
-  const enableVideoAndAudio = async () => {
+  const enableVideoAndAudioWithDisabledState = async () => {
+    try {
+      await engine.current.enableVideo();
+      dispatch({
+        type: 'LocalMuteAudio',
+        value: [ToggleState.disabled],
+      });
+      dispatch({
+        type: 'LocalMuteVideo',
+        value: [ToggleState.disabled],
+      });
+    } catch (error) {
+      const {status} = e as any;
+      // App Builder web only
+      if (status) {
+        const {audioError, videoError} = status;
+
+        if (!audioError) {
+          dispatch({
+            type: 'LocalMuteAudio',
+            value: [ToggleState.disabled],
+          });
+        } else {
+          console.error('No audio device', audioError);
+        }
+
+        if (!videoError) {
+          dispatch({
+            type: 'LocalMuteVideo',
+            value: [ToggleState.disabled],
+          });
+        } else {
+          console.error('No video device', videoError);
+        }
+      }
+      console.error('No devices', e);
+    }
+  };
+  const enableVideoAndAudioWithEnabledState = async () => {
     try {
       await engine.current.enableVideo();
       dispatch({
@@ -66,6 +107,16 @@ const Create = ({
       console.error('No devices', e);
     }
   };
+  const enableVideoAndAudioWithInitialStates = async () => {
+    if (
+      mode == ChannelProfile.LiveBroadcasting &&
+      rtcProps?.role == ClientRole.Audience
+    ) {
+      enableVideoAndAudioWithDisabledState();
+    } else {
+      enableVideoAndAudioWithEnabledState();
+    }
+  };
 
   useEffect(() => {
     async function init() {
@@ -74,14 +125,17 @@ const Create = ({
         await requestCameraAndAudioPermission();
       }
       try {
-        if(beforeCreate){
+        if (beforeCreate) {
           await beforeCreate();
-        }  
+        }
       } catch (error) {
-        console.error('FPE:Error on executing useBeforeCreate',error);
+        console.error('FPE:Error on executing useBeforeCreate', error);
       }
       try {
-        if (Platform.OS === 'android' || Platform.OS === 'ios') {
+        if (
+          geoFencing === true &&
+          (Platform.OS === 'android' || Platform.OS === 'ios')
+        ) {
           engine.current = await RtcEngine.createWithAreaCode(
             rtcProps.appId,
             // eslint-disable-next-line no-bitwise
@@ -132,7 +186,7 @@ const Create = ({
             Platform.OS === 'web'
           )
         ) {
-          await enableVideoAndAudio();
+          await enableVideoAndAudioWithInitialStates();
           isVideoEnabledRef.current = true;
         }
 
@@ -202,7 +256,7 @@ const Create = ({
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
           if (!isVideoEnabledRef.current) {
-            await enableVideoAndAudio();
+            await enableVideoAndAudioWithDisabledState();
             isVideoEnabledRef.current = true;
           }
           if (isVideoEnabledRef.current) {
