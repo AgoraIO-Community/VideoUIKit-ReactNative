@@ -9,7 +9,7 @@ export default function UserJoined(
   state: RenderStateInterface,
   action: ActionType<'UserJoined'>,
   dualStreamMode: DualStreamMode,
-  uids: (string | number)[],
+  uids: UidType[],
   localUid: UidType,
 ) {
   let stateUpdate = {};

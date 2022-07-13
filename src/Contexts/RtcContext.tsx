@@ -1,9 +1,9 @@
-import React, {Dispatch} from 'react';
+import React from 'react';
 import {CallbacksInterface} from './PropsContext';
 import RtcEngine from 'react-native-agora';
 import type {DualStreamMode, RenderInterface} from './PropsContext';
 
-export type UidType = string | number;
+export type UidType = number;
 
 export interface RenderObjectInterface {
   [key: UidType]: RenderInterface;

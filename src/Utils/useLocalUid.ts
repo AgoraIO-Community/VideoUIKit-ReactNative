@@ -1,8 +1,8 @@
 import {useContext} from 'react';
 import PropsContext from '../Contexts/PropsContext';
 
-const useLocalUid: () => number | string = () => {
+const useLocalUid = () => {
   const {rtcProps} = useContext(PropsContext);
-  return rtcProps?.uid || 'local';
+  return rtcProps?.uid || 0;
 };
 export default useLocalUid;
