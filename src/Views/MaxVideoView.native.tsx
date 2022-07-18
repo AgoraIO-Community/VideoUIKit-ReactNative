@@ -22,7 +22,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const localUid = useLocalUid();
   const uid = props.uid === rtcProps?.screenShareUid ? 1 : props.uid;
   return uid === localUid ? (
-    props.user.video ? (
+    props.user?.video ? (
       <LocalView
         style={{...styles.fullView, ...(maxViewStyles as object)}}
         renderMode={VideoRenderMode.Fit}
@@ -32,7 +32,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     ) : (
       <View style={{flex: 1, backgroundColor: '#000'}} />
     )
-  ) : props.user.video ? (
+  ) : props.user?.video ? (
     <RemoteView
       style={{...styles.fullView, ...(maxViewStyles as object)}}
       uid={uid as number}

@@ -31,7 +31,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
       {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
           {uid === localUid ? (
-            props.user.video ? (
+            props.user?.video ? (
               <LocalView
                 style={{...styles.minView, ...(minViewStyles as object)}}
                 renderMode={VideoRenderMode.Hidden}

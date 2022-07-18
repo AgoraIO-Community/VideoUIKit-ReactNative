@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
-import {EncryptionMode} from 'react-native-agora';
+import {AudioProfile, EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
 import {UidType} from './RtcContext';
 
@@ -37,8 +37,8 @@ export const toggleHelper = (state: ToggleState) =>
 
 export interface DefaultRenderInterface {
   audio: ToggleState;
-  video: ToggleState;
-  streamType: 'high' | 'low';
+  video?: ToggleState;
+  streamType?: 'high' | 'low';
   type: 'rtc';
 }
 export interface CustomRenderInterface<T> {
@@ -89,6 +89,7 @@ export interface RtcPropsInterface {
   token?: string | null;
   dual?: boolean | null;
   profile?: VideoProfile;
+  audioProfile?: AudioProfile;
   initialDualStreamMode?: DualStreamMode;
   role?: ClientRole /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
   callActive?: boolean;
@@ -104,6 +105,7 @@ export interface RtcPropsInterface {
     useBeforeCreate?: () => () => Promise<void>;
   };
   geoFencing?: boolean;
+  audioRoom?: boolean;
 }
 
 export interface CallbacksInterface {
@@ -140,6 +142,7 @@ const initialValue: PropsInterface = {
     appId: '',
     channel: '',
     geoFencing: true,
+    audioRoom: false,
   },
 };
 

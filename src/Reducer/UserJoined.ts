@@ -11,6 +11,7 @@ export default function UserJoined(
   dualStreamMode: DualStreamMode,
   uids: UidType[],
   localUid: UidType,
+  audioRoom: boolean,
 ) {
   let stateUpdate = {};
   //default type will be rtc
@@ -26,20 +27,26 @@ export default function UserJoined(
 
   let renderList: RenderStateInterface['renderList'] = {
     ...state.renderList,
-    [action.value[0]]: {
-      ...state.renderList[action.value[0]],
-      audio: ToggleState.disabled,
-      video: ToggleState.disabled,
-      streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
-      ...typeData,
-    },
+    [action.value[0]]: audioRoom
+      ? {
+          ...state.renderList[action.value[0]],
+          audio: ToggleState.disabled,
+          ...typeData,
+        }
+      : {
+          ...state.renderList[action.value[0]],
+          audio: ToggleState.disabled,
+          video: ToggleState.disabled,
+          streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
+          ...typeData,
+        },
   };
   let renderPosition = [...state.renderPosition, action.value[0]];
   const [maxUid] = renderPosition;
   if (renderPosition.length === 2 && maxUid === localUid) {
     //Only one remote and local is maximized
     //Change stream type to high if dualStreaMode is DYNAMIC
-    if (dualStreamMode === DualStreamMode.DYNAMIC) {
+    if (dualStreamMode === DualStreamMode.DYNAMIC && !audioRoom) {
       renderList[action.value[0]].streamType = 'high';
     }
     //Swap render positions

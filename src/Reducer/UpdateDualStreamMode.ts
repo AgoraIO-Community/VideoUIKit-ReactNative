@@ -8,7 +8,11 @@ import {
 export default function UpdateDualStreamMode(
   state: RenderStateInterface,
   action: ActionType<'UpdateDualStreamMode'>,
+  audioRoom: boolean,
 ) {
+  if (audioRoom) {
+    return {};
+  }
   const newMode = action.value[0];
   let renderList = {...state.renderList};
   let stateUpdate: RenderStateInterface;

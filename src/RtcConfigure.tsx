@@ -35,15 +35,22 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
+  const {audioRoom = false} = rtcProps;
+
   const localUid = useLocalUid();
   const initialLocalState: RenderStateInterface = {
     renderList: {
-      [localUid]: {
-        audio: ToggleState.disabled,
-        video: ToggleState.disabled,
-        streamType: 'high',
-        type: 'rtc',
-      },
+      [localUid]: audioRoom
+        ? {
+            audio: ToggleState.disabled,
+            type: 'rtc',
+          }
+        : {
+            audio: ToggleState.disabled,
+            video: ToggleState.disabled,
+            streamType: 'high',
+            type: 'rtc',
+          },
     },
     renderPosition: [localUid],
   };
@@ -127,7 +134,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         break;
       case 'UpdateDualStreamMode':
         if (actionTypeGuard(action, action.type)) {
-          stateUpdate = UpdateDualStreamMode(state, action);
+          stateUpdate = UpdateDualStreamMode(state, action, audioRoom);
         }
         break;
       case 'UserJoined':
@@ -138,6 +145,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             dualStreamMode,
             uids,
             localUid,
+            audioRoom,
           );
         }
         break;
@@ -221,7 +229,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         return {};
       }
 
-      if (dualStreamMode === DualStreamMode.DYNAMIC) {
+      if (dualStreamMode === DualStreamMode.DYNAMIC && !audioRoom) {
         renderList[currentMaxUid].streamType = 'low';
         renderList[newMaxUid].streamType = 'high';
         // No need to modify the streamType if the mode is not dynamic
@@ -266,7 +274,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         return {};
       }
 
-      if (dualStreamMode === DualStreamMode.DYNAMIC) {
+      if (dualStreamMode === DualStreamMode.DYNAMIC && !audioRoom) {
         renderList[currentMaxUid].streamType = 'low';
         renderList[newMaxUid].streamType = 'high';
         // No need to modify the streamType if the mode is not dynamic

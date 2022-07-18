@@ -15,7 +15,7 @@ const Join: React.FC<{
   const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
     ? rtcProps.lifecycle.useBeforeJoin()
     : null;
-
+  const {audioRoom = false} = rtcProps;
   useEffect(() => {
     const engine = engineRef.current;
     async function leave() {
@@ -29,7 +29,7 @@ const Join: React.FC<{
     }
     const {renderList, renderPosition} = uidState;
     const [maxUid] = renderPosition;
-    const videoState = renderList[maxUid].video;
+    const videoState = renderList[maxUid]?.video;
     async function join() {
       if (
         rtcProps.encryption &&
@@ -42,7 +42,11 @@ const Join: React.FC<{
           encryptionMode: rtcProps.encryption.mode,
         });
       }
-      if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
+      if (
+        !audioRoom &&
+        videoState === ToggleState.enabled &&
+        Platform.OS === 'ios'
+      ) {
         dispatch({
           type: 'LocalMuteVideo',
           value: [ToggleState.disabling],
@@ -68,7 +72,11 @@ const Join: React.FC<{
         null,
         rtcProps.uid || 0,
       );
-      if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
+      if (
+        !audioRoom &&
+        videoState === ToggleState.enabled &&
+        Platform.OS === 'ios'
+      ) {
         dispatch({
           type: 'LocalMuteVideo',
           value: [ToggleState.enabling],
