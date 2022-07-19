@@ -112,8 +112,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     state: RenderStateInterface,
     action: ActionType<keyof CallbacksInterface>,
   ) => {
-    let stateUpdate = {},
-      uids = state.renderPosition;
+    let stateUpdate = {};
+
     switch (action.type) {
       case 'AddCustomContent':
         if (actionTypeGuard(action, action.type)) {
@@ -132,13 +132,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
         break;
       case 'UserJoined':
         if (actionTypeGuard(action, action.type)) {
-          stateUpdate = UserJoined(
-            state,
-            action,
-            dualStreamMode,
-            uids,
-            localUid,
-          );
+          stateUpdate = UserJoined(state, action, dualStreamMode, localUid);
         }
         break;
       case 'UserOffline':

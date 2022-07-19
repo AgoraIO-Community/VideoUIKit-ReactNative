@@ -9,38 +9,35 @@ export default function UserJoined(
   state: RenderStateInterface,
   action: ActionType<'UserJoined'>,
   dualStreamMode: DualStreamMode,
-  uids: UidType[],
   localUid: UidType,
 ) {
+  const newUid = action.value[0];
   let stateUpdate = {};
   //default type will be rtc
   let typeData = {
     type: 'rtc',
   };
-  if (
-    state.renderList[action.value[0]] &&
-    'type' in state.renderList[action.value[0]]
-  ) {
-    typeData.type = state.renderList[action.value[0]].type;
+  if (state.renderList[newUid] && 'type' in state.renderList[newUid]) {
+    typeData.type = state.renderList[newUid].type;
   }
 
   let renderList: RenderStateInterface['renderList'] = {
     ...state.renderList,
-    [action.value[0]]: {
-      ...state.renderList[action.value[0]],
+    [newUid]: {
+      ...state.renderList[newUid],
       audio: ToggleState.disabled,
       video: ToggleState.disabled,
       streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
       ...typeData,
     },
   };
-  let renderPosition = [...state.renderPosition, action.value[0]];
+  let renderPosition = [...state.renderPosition, newUid];
   const [maxUid] = renderPosition;
   if (renderPosition.length === 2 && maxUid === localUid) {
     //Only one remote and local is maximized
     //Change stream type to high if dualStreaMode is DYNAMIC
     if (dualStreamMode === DualStreamMode.DYNAMIC) {
-      renderList[action.value[0]].streamType = 'high';
+      renderList[newUid].streamType = 'high';
     }
     //Swap render positions
     stateUpdate = {
