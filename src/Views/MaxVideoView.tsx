@@ -9,6 +9,7 @@ import useLocalUid from '../Utils/useLocalUid';
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
+//todo hari combine uid/user
 interface MaxViewInterface {
   uid: UidType;
   user: RenderInterface;

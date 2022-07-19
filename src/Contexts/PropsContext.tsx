@@ -122,8 +122,8 @@ export interface CallbacksInterface {
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
-  UpdateRenderList(uid: UidType, user: RenderInterface): void;
-  AddCustomContent(uid: UidType, data: any): void;
+  UpdateRenderList(uid: UidType, user: Partial<RenderInterface>): void;
+  AddCustomContent(uid: UidType, data: RenderInterface): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;
