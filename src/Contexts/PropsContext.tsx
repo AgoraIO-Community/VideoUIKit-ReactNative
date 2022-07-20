@@ -36,6 +36,7 @@ export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
 export interface DefaultRenderInterface {
+  uid: UidType;
   audio: ToggleState;
   video: ToggleState;
   streamType: 'high' | 'low';
@@ -85,7 +86,7 @@ export enum DualStreamMode {
 export interface RtcPropsInterface {
   appId: string;
   channel: string;
-  uid?: number;
+  uid?: UidType;
   token?: string | null;
   dual?: boolean | null;
   profile?: VideoProfile;
@@ -123,7 +124,7 @@ export interface CallbacksInterface {
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
   UpdateRenderList(uid: UidType, user: Partial<RenderInterface>): void;
-  AddCustomContent(uid: UidType, data: RenderInterface): void;
+  AddCustomContent(uid: UidType, data: any): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;

@@ -39,6 +39,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
   const initialLocalState: RenderStateInterface = {
     renderList: {
       [localUid]: {
+        uid: localUid,
         audio: ToggleState.disabled,
         video: ToggleState.disabled,
         streamType: 'high',

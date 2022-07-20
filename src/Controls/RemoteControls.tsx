@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import {UidType} from '../Contexts/RtcContext';
 import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
 import styles from '../Style';
 import RemoteAudioMute from './Remote/RemoteAudioMute';
@@ -12,7 +11,6 @@ interface RemoteControlsInterface {
   showMuteRemoteAudio?: boolean;
   showRemoteSwap?: boolean;
   user: RenderInterface;
-  uid: UidType;
 }
 
 const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {
@@ -23,7 +21,7 @@ const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {
     <View
       style={{...styles.remoteBtnContainer, ...(remoteBtnContainer as object)}}>
       {props.showMuteRemoteAudio !== false ? (
-        <RemoteAudioMute user={props.user} uid={props.uid} />
+        <RemoteAudioMute user={props.user} />
       ) : (
         <></>
       )}
@@ -31,12 +29,15 @@ const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {
         <RemoteVideoMute
           rightButton={!props.showRemoteSwap}
           user={props.user}
-          uid={props.uid}
         />
       ) : (
         <></>
       )}
-      {props.showRemoteSwap !== false ? <RemoteSwap uid={props.uid} /> : <></>}
+      {props.showRemoteSwap !== false ? (
+        <RemoteSwap uid={props.user.uid} />
+      ) : (
+        <></>
+      )}
     </View>
   );
 };

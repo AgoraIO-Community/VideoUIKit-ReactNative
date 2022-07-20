@@ -25,6 +25,7 @@ export default function UserJoined(
     ...state.renderList,
     [newUid]: {
       ...state.renderList[newUid],
+      uid: newUid,
       audio: ToggleState.disabled,
       video: ToggleState.disabled,
       streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,

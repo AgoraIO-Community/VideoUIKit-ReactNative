@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
-import {UidType} from '../Contexts/RtcContext';
 import {View} from 'react-native';
 import useLocalUid from '../Utils/useLocalUid';
 
@@ -10,7 +9,6 @@ const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
 interface MaxViewInterface {
-  uid: UidType;
   user: RenderInterface;
   fallback?: React.ComponentType;
 }
@@ -20,7 +18,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {maxViewStyles} = styleProps || {};
   const Fallback = props.fallback;
   const localUid = useLocalUid();
-  const uid = props.uid === rtcProps?.screenShareUid ? 1 : props.uid;
+  const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
   return uid === localUid ? (
     props.user.video ? (
       <LocalView
