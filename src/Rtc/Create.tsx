@@ -24,9 +24,10 @@ const Create = ({
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {geoFencing = true} = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
-  const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
-    ? rtcProps.lifecycle.useBeforeCreate()
-    : null;
+  // commented for v1 release
+  // const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
+  //   ? rtcProps.lifecycle.useBeforeCreate()
+  //   : null;
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
@@ -124,13 +125,14 @@ const Create = ({
         //Request required permissions from Android
         await requestCameraAndAudioPermission();
       }
-      try {
-        if (beforeCreate) {
-          await beforeCreate();
-        }
-      } catch (error) {
-        console.error('FPE:Error on executing useBeforeCreate', error);
-      }
+      // commented for v1 release
+      // try {
+      //   if (beforeCreate) {
+      //     await beforeCreate();
+      //   }
+      // } catch (error) {
+      //   console.error('FPE:Error on executing useBeforeCreate', error);
+      // }
       try {
         if (
           geoFencing === true &&

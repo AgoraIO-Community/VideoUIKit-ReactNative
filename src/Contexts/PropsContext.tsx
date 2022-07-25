@@ -100,10 +100,11 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
-  lifecycle?: {
-    useBeforeJoin?: () => () => Promise<void>;
-    useBeforeCreate?: () => () => Promise<void>;
-  };
+  // commented for v1 release
+  // lifecycle?: {
+  //   useBeforeJoin?: () => () => Promise<void>;
+  //   useBeforeCreate?: () => () => Promise<void>;
+  // };
   geoFencing?: boolean;
 }
 
