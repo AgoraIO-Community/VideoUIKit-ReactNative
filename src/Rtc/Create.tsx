@@ -43,7 +43,7 @@ const Create = ({
         value: [ToggleState.disabled],
       });
     } catch (error) {
-      const {status} = e as any;
+      const {status} = error as any;
       // App Builder web only
       if (status) {
         const {audioError, videoError} = status;
@@ -66,7 +66,7 @@ const Create = ({
           console.error('No video device', videoError);
         }
       }
-      console.error('No devices', e);
+      console.error('No devices', error);
     }
   };
   const enableVideoAndAudioWithEnabledState = async () => {

@@ -83,7 +83,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
               source={{uri: icons.close}}
             />
           </TouchableOpacity>
-          <RemoteControls showRemoteSwap={true} user={props.user} uid={uid} />
+          <RemoteControls showRemoteSwap={true} user={props.user} />
         </View>
       ) : (
         <></>

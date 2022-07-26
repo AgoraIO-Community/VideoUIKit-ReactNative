@@ -34,7 +34,6 @@ function Controls(props: ControlsPropsInterface) {
             <View style={{...styles.Controls, top: styles.Controls.top - 100}}>
               <RemoteControls
                 user={renderList[renderPosition[0]]}
-                uid={renderPosition[0]}
                 showRemoteSwap={false}
               />
             </View>

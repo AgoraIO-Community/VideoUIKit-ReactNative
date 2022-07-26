@@ -30,7 +30,7 @@ import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 import useLocalUid from './Utils/useLocalUid';
 
-const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
+const RtcConfigure = (props: {children: React.ReactNode}) => {
   const {callbacks, rtcProps} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,

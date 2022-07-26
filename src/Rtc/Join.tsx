@@ -5,6 +5,7 @@ import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
 const Join: React.FC<{
+  children: React.ReactNode;
   precall: boolean;
   engineRef: React.MutableRefObject<RtcEngine>;
   uidState: RenderStateInterface;
