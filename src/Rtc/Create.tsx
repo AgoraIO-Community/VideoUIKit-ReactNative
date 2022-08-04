@@ -247,7 +247,14 @@ const Create = ({
     }
     init();
     return () => {
-      engine.current!.destroy();
+      /**
+       * if condition add for websdk issue
+       * For some reason even if engine.current is defined somehow destroy gets undefined and
+       * causes a crash so thats why this check is needed before we call the method
+       */
+      if (engine.current.destroy) {
+        engine.current!.destroy();
+      }
     };
   }, [rtcProps.appId]);
 
