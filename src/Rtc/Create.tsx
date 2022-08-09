@@ -24,9 +24,10 @@ const Create = ({
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {geoFencing = true, audioRoom = false} = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
-  const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
-    ? rtcProps.lifecycle.useBeforeCreate()
-    : null;
+  // commented for v1 release
+  // const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
+  //   ? rtcProps.lifecycle.useBeforeCreate()
+  //   : null;
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
@@ -50,7 +51,7 @@ const Create = ({
         });
       }
     } catch (error) {
-      const {status} = e as any;
+      const {status} = error as any;
       // App Builder web only
       if (status) {
         const {audioError, videoError} = status;
@@ -73,7 +74,7 @@ const Create = ({
           console.error('No video device', videoError);
         }
       }
-      console.error('No devices', e);
+      console.error('No devices', error);
     }
   };
   const enableVideoAndAudioWithEnabledState = async () => {
@@ -140,13 +141,14 @@ const Create = ({
         //Request required permissions from Android
         await requestCameraAndAudioPermission();
       }
-      try {
-        if (beforeCreate) {
-          await beforeCreate();
-        }
-      } catch (error) {
-        console.error('FPE:Error on executing useBeforeCreate', error);
-      }
+      // commented for v1 release
+      // try {
+      //   if (beforeCreate) {
+      //     await beforeCreate();
+      //   }
+      // } catch (error) {
+      //   console.error('FPE:Error on executing useBeforeCreate', error);
+      // }
       try {
         if (
           geoFencing === true &&
@@ -265,7 +267,14 @@ const Create = ({
     }
     init();
     return () => {
-      engine.current!.destroy();
+      /**
+       * if condition add for websdk issue
+       * For some reason even if engine.current is defined somehow destroy gets undefined and
+       * causes a crash so thats why this check is needed before we call the method
+       */
+      if (engine.current.destroy) {
+        engine.current!.destroy();
+      }
     };
   }, [rtcProps.appId]);
 

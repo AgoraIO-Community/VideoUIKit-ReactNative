@@ -5,6 +5,7 @@ import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
 const Join: React.FC<{
+  children: React.ReactNode;
   precall: boolean;
   engineRef: React.MutableRefObject<RtcEngine>;
   uidState: RenderStateInterface;
@@ -12,9 +13,10 @@ const Join: React.FC<{
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
-  const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
-    ? rtcProps.lifecycle.useBeforeJoin()
-    : null;
+  //commented for v1 release
+  // const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
+  //   ? rtcProps.lifecycle.useBeforeJoin()
+  //   : null;
   const {audioRoom = false} = rtcProps;
   useEffect(() => {
     const engine = engineRef.current;
@@ -57,14 +59,14 @@ const Join: React.FC<{
           value: [ToggleState.disabled],
         });
       }
-
-      try {
-        if (beforeJoin) {
-          await beforeJoin();
-        }
-      } catch (error) {
-        console.error('FPE:Error on executing useBeforeJoin', error);
-      }
+      //commented for v1 release
+      // try {
+      //   if (beforeJoin) {
+      //     await beforeJoin();
+      //   }
+      // } catch (error) {
+      //   console.error('FPE:Error on executing useBeforeJoin', error);
+      // }
 
       await engine.joinChannel(
         rtcProps.token || null,

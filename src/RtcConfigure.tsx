@@ -30,7 +30,7 @@ import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 import useLocalUid from './Utils/useLocalUid';
 
-const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
+const RtcConfigure = (props: {children: React.ReactNode}) => {
   const {callbacks, rtcProps} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
@@ -46,6 +46,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             type: 'rtc',
           }
         : {
+            uid: localUid,
             audio: ToggleState.disabled,
             video: ToggleState.disabled,
             streamType: 'high',
@@ -119,8 +120,8 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     state: RenderStateInterface,
     action: ActionType<keyof CallbacksInterface>,
   ) => {
-    let stateUpdate = {},
-      uids = state.renderPosition;
+    let stateUpdate = {};
+
     switch (action.type) {
       case 'AddCustomContent':
         if (actionTypeGuard(action, action.type)) {
@@ -143,7 +144,6 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             state,
             action,
             dualStreamMode,
-            uids,
             localUid,
             audioRoom,
           );

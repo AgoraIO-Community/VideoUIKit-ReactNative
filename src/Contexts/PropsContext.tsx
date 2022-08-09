@@ -36,6 +36,7 @@ export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
 export interface DefaultRenderInterface {
+  uid: UidType;
   audio: ToggleState;
   video?: ToggleState;
   streamType?: 'high' | 'low';
@@ -85,7 +86,7 @@ export enum DualStreamMode {
 export interface RtcPropsInterface {
   appId: string;
   channel: string;
-  uid?: number;
+  uid?: UidType;
   token?: string | null;
   dual?: boolean | null;
   profile?: VideoProfile;
@@ -100,10 +101,11 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
-  lifecycle?: {
-    useBeforeJoin?: () => () => Promise<void>;
-    useBeforeCreate?: () => () => Promise<void>;
-  };
+  // commented for v1 release
+  // lifecycle?: {
+  //   useBeforeJoin?: () => () => Promise<void>;
+  //   useBeforeCreate?: () => () => Promise<void>;
+  // };
   geoFencing?: boolean;
   audioRoom?: boolean;
 }
@@ -124,7 +126,7 @@ export interface CallbacksInterface {
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
-  UpdateRenderList(uid: UidType, user: RenderInterface): void;
+  UpdateRenderList(uid: UidType, user: Partial<RenderInterface>): void;
   AddCustomContent(uid: UidType, data: any): void;
 }
 

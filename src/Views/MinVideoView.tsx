@@ -5,14 +5,12 @@ import styles from '../Style';
 import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
 import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
-import {UidType} from '../Contexts/RtcContext';
 import useLocalUid from '../Utils/useLocalUid';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
 interface MinViewInterface {
-  uid: UidType;
   user: RenderInterface;
   color?: string;
   showOverlay?: boolean;
@@ -25,7 +23,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
   const localUid = useLocalUid();
-  const uid = props.uid === rtcProps?.screenShareUid ? 1 : props.uid;
+  const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
   return (
     <View style={{margin: 5}}>
       {showOverlay ? (
@@ -85,7 +83,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
               source={{uri: icons.close}}
             />
           </TouchableOpacity>
-          <RemoteControls showRemoteSwap={true} user={props.user} uid={uid} />
+          <RemoteControls showRemoteSwap={true} user={props.user} />
         </View>
       ) : (
         <></>

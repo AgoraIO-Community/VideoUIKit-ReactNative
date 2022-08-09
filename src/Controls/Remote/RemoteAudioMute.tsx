@@ -10,7 +10,6 @@ import useLocalUid from '../../Utils/useLocalUid';
 
 interface RemoteAudioMuteInterface {
   user: RenderInterface;
-  uid: UidType;
 }
 
 const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
@@ -19,13 +18,13 @@ const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
   const {remoteBtnStyles} = styleProps || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};
   const localUid = useLocalUid();
-  return props.uid !== localUid ? (
+  return props.user.uid !== localUid ? (
     <BtnTemplate
       name={props.user.audio === ToggleState.enabled ? 'mic' : 'micOff'}
       style={{...styles.leftRemoteBtn, ...(muteRemoteAudio as object)}}
       onPress={() => {
         RtcEngine.muteRemoteAudioStream(
-          props.uid as number,
+          props.user.uid as number,
           props.user.audio === ToggleState.enabled,
         );
         // dispatch({

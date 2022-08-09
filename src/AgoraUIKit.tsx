@@ -21,11 +21,7 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
               const [maxUid, ...minUids] = renderPosition;
               return (
                 <>
-                  <MaxVideoView
-                    user={renderList[maxUid]}
-                    key={maxUid}
-                    uid={maxUid}
-                  />
+                  <MaxVideoView user={renderList[maxUid]} key={maxUid} />
                   <ScrollView
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}
@@ -35,7 +31,6 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
                         showOverlay
                         user={renderList[minUid]}
                         key={minUid}
-                        uid={minUid}
                       />
                     ))}
                   </ScrollView>
