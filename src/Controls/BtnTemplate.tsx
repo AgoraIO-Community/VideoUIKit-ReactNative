@@ -62,11 +62,10 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
             tintColor: disabled ? 'grey' : props.color || theme || '#fff',
           }}
           resizeMode={'contain'}
-          source={
-            props.name && icons[props.name]
-              ? {uri: icons[props.name]}
-              : props.icon
-          }
+          source={{
+            uri:
+              props.name && icons[props.name] ? icons[props.name] : props.icon,
+          }}
         />
       </View>
       <Text
