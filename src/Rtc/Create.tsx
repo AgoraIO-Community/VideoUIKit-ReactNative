@@ -121,15 +121,15 @@ const Create = ({
         await requestCameraAndAudioPermission();
       }
       try {
-        if (Platform.OS === 'android' || Platform.OS === 'ios') {
-          engine.current = await RtcEngine.createWithAreaCode(
-            rtcProps.appId,
-            // eslint-disable-next-line no-bitwise
-            AreaCode.GLOB ^ AreaCode.CN,
-          );
-        } else {
-          engine.current = await RtcEngine.create(rtcProps.appId);
-        }
+        // if (Platform.OS === 'android' || Platform.OS === 'ios') {
+        //   engine.current = await RtcEngine.createWithAreaCode(
+        //     rtcProps.appId,
+        //     // eslint-disable-next-line no-bitwise
+        //     AreaCode.GLOB ^ AreaCode.CN,
+        //   );
+        // } else {
+        engine.current = await RtcEngine.create(rtcProps.appId);
+        //}
         /* Live Streaming */
         if (mode == ChannelProfile.LiveBroadcasting) {
           await engine.current.setChannelProfile(
