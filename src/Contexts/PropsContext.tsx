@@ -92,7 +92,6 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
-  geoFencing?: boolean
 }
 
 export interface CallbacksInterface {
@@ -125,7 +124,6 @@ const initialValue: PropsInterface = {
   rtcProps: {
     appId: '',
     channel: '',
-    geoFencing: true
   },
 };
 
