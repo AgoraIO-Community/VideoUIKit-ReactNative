@@ -203,21 +203,30 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
   const swapVideo = useCallback(
     (state: RenderStateInterface, newMaxUid: UidType) => {
+      if (state?.renderPosition?.indexOf(newMaxUid) === -1) {
+        //skip the update if new max uid is not joined yet.
+        return {};
+      }
       let renderPosition: RenderStateInterface['renderPosition'] = [
         ...state.renderPosition,
       ];
       let renderList: RenderStateInterface['renderList'] = {
         ...state.renderList,
       };
-      if (!(newMaxUid in renderList)) {
-        //skip the update if new max uid is not joined yet.
-        return {};
-      }
+
       // Element which is currently maximized
       const [currentMaxUid] = renderPosition;
 
       if (currentMaxUid === newMaxUid) {
         //skip the update if new max uid is already maximized
+        return {};
+      }
+
+      const newMaxUidOldPosition = renderPosition.findIndex(
+        (i) => i === newMaxUid,
+      );
+
+      if (!newMaxUidOldPosition) {
         return {};
       }
 
@@ -232,10 +241,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
        * if currentMaxUid === localUid then push newMaxId at first position
        * else push newMaxUid at last position
        */
-
-      const newMaxUidOldPosition = renderPosition.findIndex(
-        (i) => i === newMaxUid,
-      );
 
       renderPosition[0] = newMaxUid;
       renderPosition[newMaxUidOldPosition] = currentMaxUid;
