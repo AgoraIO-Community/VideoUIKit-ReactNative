@@ -32,7 +32,9 @@ export default function UserJoined(
       ...typeData,
     },
   };
-  let renderPosition = [...state.renderPosition, newUid];
+  let renderPosition = state.renderPosition.filter((i) => i === newUid).length
+    ? [...state.renderPosition]
+    : [...state.renderPosition, newUid];
   const [maxUid] = renderPosition;
   if (renderPosition.length === 2 && maxUid === localUid) {
     //Only one remote and local is maximized

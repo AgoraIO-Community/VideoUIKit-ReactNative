@@ -209,10 +209,15 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       let renderList: RenderStateInterface['renderList'] = {
         ...state.renderList,
       };
+      if (!(newMaxUid in renderList)) {
+        //skip the update if new max uid is not joined yet.
+        return {};
+      }
       // Element which is currently maximized
       const [currentMaxUid] = renderPosition;
 
       if (currentMaxUid === newMaxUid) {
+        //skip the update if new max uid is already maximized
         return {};
       }
 
@@ -254,10 +259,15 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       let renderList: RenderStateInterface['renderList'] = {
         ...state.renderList,
       };
+      if (!(newMaxUid in renderList)) {
+        //skip the update if new max uid is not joined yet.
+        return {};
+      }
       // Element which is currently maximized
       const [currentMaxUid] = renderPosition;
 
       if (currentMaxUid === newMaxUid) {
+        //skip the update if new max uid is already maximized
         return {};
       }
 
