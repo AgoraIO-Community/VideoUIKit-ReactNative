@@ -258,6 +258,10 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
    */
   const dequeVideo = useCallback(
     (state: RenderStateInterface, newMaxUid: UidType) => {
+      if (state?.renderPosition?.indexOf(newMaxUid) === -1) {
+        //skip the update if new max uid is not joined yet.
+        return {};
+      }
       let renderPosition: RenderStateInterface['renderPosition'] = [
         ...state.renderPosition,
       ];
