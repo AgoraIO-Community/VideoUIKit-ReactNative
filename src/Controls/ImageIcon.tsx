@@ -49,7 +49,9 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
         props.style as object,
       ]}
       resizeMode={'contain'}
-      source={props.name && icons[props.name] ? {uri: icons[props.name] } : props.icon}
+      source={{
+        uri: props.name && icons[props.name] ? icons[props.name] : props.icon,
+      }}
     />
   );
 };
