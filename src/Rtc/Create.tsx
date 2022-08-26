@@ -139,7 +139,7 @@ const Create = ({
     async function init() {
       if (Platform.OS === 'android') {
         //Request required permissions from Android
-        await requestCameraAndAudioPermission();
+        await requestCameraAndAudioPermission(audioRoom);
       }
       // commented for v1 release
       // try {

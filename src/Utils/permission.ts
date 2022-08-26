@@ -1,14 +1,20 @@
-import {PermissionsAndroid} from 'react-native';
+import {Permission, PermissionsAndroid} from 'react-native';
 /**
  * @name requestCameraAndAudioPermission
  * @description Function to request permission for Audio and Camera
  */
-export default async function requestCameraAndAudioPermission() {
+export default async function requestCameraAndAudioPermission(
+  audioRoom: boolean,
+) {
   try {
-    const granted = await PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-    ]);
+    const permissionsToRequest: Permission[] = [];
+    permissionsToRequest.push(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+    if (!audioRoom) {
+      permissionsToRequest.push(PermissionsAndroid.PERMISSIONS.CAMERA);
+    }
+    const granted = await PermissionsAndroid.requestMultiple(
+      permissionsToRequest,
+    );
     if (
       granted['android.permission.RECORD_AUDIO'] ===
         PermissionsAndroid.RESULTS.GRANTED &&
@@ -16,6 +22,11 @@ export default async function requestCameraAndAudioPermission() {
         PermissionsAndroid.RESULTS.GRANTED
     ) {
       console.log('You can use the cameras & mic');
+    } else if (
+      granted['android.permission.RECORD_AUDIO'] ===
+      PermissionsAndroid.RESULTS.GRANTED
+    ) {
+      console.log('You can use mic');
     } else {
       console.log('Permission denied');
     }
