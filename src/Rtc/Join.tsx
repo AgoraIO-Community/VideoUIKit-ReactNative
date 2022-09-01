@@ -13,6 +13,7 @@ const Join: React.FC<{
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
+  const {audioRoom = false} = rtcProps;
   //commented for v1 release
   // const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
   //   ? rtcProps.lifecycle.useBeforeJoin()
@@ -44,7 +45,11 @@ const Join: React.FC<{
           encryptionMode: rtcProps.encryption.mode,
         });
       }
-      if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
+      if (
+        !audioRoom &&
+        videoState === ToggleState.enabled &&
+        Platform.OS === 'ios'
+      ) {
         dispatch({
           type: 'LocalMuteVideo',
           value: [ToggleState.disabling],
@@ -70,7 +75,11 @@ const Join: React.FC<{
         null,
         rtcProps.uid || 0,
       );
-      if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
+      if (
+        !audioRoom &&
+        videoState === ToggleState.enabled &&
+        Platform.OS === 'ios'
+      ) {
         dispatch({
           type: 'LocalMuteVideo',
           value: [ToggleState.enabling],

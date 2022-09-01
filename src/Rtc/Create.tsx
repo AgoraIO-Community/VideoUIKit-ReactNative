@@ -22,7 +22,7 @@ const Create = ({
 }) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
-  const {geoFencing = true} = rtcProps || {};
+  const {geoFencing = true, audioRoom = false} = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
   // commented for v1 release
   // const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
@@ -33,15 +33,23 @@ const Create = ({
 
   const enableVideoAndAudioWithDisabledState = async () => {
     try {
-      await engine.current.enableVideo();
-      dispatch({
-        type: 'LocalMuteAudio',
-        value: [ToggleState.disabled],
-      });
-      dispatch({
-        type: 'LocalMuteVideo',
-        value: [ToggleState.disabled],
-      });
+      if (audioRoom === true) {
+        await engine.current.enableAudio();
+        dispatch({
+          type: 'LocalMuteAudio',
+          value: [ToggleState.disabled],
+        });
+      } else {
+        await engine.current.enableVideo();
+        dispatch({
+          type: 'LocalMuteAudio',
+          value: [ToggleState.disabled],
+        });
+        dispatch({
+          type: 'LocalMuteVideo',
+          value: [ToggleState.disabled],
+        });
+      }
     } catch (error) {
       const {status} = error as any;
       // App Builder web only
@@ -57,7 +65,7 @@ const Create = ({
           console.error('No audio device', audioError);
         }
 
-        if (!videoError) {
+        if (!videoError && !audioRoom) {
           dispatch({
             type: 'LocalMuteVideo',
             value: [ToggleState.disabled],
@@ -71,15 +79,23 @@ const Create = ({
   };
   const enableVideoAndAudioWithEnabledState = async () => {
     try {
-      await engine.current.enableVideo();
-      dispatch({
-        type: 'LocalMuteAudio',
-        value: [ToggleState.enabled],
-      });
-      dispatch({
-        type: 'LocalMuteVideo',
-        value: [ToggleState.enabled],
-      });
+      if (audioRoom === true) {
+        await engine.current.enableAudio();
+        dispatch({
+          type: 'LocalMuteAudio',
+          value: [ToggleState.enabled],
+        });
+      } else {
+        await engine.current.enableVideo();
+        dispatch({
+          type: 'LocalMuteAudio',
+          value: [ToggleState.enabled],
+        });
+        dispatch({
+          type: 'LocalMuteVideo',
+          value: [ToggleState.enabled],
+        });
+      }
     } catch (e) {
       const {status} = e as any;
 
@@ -96,7 +112,7 @@ const Create = ({
           console.error('No audio device', audioError);
         }
 
-        if (!videoError) {
+        if (!videoError && !audioRoom) {
           dispatch({
             type: 'LocalMuteVideo',
             value: [ToggleState.enabled],
@@ -123,7 +139,7 @@ const Create = ({
     async function init() {
       if (Platform.OS === 'android') {
         //Request required permissions from Android
-        await requestCameraAndAudioPermission();
+        await requestCameraAndAudioPermission(audioRoom);
       }
       // commented for v1 release
       // try {
@@ -271,16 +287,20 @@ const Create = ({
           if (isVideoEnabledRef.current) {
             // This unpublishes the current track
             await engine.current?.muteLocalAudioStream(true);
-            await engine.current?.muteLocalVideoStream(true);
+            if (!audioRoom) {
+              await engine.current?.muteLocalVideoStream(true);
+            }
             // This updates the uid interface
             dispatch({
               type: 'LocalMuteAudio',
               value: [ToggleState.disabled],
             });
-            dispatch({
-              type: 'LocalMuteVideo',
-              value: [ToggleState.disabled],
-            });
+            if (!audioRoom) {
+              dispatch({
+                type: 'LocalMuteVideo',
+                value: [ToggleState.disabled],
+              });
+            }
           }
         }
         if (rtcProps.role == ClientRole.Audience) {
@@ -289,15 +309,19 @@ const Create = ({
            * Otherwise the setClientRole method call fails and throws an exception.
            */
           await engine.current?.muteLocalAudioStream(true);
-          await engine.current?.muteLocalVideoStream(true);
+          if (!audioRoom) {
+            await engine.current?.muteLocalVideoStream(true);
+          }
           dispatch({
             type: 'LocalMuteAudio',
             value: [ToggleState.disabled],
           });
-          dispatch({
-            type: 'LocalMuteVideo',
-            value: [ToggleState.disabled],
-          });
+          if (!audioRoom) {
+            dispatch({
+              type: 'LocalMuteVideo',
+              value: [ToggleState.disabled],
+            });
+          }
           await engine.current?.setClientRole(ClientRole.Audience);
         }
       }
