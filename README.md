@@ -1,4 +1,4 @@
-# Agora UI Kit for React Native
+# Agora VideoUIKit for React Native
 Instantly integrate Agora video calling or streaming into your React Native application.
 
 ![img](UI%20Kit.png)
@@ -23,7 +23,7 @@ npm i react-native-agora agora-react-native-rtm agora-rn-uikit
 
 ### Usage
 
-This UIKit is very simple to use and contains a high level component called `AgoraUIKit`. You can check out code explanation here.
+This VideoUIKit is very simple to use and contains a high level component called `AgoraUIKit`. You can check out code explanation here.
 
 **A simple sample app integrating Agora UI Kit:**
 ```javascript
@@ -54,7 +54,7 @@ export default App;
 If you created the Agora App in secured mode, you'll need to pass in an `rtcToken` and an `rtmToken` to the `connectionData` prop. Alternatively, you can deploy the one-click [token server](https://github.com/AgoraIO-Community/agora-token-service) and pass in the `tokenUrl`, the UIKit then automatically fetches and manages the tokens. 
 
 ### Demo Project
-There's a React Native UIKit demo [here](https://github.com/AgoraIO-Community/ReactNative-UIKit-example), and one with typescript [here](https://github.com/AgoraIO-Community/ReactNative-UIKit-example/tree/typescript).
+There's a React Native VideoUIKit demo [here](https://github.com/AgoraIO-Community/ReactNative-UIKit-example), and one with typescript [here](https://github.com/AgoraIO-Community/ReactNative-UIKit-example/tree/typescript).
 
 ### Instructions for running on Android:
 
@@ -79,6 +79,6 @@ There's a React Native UIKit demo [here](https://github.com/AgoraIO-Community/Re
 
 ## Documentation
 
-For full documentation, see our [docs page](https://agoraio-community.github.io/ReactNative-UIKit/).
+For full documentation, see our [docs page](https://agoraio-community.github.io/VideoUIKit-ReactNative/).
 
-You can visit the [wiki](https://github.com/AgoraIO-Community/ReactNative-UIKit/wiki) for other examples and in depth guide.
+You can visit the [wiki](https://github.com/AgoraIO-Community/VideoUIKit-ReactNative/wiki) for other examples and in depth guide.
