@@ -19,6 +19,7 @@ interface BtnTemplateBasicInterface {
   color?: string;
   onPress?: TouchableOpacityProps['onPress'];
   style?: StyleProp<ViewStyle>;
+  styleText?: StyleProp<ViewStyle>;
   btnText?: string;
   disabled?: boolean;
 }
@@ -74,6 +75,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           marginTop: 5,
           color: disabled ? 'grey' : props.color || theme || '#fff',
           opacity: disabled ? 0.4 : 1,
+          ...(props.styleText as object),
         }}>
         {props.btnText}
       </Text>
