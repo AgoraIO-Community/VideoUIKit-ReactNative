@@ -5,12 +5,12 @@ import type {DualStreamMode, RenderInterface} from './PropsContext';
 
 export type UidType = number;
 
-export interface RenderObjectInterface {
+export interface RenderObjects {
   [key: number]: RenderInterface;
 }
 
 export interface RenderStateInterface {
-  renderList: RenderObjectInterface;
+  renderList: RenderObjects;
   renderPosition: Array<UidType>;
 }
 
