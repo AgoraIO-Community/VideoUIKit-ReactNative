@@ -39,8 +39,10 @@ const Create: React.FC<{
             // eslint-disable-next-line no-bitwise
             AreaCode.GLOB ^ AreaCode.CN,
           );
+          engine.current.setParameters("{\"rtc.using_ui_kit\": 1}")
         } else {
           engine.current = await RtcEngine.create(rtcProps.appId);
+          engine.current.setParameters("{\"rtc.using_ui_kit\": 1}")
         }
         /* Live Streaming */
         if (rtcProps.mode == ChannelProfile.LiveBroadcasting) {
