@@ -12,12 +12,12 @@ export default function UserOffline(
   // if (updatedRenderList[action.value[0]]) {
   //   delete updatedRenderList[action.value[0]];
   // }
-  const updatedRenderPosition = [...state.renderPosition].filter(
+  const updatedActiveUids = [...state.activeUids].filter(
     (uid) => uid !== action.value[0],
   );
   const stateUpdate: RenderStateInterface = {
     renderList: state.renderList,
-    renderPosition: updatedRenderPosition,
+    activeUids: updatedActiveUids,
   };
 
   return stateUpdate;

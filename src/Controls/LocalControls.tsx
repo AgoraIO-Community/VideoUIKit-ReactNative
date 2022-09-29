@@ -30,10 +30,10 @@ function Controls(props: ControlsPropsInterface) {
       </View>
       {showButton ? (
         <RenderConsumer>
-          {({renderList, renderPosition}) => (
+          {({renderList, activeUids}) => (
             <View style={{...styles.Controls, top: styles.Controls.top - 100}}>
               <RemoteControls
-                user={renderList[renderPosition[0]]}
+                user={renderList[activeUids[0]]}
                 showRemoteSwap={false}
               />
             </View>

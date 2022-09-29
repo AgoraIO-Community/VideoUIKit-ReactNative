@@ -22,12 +22,12 @@ export default function UpdateDualStreamMode(
 
   if (newMode === DualStreamMode.HIGH) {
     // Update everybody to high
-    state.renderPosition.forEach(setHighStreamType);
+    state.activeUids.forEach(setHighStreamType);
   } else if (newMode === DualStreamMode.LOW) {
     // Update everybody to low
-    state.renderPosition.forEach(setLowStreamType);
+    state.activeUids.forEach(setLowStreamType);
   } else {
-    const [maxUid, ...minUids] = state.renderPosition;
+    const [maxUid, ...minUids] = state.activeUids;
     // if (newMode === DualStreamMode.DYNAMIC)
     // Max users are high other are low
     //setting high for maxuid
@@ -37,7 +37,7 @@ export default function UpdateDualStreamMode(
   }
   stateUpdate = {
     renderList: renderList,
-    renderPosition: [...state.renderPosition],
+    activeUids: [...state.activeUids],
   };
   return stateUpdate;
 }

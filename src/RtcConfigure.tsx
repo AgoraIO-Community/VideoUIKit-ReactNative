@@ -46,7 +46,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
         type: 'rtc',
       },
     },
-    renderPosition: [localUid],
+    activeUids: [localUid],
   };
 
   const [initialState, setInitialState] = React.useState(
@@ -97,7 +97,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
   ) => {
     const newState = {
       ...state,
-      renderPosition: [...state.renderPosition, action.value[0]],
+      activeUids: [...state.activeUids, action.value[0]],
       renderList: {
         ...state.renderList,
         [action.value[0]]: {
@@ -203,28 +203,26 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
   const swapVideo = useCallback(
     (state: RenderStateInterface, newMaxUid: UidType) => {
-      if (state?.renderPosition?.indexOf(newMaxUid) === -1) {
+      if (state?.activeUids?.indexOf(newMaxUid) === -1) {
         //skip the update if new max uid is not joined yet.
         return {};
       }
-      let renderPosition: RenderStateInterface['renderPosition'] = [
-        ...state.renderPosition,
+      let activeUids: RenderStateInterface['activeUids'] = [
+        ...state.activeUids,
       ];
       let renderList: RenderStateInterface['renderList'] = {
         ...state.renderList,
       };
 
       // Element which is currently maximized
-      const [currentMaxUid] = renderPosition;
+      const [currentMaxUid] = activeUids;
 
       if (currentMaxUid === newMaxUid) {
         //skip the update if new max uid is already maximized
         return {};
       }
 
-      const newMaxUidOldPosition = renderPosition.findIndex(
-        (i) => i === newMaxUid,
-      );
+      const newMaxUidOldPosition = activeUids.findIndex((i) => i === newMaxUid);
 
       if (!newMaxUidOldPosition) {
         return {};
@@ -242,11 +240,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
        * else push newMaxUid at last position
        */
 
-      renderPosition[0] = newMaxUid;
-      renderPosition[newMaxUidOldPosition] = currentMaxUid;
+      activeUids[0] = newMaxUid;
+      activeUids[newMaxUidOldPosition] = currentMaxUid;
 
       return {
-        renderPosition: renderPosition,
+        activeUids: activeUids,
         renderList: renderList,
       };
     },
@@ -258,12 +256,12 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
    */
   const dequeVideo = useCallback(
     (state: RenderStateInterface, newMaxUid: UidType) => {
-      if (state?.renderPosition?.indexOf(newMaxUid) === -1) {
+      if (state?.activeUids?.indexOf(newMaxUid) === -1) {
         //skip the update if new max uid is not joined yet.
         return {};
       }
-      let renderPosition: RenderStateInterface['renderPosition'] = [
-        ...state.renderPosition,
+      let activeUids: RenderStateInterface['activeUids'] = [
+        ...state.activeUids,
       ];
       let renderList: RenderStateInterface['renderList'] = {
         ...state.renderList,
@@ -273,7 +271,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
         return {};
       }
       // Element which is currently maximized
-      const [currentMaxUid] = renderPosition;
+      const [currentMaxUid] = activeUids;
 
       if (currentMaxUid === newMaxUid) {
         //skip the update if new max uid is already maximized
@@ -286,14 +284,14 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
         // No need to modify the streamType if the mode is not dynamic
       }
 
-      const minIds = renderPosition.filter(
+      const minIds = activeUids.filter(
         (uid) => uid !== newMaxUid && uid !== currentMaxUid,
       );
 
-      renderPosition = [newMaxUid, currentMaxUid, ...minIds];
+      activeUids = [newMaxUid, currentMaxUid, ...minIds];
 
       return {
-        renderPosition: renderPosition,
+        activeUids: activeUids,
         renderList: renderList,
       };
     },
@@ -322,7 +320,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
             <RenderProvider
               value={{
                 renderList: uidState.renderList,
-                renderPosition: uidState.renderPosition,
+                activeUids: uidState.activeUids,
               }}>
               {props.children}
             </RenderProvider>

@@ -12,7 +12,7 @@ export default function UserMuteRemoteVideo(
         video: action.value[1],
       },
     },
-    renderPosition: [...state.renderPosition],
+    activeUids: [...state.activeUids],
   };
   return stateUpdate;
 }
