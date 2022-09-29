@@ -11,7 +11,7 @@ export interface RenderObjects {
 
 export interface RenderStateInterface {
   renderList: RenderObjects;
-  renderPosition: Array<UidType>;
+  activeUids: Array<UidType>;
 }
 
 export interface ActionInterface<T extends keyof CallbacksInterface> {

@@ -23,7 +23,7 @@ export default function RemoteVideoStateChanged(
             : state.renderList[action.value[0]].video,
       },
     },
-    renderPosition: [...state.renderPosition],
+    activeUids: [...state.activeUids],
   };
   return stateUpdate;
 }

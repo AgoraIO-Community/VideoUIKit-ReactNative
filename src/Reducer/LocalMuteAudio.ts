@@ -17,7 +17,7 @@ export default function LocalMuteAudio(
         audio: action.value[0],
       },
     },
-    renderPosition: [...state.renderPosition],
+    activeUids: [...state.activeUids],
   };
   return stateUpdate;
 }

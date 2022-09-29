@@ -32,11 +32,11 @@ export default function UserJoined(
       ...typeData,
     },
   };
-  let renderPosition = state.renderPosition.filter((i) => i === newUid).length
-    ? [...state.renderPosition]
-    : [...state.renderPosition, newUid];
-  const [maxUid] = renderPosition;
-  if (renderPosition.length === 2 && maxUid === localUid) {
+  let activeUids = state.activeUids.filter((i) => i === newUid).length
+    ? [...state.activeUids]
+    : [...state.activeUids, newUid];
+  const [maxUid] = activeUids;
+  if (activeUids.length === 2 && maxUid === localUid) {
     //Only one remote and local is maximized
     //Change stream type to high if dualStreaMode is DYNAMIC
     if (dualStreamMode === DualStreamMode.DYNAMIC) {
@@ -45,13 +45,13 @@ export default function UserJoined(
     //Swap render positions
     stateUpdate = {
       renderList: renderList,
-      renderPosition: renderPosition.reverse(),
+      activeUids: activeUids.reverse(),
     };
   } else {
     //More than one remote
     stateUpdate = {
       renderList: renderList,
-      renderPosition: renderPosition,
+      activeUids: activeUids,
     };
   }
 

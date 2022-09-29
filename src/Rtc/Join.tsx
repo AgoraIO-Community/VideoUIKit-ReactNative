@@ -30,8 +30,8 @@ const Join: React.FC<{
         console.error('Cannot leave the channel:', err);
       }
     }
-    const {renderList, renderPosition} = uidState;
-    const [maxUid] = renderPosition;
+    const {renderList, activeUids} = uidState;
+    const [maxUid] = activeUids;
     const videoState = renderList[maxUid].video;
     async function join() {
       if (

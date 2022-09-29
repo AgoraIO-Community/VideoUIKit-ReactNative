@@ -20,7 +20,7 @@ export default function RemoteAudioStateChanged(
         audio: audioState,
       },
     },
-    renderPosition: [...state.renderPosition],
+    activeUids: [...state.activeUids],
   };
   return stateUpdate;
 }
