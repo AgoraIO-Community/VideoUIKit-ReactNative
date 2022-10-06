@@ -2,6 +2,8 @@ import React, {useState, useEffect, useContext, useRef, FC} from 'react';
 import RtcEngine, {
   VideoEncoderConfiguration,
   AreaCode,
+  AudioProfile,
+  AudioScenario,
 } from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
@@ -175,17 +177,32 @@ const Create = ({
         } else {
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
-        if (rtcProps.profile) {
-          if (Platform.OS === 'web') {
-            // move this to bridge?
-            // @ts-ignore
-            await engine.current.setVideoProfile(rtcProps.profile);
-          } else {
-            const config: VideoEncoderConfiguration = quality[rtcProps.profile];
-            await engine.current.setVideoEncoderConfiguration({
-              ...config,
-              bitrate: 0,
-            });
+        if (!audioRoom) {
+          if (rtcProps.profile) {
+            if (Platform.OS === 'web') {
+              // move this to bridge?
+              // @ts-ignore
+              await engine.current.setVideoProfile(rtcProps.profile);
+            } else {
+              const config: VideoEncoderConfiguration =
+                quality[rtcProps.profile];
+              await engine.current.setVideoEncoderConfiguration({
+                ...config,
+                bitrate: 0,
+              });
+            }
+          }
+        } else {
+          //web will work even without audio profile
+          //but native need to set audio profile otherwise user will experience low audio issue
+          //also audio route for voice-chat will work through earpiece not phonespeaker
+          //for audiolivecast it will work through phone speaker
+          //ref - https://docs.agora.io/en/help/integration-issues/profile_difference/#audio-route
+          if (Platform.OS === 'android' || Platform.OS === 'ios') {
+            await engine.current.setAudioProfile(
+              AudioProfile.Default,
+              AudioScenario.Default,
+            );
           }
         }
 
