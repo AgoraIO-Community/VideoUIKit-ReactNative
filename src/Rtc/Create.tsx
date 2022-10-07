@@ -203,6 +203,7 @@ const Create = ({
             //also audio route for voice-chat will work through earpiece not phonespeaker
             //for audiolivecast it will work through phone speaker
             //ref - https://docs.agora.io/en/help/integration-issues/profile_difference/#audio-route
+            //so setting into phone speaker manually as requested
             if (mode == ChannelProfile.Communication) {
               await engine.current.setEnableSpeakerphone(true);
             }
