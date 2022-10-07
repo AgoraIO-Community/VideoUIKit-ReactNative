@@ -195,14 +195,18 @@ const Create = ({
         } else {
           //web will work even without audio profile
           //but native need to set audio profile otherwise user will experience low audio issue
-          //also audio route for voice-chat will work through earpiece not phonespeaker
-          //for audiolivecast it will work through phone speaker
-          //ref - https://docs.agora.io/en/help/integration-issues/profile_difference/#audio-route
           if (Platform.OS === 'android' || Platform.OS === 'ios') {
             await engine.current.setAudioProfile(
               AudioProfile.Default,
               AudioScenario.Default,
             );
+            //also audio route for voice-chat will work through earpiece not phonespeaker
+            //for audiolivecast it will work through phone speaker
+            //ref - https://docs.agora.io/en/help/integration-issues/profile_difference/#audio-route
+            //so setting into phone speaker manually as requested
+            if (mode == ChannelProfile.Communication) {
+              await engine.current.setEnableSpeakerphone(true);
+            }
           }
         }
 
