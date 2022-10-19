@@ -28,15 +28,22 @@
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
   },
   "peerDependencies": {
+    "agora-react-native-rtm": "^1.5.0",
     "react": "*",
     "react-native": ">=0.62.2",
-    "react-native-agora": "^3.7.0",
-    "agora-react-native-rtm": "^1.5.0"
+    "react-native-agora": "^3.7.1"
   },
   "scripts": {
     "docs": "typedoc  --entryPoints index.ts  --entryPoints Components.ts  --entryPoints Contexts.ts && cp 'UI Kit.png' './docs/UI Kit.png'"
   },
   "devDependencies": {
+    "@react-native-community/eslint-config": "^3.1.0",
+    "@tsconfig/react-native": "^2.0.2",
+    "@types/react": "^18.0.21",
+    "@types/react-native": "^0.70.6",
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.25.0",
     "typedoc": "^0.22.15",
     "typedoc-plugin-missing-exports": "^0.22.6"
   }
