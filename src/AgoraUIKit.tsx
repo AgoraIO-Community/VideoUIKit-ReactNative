@@ -17,8 +17,8 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
       <View style={{backgroundColor: '#000', flex: 1}}>
         <RtcConfigure>
           <RenderConsumer>
-            {({renderList, renderPosition}) => {
-              const [maxUid, ...minUids] = renderPosition;
+            {({renderList, activeUids}) => {
+              const [maxUid, ...minUids] = activeUids;
               return (
                 <>
                   <MaxVideoView user={renderList[maxUid]} key={maxUid} />
