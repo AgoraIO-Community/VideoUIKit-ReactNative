@@ -2,7 +2,9 @@
 import {Platform} from 'react-native';
 
 const isSafariBrowser = () => {
-  if (Platform.OS !== 'web') return false;
+  if (Platform.OS !== 'web') {
+    return false;
+  }
   if (!('userAgent' in navigator)) {
     console.warn('unable to detect browser');
     return false;
@@ -19,7 +21,9 @@ const isSafariBrowser = () => {
   // If both the user-agents of Chrome and Safari are in the user-agent,
   // it means that the browser is Chrome, and hence the Safari browser value is discarded.
 
-  if (chromeAgent && safariAgent) return false; // Discard Safari since it also matches Chrome
+  if (chromeAgent && safariAgent) {
+    return false;
+  } // Discard Safari since it also matches Chrome
   return true;
 };
 

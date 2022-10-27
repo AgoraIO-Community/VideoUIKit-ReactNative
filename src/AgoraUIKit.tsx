@@ -26,7 +26,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
   return (
     <PropsProvider value={props}>
       <View style={[containerStyle, props.styleProps?.UIKitContainer]}>
-        <RtcConfigure>
+        <RtcConfigure key={props.rtcProps.channel}>
           <LocalUserContext>
             {props.rtcProps.disableRtm ? (
               <>
@@ -60,6 +60,7 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
       token: rtcToken,
       ...restConnectonData,
       ...props.settings,
+      callActive: true,
     },
     rtmProps: {
       token: rtmToken,

@@ -8,7 +8,7 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 import {DispatchType} from '../../Contexts/RtcContext';
-import RtcEngineType from 'react-native-agora';
+import {IRtcEngine} from 'react-native-agora';
 
 interface LocalVideoMuteProps {
   btnText?: string;
@@ -42,7 +42,7 @@ const LocalVideoMute: React.FC<LocalVideoMuteProps> = (props) => {
 export const muteVideo = async (
   local: UidInterface,
   dispatch: DispatchType,
-  RtcEngine: RtcEngineType,
+  RtcEngine: IRtcEngine,
 ) => {
   const localState = local.video;
   // Don't do anything if it is in a transitional state

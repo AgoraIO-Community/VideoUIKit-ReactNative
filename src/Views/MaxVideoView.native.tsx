@@ -1,13 +1,13 @@
 import React, {useContext} from 'react';
-import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
+import {RenderModeType, RtcSurfaceView} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import {StyleSheet, View} from 'react-native';
 import ImageIcon from '../Controls/ImageIcon';
 import Username from './Usernames';
 
-const LocalView = RtcLocalView.SurfaceView;
-const RemoteView = RtcRemoteView.SurfaceView;
+// const LocalView = RtcLocalView.SurfaceView;
+// const RemoteView = RtcRemoteView.SurfaceView;
 
 interface MaxViewInterface {
   user: UidInterface;
@@ -26,9 +26,9 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
       {!rtcProps.disableRtm && <Username user={props.user} />}
       {props.user.uid === 'local' ? (
         props.user.video ? (
-          <LocalView
+          <RtcSurfaceView
             style={{...styles.fullView, ...(maxViewStyles as object)}}
-            renderMode={VideoRenderMode.Fit}
+            canvas={{renderMode: RenderModeType.RenderModeFit, uid: 0}}
           />
         ) : Fallback ? (
           <Fallback />
@@ -36,11 +36,16 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
           <DefaultFallback />
         )
       ) : props.user.video ? (
-        <RemoteView
-          style={{...styles.fullView, ...(maxViewStyles as object)}}
-          uid={props.user.uid as number}
-          renderMode={VideoRenderMode.Fit}
-        />
+        <>
+          {console.log('!user', props.user.uid, props.user)}
+          <RtcSurfaceView
+            style={{...styles.fullView, ...(maxViewStyles as object)}}
+            canvas={{
+              renderMode: RenderModeType.RenderModeFit,
+              uid: props.user.uid as number,
+            }}
+          />
+        </>
       ) : Fallback ? (
         <Fallback />
       ) : (

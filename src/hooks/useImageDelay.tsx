@@ -9,7 +9,9 @@ function useImageDelay(
   tintColor?: string,
 ) {
   React.useEffect(() => {
-    if (!isSafariBrowser()) return;
+    if (!isSafariBrowser()) {
+      return;
+    }
     // The following block allows to repaint the icon
     let imageElement: any;
     if (elementRef && elementRef.current) {
@@ -26,6 +28,7 @@ function useImageDelay(
     }, delay);
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageName, tintColor]);
 }
 

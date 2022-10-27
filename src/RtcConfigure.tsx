@@ -4,6 +4,7 @@ import React, {
   useContext,
   useCallback,
   useRef,
+  PropsWithChildren,
 } from 'react';
 import {
   RtcProvider,
@@ -17,8 +18,6 @@ import PropsContext, {
   RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
-  ClientRole,
-  ChannelProfile,
 } from './Contexts/PropsContext';
 import {MinUidProvider} from './Contexts/MinUidContext';
 import {MaxUidProvider} from './Contexts/MaxUidContext';
@@ -37,8 +36,11 @@ import {
 } from './Reducer';
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
+import {ClientRoleType} from 'react-native-agora';
 
-const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
+const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
+  props,
+) => {
   const {callbacks, rtcProps} = useContext(PropsContext);
   const rtcUidRef = useRef<number>();
   const [rtcChannelJoined, setRtcChannelJoined] = useState(false);
@@ -50,15 +52,22 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
     min: [],
     max: [
       {
+        // todo: fix enum
         uid: 'local',
         audio:
-          rtcProps.mode == ChannelProfile.LiveBroadcasting &&
-          rtcProps?.role == ClientRole.Audience
+          // eslint-disable-next-line eqeqeq
+          rtcProps.mode == 1 &&
+          rtcProps.role &&
+          // eslint-disable-next-line eqeqeq
+          rtcProps.role == ClientRoleType.ClientRoleAudience
             ? ToggleState.disabled
             : ToggleState.enabled,
         video:
-          rtcProps.mode == ChannelProfile.LiveBroadcasting &&
-          rtcProps?.role == ClientRole.Audience
+          // eslint-disable-next-line eqeqeq
+          rtcProps.mode == 1 &&
+          rtcProps.role &&
+          // eslint-disable-next-line eqeqeq
+          rtcProps.role == ClientRoleType.ClientRoleAudience
             ? ToggleState.disabled
             : ToggleState.enabled,
         streamType: 'high',
@@ -229,7 +238,7 @@ const RtcConfigure: React.FC<Partial<RtcPropsInterface>> = (props) => {
             }}>
             <MaxUidProvider value={uidState.max}>
               <MinUidProvider value={uidState.min}>
-                {props.children}
+                {rtcChannelJoined ? props.children : <React.Fragment />}
               </MinUidProvider>
             </MaxUidProvider>
           </RtcProvider>

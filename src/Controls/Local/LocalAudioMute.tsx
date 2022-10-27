@@ -8,7 +8,7 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
 import {DispatchType} from '../../Contexts/RtcContext';
-import RtcEngineType from 'react-native-agora';
+import {IRtcEngine} from 'react-native-agora';
 interface LocalAudioMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
@@ -41,7 +41,7 @@ const LocalAudioMute: React.FC<LocalAudioMuteProps> = (props) => {
 export const muteAudio = async (
   local: UidInterface,
   dispatch: DispatchType,
-  RtcEngine: RtcEngineType,
+  RtcEngine: IRtcEngine,
 ) => {
   const localState = local.audio;
   // Don't do anything if it is in a transitional state

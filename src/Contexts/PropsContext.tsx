@@ -1,7 +1,11 @@
 import React from 'react';
 import {StyleProp, TextStyle, ViewStyle} from 'react-native';
-import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
-import {EncryptionMode, VideoRenderMode} from 'react-native-agora';
+import {IRtcEngineEventHandler, RenderModeType} from 'react-native-agora';
+import {
+  ChannelProfileType,
+  ClientRoleType,
+  EncryptionMode,
+} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
 import {rtmCallbacks} from '../Contexts/RtmContext';
 
@@ -11,25 +15,6 @@ export enum DualStreamMode {
   DYNAMIC,
 }
 
-// ClientRole & ChannelProfile is re declared here instead of importing from RN SDK, as AB web needs this enum
-// Moving this to AB web wrapper would be ideal
-/* User role for live streaming mode */
-export enum ClientRole {
-  /* 1: A host can both send and receive streams. */
-  Broadcaster = 1,
-  /* 2: The default role. An audience can only receive streams. */
-  Audience = 2,
-}
-
-/* Mode for RTC (Live or Broadcast) */
-export enum ChannelProfile {
-  /** 0: (Default) The Communication profile.
-   *  Use this profile in one-on-one calls or group calls, where all users can talk freely. */
-  Communication = 0,
-  /**  1: The Live-Broadcast profile.
-   *   Users in a live-broadcast channel have a role as either host or audience. A host can both send and receive streams; an audience can only receive streams. */
-  LiveBroadcasting = 1,
-}
 /**
  * Select a pre built layout
  */
@@ -116,8 +101,8 @@ export interface StylePropInterface {
    * Sets the scaling of the video
    */
   videoMode?: {
-    max?: VideoRenderMode;
-    min?: VideoRenderMode;
+    max?: RenderModeType;
+    min?: RenderModeType;
   };
   /**
    * Color tint for icons
@@ -249,21 +234,22 @@ export interface RtcSettings {
   /**
    * Set local user's role between audience and host. Use with mode set to livestreaming. (default: host)
    */
-  role?: ClientRole;
+  role?: ClientRoleType;
   /**
    * Select between livestreaming and communication mode for the SDK. (default: communication)
    */
-  mode?: ChannelProfile;
+  mode?: ChannelProfileType;
   /**
    * Enable the mic and camera when the local user toggles role to become a host from audience role. (default: true)
    */
   enableMediaOnHost?: boolean;
   encryption?: {
     key: string;
-    mode:
-      | EncryptionMode.AES128XTS
-      | EncryptionMode.AES256XTS
-      | EncryptionMode.AES128ECB;
+    mode: EncryptionMode.Aes128Gcm2 | EncryptionMode.Aes256Gcm2;
+    /**
+     * Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details. This parameter takes effect only in Aes128Gcm2 or Aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
+     */
+    salt?: number[];
   };
   /**
    * Disable Agora RTM, this also disables the use of usernames and remote mute functionality
@@ -320,6 +306,7 @@ export interface RtcPropsInterface extends RtcSettings, RtcConnectionData {}
  */
 export interface RtmPropsInterface extends RtmSettings, RtmConnectionData {}
 
+type RemoveUndefined<T> = Exclude<T, undefined>;
 export interface CallbacksInterface {
   /**
    * Callback for EndCall
@@ -330,8 +317,8 @@ export interface CallbacksInterface {
    */
   SwitchCamera(): void;
   UpdateDualStreamMode(mode: DualStreamMode): void;
-  UserJoined: RtcEngineEvents['UserJoined'];
-  UserOffline: RtcEngineEvents['UserOffline'];
+  UserJoined: RemoveUndefined<IRtcEngineEventHandler['onUserJoined']>;
+  UserOffline: RemoveUndefined<IRtcEngineEventHandler['onUserOffline']>;
   /**
    * Callback for when a user swaps video in pinned layout
    */
@@ -356,9 +343,15 @@ export interface CallbacksInterface {
    * Callback for when a user mutes their video
    */
   LocalMuteVideo(muted: ToggleState): void;
-  RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
-  RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
-  JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
+  RemoteAudioStateChanged: RemoveUndefined<
+    IRtcEngineEventHandler['onRemoteAudioStateChanged']
+  >;
+  RemoteVideoStateChanged: RemoveUndefined<
+    IRtcEngineEventHandler['onRemoteVideoStateChanged']
+  >;
+  JoinChannelSuccess: RemoveUndefined<
+    IRtcEngineEventHandler['onJoinChannelSuccess']
+  >;
   BecomeAudience(): void;
 }
 
