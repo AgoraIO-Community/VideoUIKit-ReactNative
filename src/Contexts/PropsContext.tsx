@@ -32,6 +32,14 @@ export enum ToggleState {
   enabling, // disabled -> enabling -> enabled
 }
 
+export enum PermissionState {
+  NOT_REQUESTED,
+  GRANTED_FOR_CAM_AND_MIC,
+  GRANTED_FOR_CAM_ONLY,
+  GRANTED_FOR_MIC_ONLY,
+  REJECTED,
+}
+
 export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
@@ -41,6 +49,7 @@ export interface DefaultRenderInterface {
   video: ToggleState;
   streamType: 'high' | 'low';
   type: 'rtc';
+  permissionStatus?: PermissionState;
 }
 export interface CustomRenderInterface<T> {
   type: T extends DefaultRenderInterface['type'] ? never : T;
@@ -122,6 +131,9 @@ export interface CallbacksInterface {
   UserMuteRemoteVideo(uid: UidType, muted: RenderInterface['video']): void;
   LocalMuteAudio(muted: ToggleState): void;
   LocalMuteVideo(muted: ToggleState): void;
+  LocalPermissionState(
+    permissionState: RenderInterface['permissionStatus'],
+  ): void;
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];

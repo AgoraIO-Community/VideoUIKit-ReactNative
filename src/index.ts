@@ -24,7 +24,7 @@ export {
 
 export {DualStreamMode} from './Contexts/PropsContext';
 
-export {ToggleState} from './Contexts/PropsContext';
+export {ToggleState, PermissionState} from './Contexts/PropsContext';
 
 export type {
   DefaultRenderInterface,

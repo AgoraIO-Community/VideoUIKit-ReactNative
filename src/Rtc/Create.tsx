@@ -12,6 +12,7 @@ import PropsContext, {
   ToggleState,
   ClientRole,
   ChannelProfile,
+  PermissionState,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
@@ -32,6 +33,30 @@ const Create = ({
   //   : null;
   const isVideoEnabledRef = useRef<boolean>(false);
   const firstUpdate = useRef(true);
+
+  const dispatchPermissionState = (audioError: any, videoError: any) => {
+    if (audioError && videoError) {
+      dispatch({
+        type: 'LocalPermissionState',
+        value: [PermissionState.REJECTED],
+      });
+    } else if (audioError && !videoError) {
+      dispatch({
+        type: 'LocalPermissionState',
+        value: [PermissionState.GRANTED_FOR_CAM_ONLY],
+      });
+    } else if (!audioError && videoError) {
+      dispatch({
+        type: 'LocalPermissionState',
+        value: [PermissionState.GRANTED_FOR_MIC_ONLY],
+      });
+    } else {
+      dispatch({
+        type: 'LocalPermissionState',
+        value: [PermissionState.GRANTED_FOR_CAM_AND_MIC],
+      });
+    }
+  };
 
   const enableVideoAndAudioWithDisabledState = async () => {
     try {
@@ -75,6 +100,7 @@ const Create = ({
         } else {
           console.error('No video device', videoError);
         }
+        dispatchPermissionState(audioError, videoError);
       }
       console.error('No devices', error);
     }
@@ -122,6 +148,7 @@ const Create = ({
         } else {
           console.error('No video device', videoError);
         }
+        dispatchPermissionState(audioError, videoError);
       }
       console.error('No devices', e);
     }

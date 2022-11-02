@@ -11,6 +11,7 @@ import PropsContext, {
   RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
+  PermissionState,
 } from './Contexts/PropsContext';
 import {RenderProvider} from './Contexts/RenderContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
@@ -18,6 +19,7 @@ import {actionTypeGuard} from './Utils/actionTypeGuard';
 import {
   LocalMuteAudio,
   LocalMuteVideo,
+  LocalPermissionState,
   RemoteAudioStateChanged,
   RemoteVideoStateChanged,
   UpdateDualStreamMode,
@@ -44,6 +46,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
         video: ToggleState.disabled,
         streamType: 'high',
         type: 'rtc',
+        permissionStatus: PermissionState.NOT_REQUESTED,
       },
     },
     activeUids: [localUid],
@@ -169,6 +172,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       case 'LocalMuteVideo':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = LocalMuteVideo(state, action, localUid);
+        }
+        break;
+      case 'LocalPermissionState':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = LocalPermissionState(state, action, localUid);
         }
         break;
       case 'RemoteAudioStateChanged':
