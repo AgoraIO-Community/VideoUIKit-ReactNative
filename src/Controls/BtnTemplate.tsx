@@ -5,9 +5,11 @@ import {
   StyleProp,
   TouchableOpacityProps,
   ViewStyle,
+  TextStyle,
   Text,
   View,
   Platform,
+  ImageStyle,
 } from 'react-native';
 import PropsContext from '../Contexts/PropsContext';
 import styles from '../Style';
@@ -19,10 +21,10 @@ interface BtnTemplateBasicInterface {
   color?: string;
   onPress?: TouchableOpacityProps['onPress'];
   style?: StyleProp<ViewStyle>;
-  styleText?: StyleProp<ViewStyle>;
+  styleText?: TextStyle;
+  styleIcon?: ImageStyle;
   btnText?: string;
   disabled?: boolean;
-  tintColor?: string;
 }
 interface BtnTemplateInterfaceWithName extends BtnTemplateBasicInterface {
   name?: keyof IconsInterface;
@@ -61,11 +63,11 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
             {
               width: '100%',
               height: '100%',
-              opacity: disabled ? 0.4 : 1,
+              //opacity: disabled ? 0.4 : 1,
               //In new design all icons comes with filled color. so don't apply the tintColor
               //tintColor: disabled ? 'grey' : props.color || theme || '#fff',
             },
-            props?.tintColor ? {tintColor: props.tintColor} : {},
+            props?.styleIcon,
           ]}
           resizeMode={'contain'}
           source={{
@@ -75,13 +77,15 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
         />
       </View>
       <Text
-        style={{
-          textAlign: 'center',
-          marginTop: 5,
-          color: disabled ? 'grey' : props.color || theme || '#fff',
-          opacity: disabled ? 0.4 : 1,
-          ...(props.styleText as object),
-        }}>
+        style={[
+          {
+            textAlign: 'center',
+            marginTop: 5,
+            //color: disabled ? 'grey' : props.color || theme || '#fff',
+            //opacity: disabled ? 0.4 : 1,
+          },
+          props?.styleText,
+        ]}>
         {props.btnText}
       </Text>
     </TouchableOpacity>

@@ -66,4 +66,6 @@ export {default as RemoteVideoMute} from './Controls/Remote/RemoteVideoMute';
 export {default as RemoteControls} from './Controls/RemoteControls';
 
 export {default as ImageIcon} from './Controls/ImageIcon';
+export {default as Icons} from './Controls/Icons';
+export type {IconsInterface} from './Controls/Icons';
 export {default as useLocalUid} from './Utils/useLocalUid';

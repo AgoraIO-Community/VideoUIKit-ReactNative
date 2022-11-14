@@ -10,15 +10,15 @@
 *********************************************
 */
 import React, {useContext} from 'react';
-import {Image, Platform, StyleProp, ViewStyle} from 'react-native';
+import {Image, Platform, ImageStyle} from 'react-native';
 import icons, {IconsInterface} from './Icons';
 import PropsContext from './../Contexts/PropsContext';
 import useImageDelay from '../hooks/useImageDelay';
 import {Either} from './types';
 
 interface BaseInterface {
-  color?: string;
-  style?: StyleProp<ViewStyle>;
+  tintColor?: string;
+  style?: ImageStyle;
 }
 
 interface BaseInterfaceWithName extends BaseInterface {
@@ -35,7 +35,7 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
   const {theme} = styleProps || {};
   const imageRef = React.useRef(null);
 
-  useImageDelay(imageRef, 10, props?.name || '', props?.color);
+  useImageDelay(imageRef, 10, props?.name || '', props?.tintColor);
 
   return (
     <Image
@@ -44,9 +44,9 @@ const ImageIcon: React.FC<ImageIconInterface> = (props) => {
         {
           width: '100%',
           height: '100%',
-          tintColor: props.color || theme || '#fff',
         },
-        props.style as object,
+        props?.tintColor ? {tintColor: props.tintColor} : {},
+        props?.style,
       ]}
       resizeMode={'contain'}
       source={{
