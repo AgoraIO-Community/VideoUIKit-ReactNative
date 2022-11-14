@@ -22,6 +22,7 @@ interface BtnTemplateBasicInterface {
   styleText?: StyleProp<ViewStyle>;
   btnText?: string;
   disabled?: boolean;
+  tintColor?: string;
 }
 interface BtnTemplateInterfaceWithName extends BtnTemplateBasicInterface {
   name?: keyof IconsInterface;
@@ -56,12 +57,16 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
         ]}>
         <Image
           ref={Platform.OS === 'web' ? imageRef : undefined}
-          style={{
-            width: '100%',
-            height: '100%',
-            opacity: disabled ? 0.4 : 1,
-            tintColor: disabled ? 'grey' : props.color || theme || '#fff',
-          }}
+          style={[
+            {
+              width: '100%',
+              height: '100%',
+              opacity: disabled ? 0.4 : 1,
+              //In new design all icons comes with filled color. so don't apply the tintColor
+              //tintColor: disabled ? 'grey' : props.color || theme || '#fff',
+            },
+            props?.tintColor ? {tintColor: props.tintColor} : {},
+          ]}
           resizeMode={'contain'}
           source={{
             uri:
