@@ -18,7 +18,6 @@ import useImageDelay from '../hooks/useImageDelay';
 import {Either} from './types';
 
 interface BtnTemplateBasicInterface {
-  color?: string;
   onPress?: TouchableOpacityProps['onPress'];
   style?: StyleProp<ViewStyle>;
   styleText?: TextStyle;
@@ -45,37 +44,31 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const imageRef = React.useRef(null);
 
   // This fixes the tint issue in safari browser
-  useImageDelay(imageRef, 10, '', props?.color || '');
+  // useImageDelay(imageRef, 10, '', props?.color || '');
 
   return (
     <TouchableOpacity
-      style={{width: '100%', height: '100%'}}
+      style={props.style}
       disabled={disabled}
       onPress={props.onPress}>
-      <View
+      <Image
+        ref={Platform.OS === 'web' ? imageRef : undefined}
         style={[
-          {...styles.controlBtn, ...(BtnTemplateStyles as object)},
-          props.style as object,
-        ]}>
-        <Image
-          ref={Platform.OS === 'web' ? imageRef : undefined}
-          style={[
-            {
-              width: '100%',
-              height: '100%',
-              //opacity: disabled ? 0.4 : 1,
-              //In new design all icons comes with filled color. so don't apply the tintColor
-              //tintColor: disabled ? 'grey' : props.color || theme || '#fff',
-            },
-            props?.styleIcon,
-          ]}
-          resizeMode={'contain'}
-          source={{
-            uri:
-              props.name && icons[props.name] ? icons[props.name] : props.icon,
-          }}
-        />
-      </View>
+          {
+            width: '100%',
+            height: '100%',
+            //opacity: disabled ? 0.4 : 1,
+            //In new design all icons comes with filled color. so don't apply the tintColor
+            //tintColor: disabled ? 'grey' : props.color || theme || '#fff',
+          },
+          props?.styleIcon,
+        ]}
+        resizeMode={'contain'}
+        source={{
+          uri:
+            props?.name && icons[props.name] ? icons[props.name] : props.icon,
+        }}
+      />
       <Text
         style={[
           {
