@@ -18,8 +18,10 @@ Instantly integrate Agora video calling or streaming into your React Native appl
 To a react-native application generated using react-native-cli, add the following:
 
 ```
-npm i react-native-agora agora-react-native-rtm agora-rn-uikit
+npm i react-native-agora@3 agora-react-native-rtm agora-rn-uikit
 ```
+
+We're working on supporting [react-native-agora](https://www.npmjs.com/package/react-native-agora) `v4.x` in the coming weeks.
 
 ### Usage
 
