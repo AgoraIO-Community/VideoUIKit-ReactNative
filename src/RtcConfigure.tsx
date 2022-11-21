@@ -13,6 +13,7 @@ import PropsContext, {
   DualStreamMode,
 } from './Contexts/PropsContext';
 import {RenderProvider} from './Contexts/RenderContext';
+import {LastJoinedUserProvider} from './Contexts/LastJoinedUserContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
@@ -322,7 +323,10 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                 renderList: uidState.renderList,
                 activeUids: uidState.activeUids,
               }}>
-              {props.children}
+              <LastJoinedUserProvider
+                value={{lastUserJoined: uidState.lastJoinedUser}}>
+                {props.children}
+              </LastJoinedUserProvider>
             </RenderProvider>
           </RtcProvider>
         </Join>
