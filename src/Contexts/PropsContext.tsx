@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleProp, TextStyle, ViewStyle} from 'react-native';
-import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
-import {EncryptionMode, VideoRenderMode} from 'react-native-agora';
-import {VideoProfile} from '../Utils/quality';
-import {rtmCallbacks} from '../Contexts/RtmContext';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { EncryptionMode, VideoRenderMode } from 'react-native-agora';
+import { RtcEngineEvents } from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import { rtmCallbacks } from '../Contexts/RtmContext';
+import { VideoProfile } from '../Utils/quality';
 
 export enum DualStreamMode {
   HIGH,
@@ -131,6 +131,10 @@ export interface StylePropInterface {
    * Custom base64 string for icon
    */
   customIcon?: Partial<IconsInterface>;
+  /**
+   * Show/Hide buttons labels
+   */
+  showButtonsLabel: boolean;
   /**
    * Globals style for the local buttons (except end call)
    */
