@@ -1,21 +1,20 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
+import RtcEngineType from 'react-native-agora';
+import { LocalContext } from '../../Contexts/LocalUserContext';
 import PropsContext, {
   ToggleState,
-  UidInterface,
+  UidInterface
 } from '../../Contexts/PropsContext';
-import RtcContext from '../../Contexts/RtcContext';
-import BtnTemplate from '../BtnTemplate';
+import RtcContext, { DispatchType } from '../../Contexts/RtcContext';
 import styles from '../../Style';
-import {LocalContext} from '../../Contexts/LocalUserContext';
-import {DispatchType} from '../../Contexts/RtcContext';
-import RtcEngineType from 'react-native-agora';
+import BtnTemplate from '../BtnTemplate';
 interface LocalAudioMuteProps {
   btnText?: string;
   variant?: 'outlined' | 'text';
 }
 
 const LocalAudioMute: React.FC<LocalAudioMuteProps> = (props) => {
-  const {btnText = 'Audio', variant = 'Outlined'} = props;
+  const {btnText = 'Audio', variant = 'outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalAudio} = localBtnStyles || {};
@@ -29,7 +28,7 @@ const LocalAudioMute: React.FC<LocalAudioMuteProps> = (props) => {
       btnText={btnText}
       style={{
         ...styles.localBtn,
-        ...(variant === 'Outlined'
+        ...(variant === 'outlined'
           ? (muteLocalAudio as object)
           : (muteRemoteAudio as object)),
       }}
