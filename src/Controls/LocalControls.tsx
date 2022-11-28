@@ -4,6 +4,7 @@ import { MaxUidConsumer } from '../Contexts/MaxUidContext';
 import PropsContext, { ClientRole, Layout } from '../Contexts/PropsContext';
 import styles from '../Style';
 import EndCall from './Local/EndCall';
+import FullScreen from './Local/FullScreen';
 import LocalAudioMute from './Local/LocalAudioMute';
 import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
@@ -26,6 +27,7 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
             {showTimer && <Timer />}
             <LocalAudioMute />
             <LocalVideoMute />
+            <FullScreen />
             <SwitchCamera />
           </>
         )}
