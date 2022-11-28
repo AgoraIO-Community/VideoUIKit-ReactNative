@@ -106,6 +106,10 @@ interface localBtnStylesInterface {
    * Style for the end call button
    */
   endCall?: StyleProp<ViewStyle>;
+  /**
+   * Style for the expand video button
+   */
+  fullScreen?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -471,6 +475,10 @@ export interface IconsInterface {
    * Icon to close the overlay in floating layout
    */
   close: string;
+  /**
+   * Icon to expand video screen
+   */
+  fullScreen: string;
 }
 
 const PropsContext = React.createContext<PropsInterface>(initialValue);
