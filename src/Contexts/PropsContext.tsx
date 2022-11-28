@@ -134,7 +134,11 @@ export interface StylePropInterface {
   /**
    * Show/Hide buttons labels
    */
-  showButtonsLabel: boolean;
+  showButtonsLabel?: boolean;
+  /**
+   * Show Timer with minutes and second of call duration
+   */
+  showTimer?: boolean;
   /**
    * Globals style for the local buttons (except end call)
    */

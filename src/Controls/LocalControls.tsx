@@ -15,15 +15,15 @@ interface ControlsPropsInterface {
 }
 
 const Controls: React.FC<ControlsPropsInterface> = (props) => {
-  const {styleProps, rtcProps} = useContext(PropsContext);
-  const {localBtnContainer} = styleProps || {};
+  const {styleProps, rtcProps } = useContext(PropsContext);
+  const {localBtnContainer, showTimer = false} = styleProps || {};
   const showButton = props.showButton !== undefined ? props.showButton : true;
   return (
     <>
       <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
         {rtcProps.role !== ClientRole.Audience && (
           <>
-            <Timer />
+            {showTimer && <Timer />}
             <LocalAudioMute />
             <LocalVideoMute />
             <SwitchCamera />
