@@ -22,6 +22,11 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
   const {layout} = props.rtcProps;
   const [fullScreen, setFullScreen] = useState(false);
   console.log('screen', fullScreen);
+
+  const fullScreenAction = () => {
+    setFullScreen(!fullScreen)
+    console.log('pressfull')
+  }
   return (
     <PropsProvider value={props}>
       <View style={[containerStyle, props.styleProps?.UIKitContainer, fullScreen ? fullScreenStyle : {}]}>
@@ -30,12 +35,12 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
             {props.rtcProps.disableRtm ? (
               <>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls fullScreenAction={setFullScreen} />
+                <LocalControls fullScreenAction={fullScreenAction} />
               </>
             ) : (
               <RtmConfigure>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls fullScreenAction={setFullScreen} />
+                <LocalControls fullScreenAction={fullScreenAction} />
                 <PopUp />
               </RtmConfigure>
             )}
@@ -80,7 +85,6 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
 };
 
 const containerStyle = {backgroundColor: '#000', flex: 1};
-const fullScreenStyle = {height: Dimensions.get('screen').height - 120};
-console.log('style', fullScreenStyle)
+const fullScreenStyle = {height: Dimensions.get('screen').height - 120, zIndex: 5};
 
 export default AgoraUIKit;

@@ -4,22 +4,20 @@ import styles from '../../Style';
 import BtnTemplate from '../BtnTemplate';
 
 interface FullScreenProps {
-  onPress?: (_: boolean) => void
+  onPress?: any
 }
 
 const FullScreen: React.FC<FullScreenProps> = (props) => {
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles} = styleProps || {};
   const {fullScreen} = localBtnStyles || {};
+  let defaultFullScreen = false
   return (
     <BtnTemplate
       name={'fullScreen'}
       style={{...styles.localBtn, ...(fullScreen as object)}}
       btnText={'Full Screen'}
-      onPress={() => {
-        props.onPress && props.onPress(true)
-        console.log('pressing')
-      }}
+      onPress={props.onPress}
     />
   );
 };
