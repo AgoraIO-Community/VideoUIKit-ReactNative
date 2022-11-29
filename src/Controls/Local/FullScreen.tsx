@@ -16,7 +16,10 @@ const FullScreen: React.FC<FullScreenProps> = (props) => {
       name={'fullScreen'}
       style={{...styles.localBtn, ...(fullScreen as object)}}
       btnText={'Full Screen'}
-      onPress={() => props.onPress}
+      onPress={() => {
+        props.onPress
+        console.log('pressing')
+      }}
     />
   );
 };

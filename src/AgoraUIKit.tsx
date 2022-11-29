@@ -35,7 +35,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
             ) : (
               <RtmConfigure>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls fullScreenAction={() => {setFullScreen(!fullScreen); console.log('click');}} />
+                <LocalControls fullScreenAction={() => setFullScreen(!fullScreen)} />
                 <PopUp />
               </RtmConfigure>
             )}

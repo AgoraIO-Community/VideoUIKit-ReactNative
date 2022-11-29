@@ -13,7 +13,7 @@ import RemoteControls from './RemoteControls';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
-  fullScreenAction?: (_: boolean) => void;
+  fullScreenAction?: any;
 }
 
 const Controls: React.FC<ControlsPropsInterface> = (props) => {
