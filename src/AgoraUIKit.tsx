@@ -20,7 +20,8 @@ import PinnedVideo from './Views/PinnedVideo';
  */
 const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
   const {layout} = props.rtcProps;
-  const [fullScreen, setFullScreen] = useState(false)
+  const [fullScreen, setFullScreen] = useState(false);
+  console.log('screen', fullScreen);
   return (
     <PropsProvider value={props}>
       <View style={[containerStyle, props.styleProps?.UIKitContainer, fullScreen ? fullScreenStyle : {}]}>
@@ -34,7 +35,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
             ) : (
               <RtmConfigure>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls fullScreenAction={() => setFullScreen(!fullScreen)} />
+                <LocalControls fullScreenAction={() => {setFullScreen(!fullScreen); console.log('click');}} />
                 <PopUp />
               </RtmConfigure>
             )}
@@ -79,6 +80,7 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
 };
 
 const containerStyle = {backgroundColor: '#000', flex: 1};
-const fullScreenStyle = {height: Dimensions.get('screen').height - 120}
+const fullScreenStyle = {height: Dimensions.get('screen').height - 120};
+console.log('style', fullScreenStyle)
 
 export default AgoraUIKit;
