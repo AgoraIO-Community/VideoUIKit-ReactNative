@@ -1,21 +1,18 @@
 /**
  * @module AgoraUIKit
  */
-import React from 'react';
-import {View} from 'react-native';
-import RtcConfigure from './RtcConfigure';
+import React, { useState } from 'react';
+import { Dimensions, View } from 'react-native';
+import LocalUserContext from './Contexts/LocalUserContext';
 import {
-  PropsProvider,
-  PropsInterface,
-  Layout,
-  AgoraUIKitProps,
+  AgoraUIKitProps, Layout, PropsInterface, PropsProvider
 } from './Contexts/PropsContext';
 import LocalControls from './Controls/LocalControls';
+import PopUp from './Controls/Remote/RemoteMutePopUp';
+import RtcConfigure from './RtcConfigure';
+import RtmConfigure from './RtmConfigure';
 import GridVideo from './Views/GridVideo';
 import PinnedVideo from './Views/PinnedVideo';
-import RtmConfigure from './RtmConfigure';
-import LocalUserContext from './Contexts/LocalUserContext';
-import PopUp from './Controls/Remote/RemoteMutePopUp';
 
 /**
  * Agora UIKit component following the v3 props
@@ -23,20 +20,21 @@ import PopUp from './Controls/Remote/RemoteMutePopUp';
  */
 const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
   const {layout} = props.rtcProps;
+  const [fullScreen, setFullScreen] = useState(false)
   return (
     <PropsProvider value={props}>
-      <View style={[containerStyle, props.styleProps?.UIKitContainer]}>
+      <View style={[containerStyle, props.styleProps?.UIKitContainer, fullScreen ? fullScreenStyle : {}]}>
         <RtcConfigure>
           <LocalUserContext>
             {props.rtcProps.disableRtm ? (
               <>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls />
+                <LocalControls fullScreenAction={() => setFullScreen(!fullScreen)} />
               </>
             ) : (
               <RtmConfigure>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls />
+                <LocalControls fullScreenAction={() => setFullScreen(!fullScreen)} />
                 <PopUp />
               </RtmConfigure>
             )}
@@ -81,5 +79,6 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
 };
 
 const containerStyle = {backgroundColor: '#000', flex: 1};
+const fullScreenStyle = {height: Dimensions.get('screen').height - 120}
 
 export default AgoraUIKit;

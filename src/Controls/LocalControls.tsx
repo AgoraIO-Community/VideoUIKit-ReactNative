@@ -13,6 +13,7 @@ import RemoteControls from './RemoteControls';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
+  fullScreenAction?: (_: boolean) => void;
 }
 
 const Controls: React.FC<ControlsPropsInterface> = (props) => {
@@ -27,7 +28,7 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
             {showTimer && <Timer />}
             <LocalAudioMute />
             <LocalVideoMute />
-            <FullScreen />
+            <FullScreen onPress={props.fullScreenAction} />
             <SwitchCamera />
           </>
         )}
