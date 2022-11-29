@@ -30,12 +30,12 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
             {props.rtcProps.disableRtm ? (
               <>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls fullScreenAction={() => setFullScreen(!fullScreen)} />
+                <LocalControls fullScreenAction={setFullScreen} />
               </>
             ) : (
               <RtmConfigure>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls fullScreenAction={() => setFullScreen(!fullScreen)} />
+                <LocalControls fullScreenAction={setFullScreen} />
                 <PopUp />
               </RtmConfigure>
             )}
