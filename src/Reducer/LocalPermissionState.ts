@@ -10,6 +10,7 @@ export default function LocalPermissionState(
   localUid: UidType,
 ) {
   let stateUpdate: RenderStateInterface = {
+    activeSpeaker: state.activeSpeaker,
     renderList: {
       ...state.renderList,
       [localUid]: {

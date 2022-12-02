@@ -17,6 +17,7 @@ import {RenderProvider} from './Contexts/RenderContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
+  ActiveSpeakerDetected,
   LocalMuteAudio,
   LocalMuteVideo,
   LocalPermissionState,
@@ -50,6 +51,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       },
     },
     activeUids: [localUid],
+    activeSpeaker: undefined,
   };
 
   const [initialState, setInitialState] = React.useState(
@@ -189,6 +191,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
           stateUpdate = RemoteVideoStateChanged(state, action);
         }
         break;
+      case 'ActiveSpeakerDetected':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = ActiveSpeakerDetected(state, action);
+        }
+        break;
     }
 
     // TODO: remove Handle event listeners
@@ -254,6 +261,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       return {
         activeUids: activeUids,
         renderList: renderList,
+        activeSpeaker: state.activeSpeaker,
       };
     },
     [dualStreamMode],
@@ -299,6 +307,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       activeUids = [newMaxUid, currentMaxUid, ...minIds];
 
       return {
+        activeSpeaker: state.activeSpeaker,
         activeUids: activeUids,
         renderList: renderList,
       };
@@ -329,6 +338,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
               value={{
                 renderList: uidState.renderList,
                 activeUids: uidState.activeUids,
+                activeSpeaker: uidState.activeSpeaker,
               }}>
               {props.children}
             </RenderProvider>

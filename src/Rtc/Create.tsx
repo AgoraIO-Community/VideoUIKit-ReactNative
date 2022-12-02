@@ -204,6 +204,7 @@ const Create = ({
         } else {
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
+        await engine.current.enableAudioVolumeIndication(200, 3, true);
         if (!audioRoom) {
           if (rtcProps.profile) {
             if (Platform.OS === 'web') {
@@ -304,6 +305,15 @@ const Create = ({
             value: args,
           });
         });
+
+        engine.current.addListener('ActiveSpeaker', (...args) => {
+          // used as a callback from the web bridge
+          dispatch({
+            type: 'ActiveSpeakerDetected',
+            value: args,
+          });
+        });
+
         setReady(true);
       } catch (e) {
         console.error(e);
