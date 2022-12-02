@@ -16,6 +16,7 @@ export default function UserOffline(
     (uid) => uid !== action.value[0],
   );
   const stateUpdate: RenderStateInterface = {
+    activeSpeaker: state.activeSpeaker,
     renderList: state.renderList,
     activeUids: updatedActiveUids,
   };

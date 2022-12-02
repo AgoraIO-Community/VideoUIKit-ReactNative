@@ -10,6 +10,7 @@ export default function LocalMuteVideo(
   localUid: UidType,
 ) {
   let stateUpdate: RenderStateInterface = {
+    activeSpeaker: state.activeSpeaker,
     renderList: {
       ...state.renderList,
       [localUid]: {

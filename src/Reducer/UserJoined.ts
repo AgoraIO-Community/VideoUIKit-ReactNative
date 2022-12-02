@@ -44,12 +44,14 @@ export default function UserJoined(
     }
     //Swap render positions
     stateUpdate = {
+      activeSpeaker: state.activeSpeaker,
       renderList: renderList,
       activeUids: activeUids.reverse(),
     };
   } else {
     //More than one remote
     stateUpdate = {
+      activeSpeaker: state.activeSpeaker,
       renderList: renderList,
       activeUids: activeUids,
     };

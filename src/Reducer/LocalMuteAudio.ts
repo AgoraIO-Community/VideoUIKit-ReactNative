@@ -10,6 +10,7 @@ export default function LocalMuteAudio(
   localUid: UidType,
 ) {
   let stateUpdate: RenderStateInterface = {
+    activeSpeaker: state.activeSpeaker,
     renderList: {
       ...state.renderList,
       [localUid]: {
