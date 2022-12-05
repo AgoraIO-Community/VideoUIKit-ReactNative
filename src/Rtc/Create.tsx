@@ -60,14 +60,26 @@ const Create = ({
 
   const enableVideoAndAudioWithDisabledState = async () => {
     try {
+      dispatch({
+        type: 'LocalPermissionState',
+        value: [PermissionState.REQUESTED],
+      });
       if (audioRoom === true) {
         await engine.current.enableAudio();
+        dispatch({
+          type: 'LocalPermissionState',
+          value: [PermissionState.GRANTED_FOR_MIC_ONLY],
+        });
         dispatch({
           type: 'LocalMuteAudio',
           value: [ToggleState.disabled],
         });
       } else {
         await engine.current.enableVideo();
+        dispatch({
+          type: 'LocalPermissionState',
+          value: [PermissionState.GRANTED_FOR_CAM_AND_MIC],
+        });
         dispatch({
           type: 'LocalMuteAudio',
           value: [ToggleState.disabled],
@@ -107,14 +119,26 @@ const Create = ({
   };
   const enableVideoAndAudioWithEnabledState = async () => {
     try {
+      dispatch({
+        type: 'LocalPermissionState',
+        value: [PermissionState.REQUESTED],
+      });
       if (audioRoom === true) {
         await engine.current.enableAudio();
+        dispatch({
+          type: 'LocalPermissionState',
+          value: [PermissionState.GRANTED_FOR_MIC_ONLY],
+        });
         dispatch({
           type: 'LocalMuteAudio',
           value: [ToggleState.enabled],
         });
       } else {
         await engine.current.enableVideo();
+        dispatch({
+          type: 'LocalPermissionState',
+          value: [PermissionState.GRANTED_FOR_CAM_AND_MIC],
+        });
         dispatch({
           type: 'LocalMuteAudio',
           value: [ToggleState.enabled],

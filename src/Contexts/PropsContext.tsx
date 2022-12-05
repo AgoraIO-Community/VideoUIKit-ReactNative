@@ -34,10 +34,12 @@ export enum ToggleState {
 
 export enum PermissionState {
   NOT_REQUESTED,
+  REQUESTED,
   GRANTED_FOR_CAM_AND_MIC,
   GRANTED_FOR_CAM_ONLY,
   GRANTED_FOR_MIC_ONLY,
   REJECTED,
+  CANCELLED,
 }
 
 export const toggleHelper = (state: ToggleState) =>
