@@ -12,6 +12,7 @@ export interface RenderObjects {
 export interface RenderStateInterface {
   renderList: RenderObjects;
   activeUids: Array<UidType>;
+  lastJoinedUid?: UidType;
 }
 
 export interface ActionInterface<T extends keyof CallbacksInterface> {
