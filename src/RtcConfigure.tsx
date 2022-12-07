@@ -245,6 +245,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       activeUids[newMaxUidOldPosition] = currentMaxUid;
 
       return {
+        /**
+         * lastJoinedUser data used to pinned screenshare view. once we swap screenshare view to max.
+         * reset last joined user info
+         */
+        lastJoinedUser: {},
         activeUids: activeUids,
         renderList: renderList,
       };
