@@ -11,6 +11,11 @@ export {
   LocalContext,
 } from './Contexts/LocalUserContext';
 export {
+  default as LastJoinedUserContext,
+  LastJoinedUserConsumer,
+  LastJoinedUserProvider,
+} from './Contexts/LastJoinedUserContext';
+export {
   default as RenderContext,
   RenderConsumer,
   RenderProvider,

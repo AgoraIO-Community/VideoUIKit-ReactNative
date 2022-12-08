@@ -14,6 +14,7 @@ import PropsContext, {
   PermissionState,
 } from './Contexts/PropsContext';
 import {RenderProvider} from './Contexts/RenderContext';
+import {LastJoinedUserProvider} from './Contexts/LastJoinedUserContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
@@ -340,7 +341,10 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                 activeUids: uidState.activeUids,
                 activeSpeaker: uidState.activeSpeaker,
               }}>
-              {props.children}
+              <LastJoinedUserProvider
+                value={{lastUserJoined: uidState.lastJoinedUser}}>
+                {props.children}
+              </LastJoinedUserProvider>
             </RenderProvider>
           </RtcProvider>
         </Join>
