@@ -28,7 +28,7 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
             {showTimer && <Timer />}
             <LocalAudioMute />
             <LocalVideoMute />
-            <FullScreen onPress={props.fullScreenAction} />
+            <FullScreen />
             <SwitchCamera />
           </>
         )}
