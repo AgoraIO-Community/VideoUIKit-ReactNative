@@ -23,7 +23,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
 
   return (
     <PropsProvider value={props}>
-      <View style={[containerStyle, props.styleProps?.UIKitContainer, fullScreen ? fullScreenStyle : {}]}>
+      <View style={[containerStyle, props.styleProps?.UIKitContainer]}>
         <RtcConfigure>
           <LocalUserContext>
             {props.rtcProps.disableRtm ? (
