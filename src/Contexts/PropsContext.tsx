@@ -372,6 +372,14 @@ export interface CallbacksInterface {
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
   BecomeAudience(): void;
+  /**
+   * Callback for: when a user expand to full screen the video
+   */
+  FullScreen(): void;
+  /**
+   * Callback for when a user click to go back to normal screen the video
+   */
+  NormalScreen(): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;
