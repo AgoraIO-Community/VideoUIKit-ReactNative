@@ -1,8 +1,8 @@
-import React, {useEffect, useContext, useRef} from 'react';
-import RtcEngine from 'react-native-agora';
-import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {ToggleState} from '../Contexts/PropsContext';
-import {Platform} from 'react-native';
+import React, { useContext, useEffect, useRef } from 'react';
+import { Platform } from 'react-native';
+import RtcEngine, { VirtualBackgroundBlurDegree, VirtualBackgroundSource, VirtualBackgroundSourceType } from 'react-native-agora';
+import PropsContext, { ToggleState } from '../Contexts/PropsContext';
+import { DispatchType, UidStateInterface } from '../Contexts/RtcContext';
 
 const Join: React.FC<{
   precall: boolean;
@@ -48,6 +48,14 @@ const Join: React.FC<{
           value: [ToggleState.disabled],
         });
       }
+      // blur background
+      engine?.enableVirtualBackground(true,
+        new VirtualBackgroundSource({
+          backgroundSourceType: VirtualBackgroundSourceType.Blur,
+          blur_degree: VirtualBackgroundBlurDegree.Medium
+        })
+      );
+
       const UID = rtcProps.uid || 0;
       if (rtcProps.tokenUrl) {
         fetch(

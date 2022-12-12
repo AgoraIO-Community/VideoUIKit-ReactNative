@@ -2,20 +2,17 @@
  * @module AgoraUIKit
  */
 import React from 'react';
-import {View} from 'react-native';
-import RtcConfigure from './RtcConfigure';
+import { Dimensions, View } from 'react-native';
+import LocalUserContext from './Contexts/LocalUserContext';
 import {
-  PropsProvider,
-  PropsInterface,
-  Layout,
-  AgoraUIKitProps,
+  AgoraUIKitProps, Layout, PropsInterface, PropsProvider
 } from './Contexts/PropsContext';
 import LocalControls from './Controls/LocalControls';
+import PopUp from './Controls/Remote/RemoteMutePopUp';
+import RtcConfigure from './RtcConfigure';
+import RtmConfigure from './RtmConfigure';
 import GridVideo from './Views/GridVideo';
 import PinnedVideo from './Views/PinnedVideo';
-import RtmConfigure from './RtmConfigure';
-import LocalUserContext from './Contexts/LocalUserContext';
-import PopUp from './Controls/Remote/RemoteMutePopUp';
 
 /**
  * Agora UIKit component following the v3 props
@@ -23,6 +20,7 @@ import PopUp from './Controls/Remote/RemoteMutePopUp';
  */
 const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
   const {layout} = props.rtcProps;
+
   return (
     <PropsProvider value={props}>
       <View style={[containerStyle, props.styleProps?.UIKitContainer]}>
@@ -31,7 +29,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
             {props.rtcProps.disableRtm ? (
               <>
                 {layout === Layout.Grid ? <GridVideo /> : <PinnedVideo />}
-                <LocalControls />
+                <LocalControls  />
               </>
             ) : (
               <RtmConfigure>
@@ -81,5 +79,6 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
 };
 
 const containerStyle = {backgroundColor: '#000', flex: 1};
-
+const fullScreenStyle = {height: Dimensions.get('screen').height - 120, zIndex: 55, position: 'absolute'};
+console.log(fullScreenStyle)
 export default AgoraUIKit;

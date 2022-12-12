@@ -1,19 +1,12 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import {
-  TouchableOpacity,
-  Image,
-  StyleProp,
-  TouchableOpacityProps,
-  ViewStyle,
-  Text,
-  View,
-  Platform,
+  Image, Platform, StyleProp, Text, TouchableOpacity, TouchableOpacityProps, View, ViewStyle
 } from 'react-native';
-import PropsContext, {IconsInterface} from '../Contexts/PropsContext';
+import PropsContext, { IconsInterface } from '../Contexts/PropsContext';
+import useImageDelay from '../hooks/useImageDelay';
 import styles from '../Style';
 import icons from './Icons';
-import useImageDelay from '../hooks/useImageDelay';
-import {Either} from './types';
+import { Either } from './types';
 
 interface BtnTemplateBasicInterface {
   color?: string;
@@ -36,7 +29,7 @@ type BtnTemplateInterface = Either<
 const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
   const {disabled = false} = props;
   const {styleProps} = useContext(PropsContext);
-  const {BtnTemplateStyles, theme, iconSize, customIcon} = styleProps || {};
+  const {BtnTemplateStyles, theme, iconSize, customIcon, showButtonsLabel} = styleProps || {};
 
   const imageRef = React.useRef(null);
 
@@ -71,6 +64,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
           }}
         />
       </View>
+      {showButtonsLabel && (
       <Text
         style={{
           textAlign: 'center',
@@ -80,6 +74,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
         }}>
         {props.btnText}
       </Text>
+      )}
     </TouchableOpacity>
   );
 };

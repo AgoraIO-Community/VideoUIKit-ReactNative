@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleProp, TextStyle, ViewStyle} from 'react-native';
-import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
-import {EncryptionMode, VideoRenderMode} from 'react-native-agora';
-import {VideoProfile} from '../Utils/quality';
-import {rtmCallbacks} from '../Contexts/RtmContext';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { EncryptionMode, VideoRenderMode } from 'react-native-agora';
+import { RtcEngineEvents } from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import { rtmCallbacks } from '../Contexts/RtmContext';
+import { VideoProfile } from '../Utils/quality';
 
 export enum DualStreamMode {
   HIGH,
@@ -106,6 +106,10 @@ interface localBtnStylesInterface {
    * Style for the end call button
    */
   endCall?: StyleProp<ViewStyle>;
+  /**
+   * Style for the expand video button
+   */
+  fullScreen?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -131,6 +135,14 @@ export interface StylePropInterface {
    * Custom base64 string for icon
    */
   customIcon?: Partial<IconsInterface>;
+  /**
+   * Show/Hide buttons labels
+   */
+  showButtonsLabel?: boolean;
+  /**
+   * Show Timer with minutes and second of call duration
+   */
+  showTimer?: boolean;
   /**
    * Globals style for the local buttons (except end call)
    */
@@ -360,6 +372,14 @@ export interface CallbacksInterface {
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
   BecomeAudience(): void;
+  /**
+   * Callback for: when a user expand to full screen the video
+   */
+  FullScreen(): void;
+  /**
+   * Callback for when a user click to go back to normal screen the video
+   */
+  NormalScreen(): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;
@@ -463,6 +483,10 @@ export interface IconsInterface {
    * Icon to close the overlay in floating layout
    */
   close: string;
+  /**
+   * Icon to expand video screen
+   */
+  fullScreen: string;
 }
 
 const PropsContext = React.createContext<PropsInterface>(initialValue);
