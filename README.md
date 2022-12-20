@@ -20,7 +20,6 @@ To a react-native application generated using react-native-cli, add the followin
 ```
 npm i react-native-agora agora-react-native-rtm agora-rn-uikit
 ```
-
 ### Usage
 
 This VideoUIKit is very simple to use and contains a high level component called `AgoraUIKit`. You can check out code explanation here.
