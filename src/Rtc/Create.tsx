@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
-import createAgoraRtcEngine, {
+import {
+  createAgoraRtcEngine,
   VideoEncoderConfiguration,
   AreaCode,
   IRtcEngine,
@@ -32,7 +33,10 @@ const Create: React.FC<{
         await requestCameraAndAudioPermission();
       }
       try {
+        console.log('hello');
         engine.current = createAgoraRtcEngine();
+        console.log('hello2');
+        console.log(engine.current);
         if (Platform.OS === 'android' || Platform.OS === 'ios') {
           engine.current.initialize({
             appId: rtcProps.appId,
@@ -204,8 +208,7 @@ const Create: React.FC<{
         engine.current.removeAllListeners('onTokenPrivilegeWillExpire');
         engine.current.removeAllListeners('onRemoteAudioStateChanged');
         engine.current.removeAllListeners('onError');
-        // tod: uncomment when fixed
-        // engine.current.release();
+        engine.current.release();
       } catch (e) {
         console.log('release error', e);
       }

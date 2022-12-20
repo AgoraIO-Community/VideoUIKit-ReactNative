@@ -37,7 +37,6 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
         )
       ) : props.user.video ? (
         <>
-          {console.log('!user', props.user.uid, props.user)}
           <RtcSurfaceView
             style={{...styles.fullView, ...(maxViewStyles as object)}}
             canvas={{

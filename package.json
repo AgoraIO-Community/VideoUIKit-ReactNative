@@ -28,10 +28,10 @@
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
   },
   "peerDependencies": {
-    "agora-react-native-rtm": "^1.5.0",
+    "agora-react-native-rtm": "^1.5.1",
     "react": "*",
     "react-native": ">=0.62.2",
-    "react-native-agora": "^4.0.0"
+    "react-native-agora": "^4.1.0"
   },
   "scripts": {
     "docs": "typedoc  --entryPoints index.ts  --entryPoints Components.ts  --entryPoints Contexts.ts && cp 'UI Kit.png' './docs/UI Kit.png'"
