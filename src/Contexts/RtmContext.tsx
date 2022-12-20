@@ -1,5 +1,5 @@
 import RtmClient from 'agora-react-native-rtm';
-import {RtmClientEvents} from 'agora-react-native-rtm/lib/typescript/src/RtmEngine';
+import {RtmClientEvents} from 'agora-react-native-rtm/src/RtmEngine';
 import React, {createContext} from 'react';
 
 /**

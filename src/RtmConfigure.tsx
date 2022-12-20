@@ -26,9 +26,8 @@ import {muteAudio} from './Controls/Local/LocalAudioMute';
 import {muteVideo} from './Controls/Local/LocalVideoMute';
 import {LocalContext} from './Contexts/LocalUserContext';
 import {Platform} from 'react-native';
-import RtmEngine, {
-  RtmClientEvents,
-} from 'agora-react-native-rtm/lib/typescript/src/RtmEngine';
+import RtmEngine from 'agora-react-native-rtm';
+import {RtmClientEvents} from 'agora-react-native-rtm/src/RtmEngine';
 import {ClientRoleType} from 'react-native-agora';
 import RTMEngine from './RTMEngine';
 
