@@ -1,15 +1,17 @@
-import React, {useEffect, useContext, useRef} from 'react';
-import RtcEngine from 'react-native-agora';
+import React, {useEffect, useContext, useRef, PropsWithChildren} from 'react';
+import {IRtcEngine, RtcConnection} from 'react-native-agora';
 import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
 import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 
-const Join: React.FC<{
-  precall: boolean;
-  engineRef: React.MutableRefObject<RtcEngine>;
-  uidState: UidStateInterface;
-  dispatch: DispatchType;
-}> = ({children, precall, engineRef, uidState, dispatch}) => {
+const Join: React.FC<
+  PropsWithChildren<{
+    precall: boolean;
+    engineRef: React.MutableRefObject<IRtcEngine>;
+    uidState: UidStateInterface;
+    dispatch: DispatchType;
+  }>
+> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
 
@@ -17,7 +19,7 @@ const Join: React.FC<{
     const engine = engineRef.current;
     async function leave() {
       try {
-        console.log('Leaving channel');
+        console.log('Leaving RTC channel');
         engine.leaveChannel();
         joinState.current = false;
       } catch (err) {
@@ -35,6 +37,7 @@ const Join: React.FC<{
         await engine.enableEncryption(true, {
           encryptionKey: rtcProps.encryption.key,
           encryptionMode: rtcProps.encryption.mode,
+          encryptionKdfSalt: rtcProps.encryption.salt,
         });
       }
       if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
@@ -55,7 +58,7 @@ const Join: React.FC<{
         )
           .then((response) => {
             response.json().then((data) => {
-              engine.joinChannel(data.rtcToken, rtcProps.channel, null, UID);
+              engine.joinChannel(data.rtcToken, rtcProps.channel, UID, {});
             });
           })
           .catch(function (err) {
@@ -63,10 +66,10 @@ const Join: React.FC<{
           });
       } else {
         await engine.joinChannel(
-          rtcProps.token || null,
+          rtcProps.token ? rtcProps.token : '',
           rtcProps.channel,
-          null,
           UID,
+          {},
         );
       }
       if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
@@ -90,7 +93,7 @@ const Join: React.FC<{
           await leave();
           await join();
         }
-        console.log('Attempted join: ', rtcProps.channel);
+        console.log('Attempted rtc join: ', rtcProps.channel);
       } else {
         console.log('In precall - waiting to join');
       }
@@ -111,18 +114,18 @@ const Join: React.FC<{
   ]);
 
   useEffect(() => {
-    const handleActive = (uid: number) => {
+    const handleActive = (connection: RtcConnection, uid: number) => {
       console.log('speaker is ', uid);
       dispatch({type: 'ActiveSpeaker', value: [uid]});
     };
     let sub;
     if (rtcProps.activeSpeaker === true) {
       engineRef.current.enableAudioVolumeIndication(200, 3, false);
-      sub = engineRef.current?.addListener('ActiveSpeaker', handleActive);
+      sub = engineRef.current?.addListener('onActiveSpeaker', handleActive);
     } else {
       engineRef.current.enableAudioVolumeIndication(0, 3, false);
       if (sub) {
-        engineRef.current?.removeListener('ActiveSpeaker', handleActive, sub);
+        engineRef.current?.removeListener('onActiveSpeaker', handleActive);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

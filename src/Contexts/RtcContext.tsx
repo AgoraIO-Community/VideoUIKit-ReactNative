@@ -1,6 +1,6 @@
 import React from 'react';
 import {CallbacksInterface} from './PropsContext';
-import RtcEngine from 'react-native-agora';
+import {IRtcEngine} from 'react-native-agora';
 import type {DualStreamMode, UidInterface} from './PropsContext';
 
 export interface UidStateInterface {
@@ -24,7 +24,7 @@ export type DispatchType = <
 export type ActionType<T extends keyof CallbacksInterface> = ActionInterface<T>;
 
 export interface RtcContextInterface {
-  RtcEngine: RtcEngine;
+  RtcEngine: IRtcEngine;
   dispatch: DispatchType;
   rtcUidRef: React.MutableRefObject<number | undefined>;
   rtcChannelJoined: boolean;

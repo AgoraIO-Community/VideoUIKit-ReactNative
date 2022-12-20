@@ -8,13 +8,13 @@ export default function UserJoined(
   uids: (string | number)[],
 ) {
   let stateUpdate = {};
-  if (uids.indexOf(action.value[0]) === -1) {
-    //If new user has joined
-    //By default add to minimized
+  if (uids.indexOf(action.value[1]) === -1) {
+    // If new user has joined
+    // By default add to minimized
     let minUpdate = [
       ...state.min,
       {
-        uid: action.value[0],
+        uid: action.value[1],
         audio: ToggleState.disabled,
         video: ToggleState.disabled,
         streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default

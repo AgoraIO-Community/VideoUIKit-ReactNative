@@ -7,7 +7,8 @@ import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
 import RemoteControls from './RemoteControls';
 import {MaxUidConsumer} from '../Contexts/MaxUidContext';
-import PropsContext, {ClientRole, Layout} from '../Contexts/PropsContext';
+import PropsContext, {Layout} from '../Contexts/PropsContext';
+import {ClientRoleType} from 'react-native-agora';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
@@ -20,7 +21,7 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
   return (
     <>
       <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
-        {rtcProps.role !== ClientRole.Audience && (
+        {rtcProps.role !== ClientRoleType.ClientRoleAudience && (
           <>
             <LocalAudioMute />
             <LocalVideoMute />

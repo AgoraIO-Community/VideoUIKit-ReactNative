@@ -1,15 +1,13 @@
 import React, {useState, useContext} from 'react';
 import {View, TouchableOpacity, Image} from 'react-native';
-import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
+import {RenderModeType, RtcSurfaceView} from 'react-native-agora';
 import styles from '../Style';
 import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
 import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import ImageIcon from '../Controls/ImageIcon';
 import Username from './Usernames';
-
-const LocalView = RtcLocalView.SurfaceView;
-const RemoteView = RtcRemoteView.SurfaceView;
+// import RtcContext from '../Contexts/RtcContext';
 
 interface MinViewInterface {
   user: UidInterface;
@@ -85,18 +83,21 @@ const UserVideoWithFallback = (props: {
 
 const UserVideo = (props: {user: UidInterface}) => {
   const {styleProps} = useContext(PropsContext);
+  // const {rtcUidRef} = useContext(RtcContext);
   const {minViewStyles} = styleProps || {};
   return props.user.uid === 'local' ? (
-    <LocalView
+    <RtcSurfaceView
       style={{...styles.minView, ...(minViewStyles as object)}}
-      renderMode={VideoRenderMode.Hidden}
+      canvas={{renderMode: RenderModeType.RenderModeFit, uid: 0}}
       zOrderMediaOverlay={true}
     />
   ) : (
-    <RemoteView
+    <RtcSurfaceView
       style={{...styles.minView, ...(minViewStyles as object)}}
-      uid={props.user.uid as number}
-      renderMode={VideoRenderMode.Hidden}
+      canvas={{
+        renderMode: RenderModeType.RenderModeFit,
+        uid: props.user.uid as number,
+      }}
       zOrderMediaOverlay={true}
     />
   );

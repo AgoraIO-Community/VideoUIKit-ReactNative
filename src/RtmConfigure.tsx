@@ -1,12 +1,17 @@
-import React, {useState, useContext, useEffect, useRef} from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  PropsWithChildren,
+} from 'react';
 import RtmClient, {
   ConnectionChangeReason,
   RtmChannelMember,
   RtmConnectionState,
   RtmMessage,
 } from 'agora-react-native-rtm';
-import RtcEngineSDK from 'react-native-agora';
-import PropsContext, {ClientRole} from './Contexts/PropsContext';
+import PropsContext from './Contexts/PropsContext';
 import {
   RtmProvider,
   muteRequest as muteRequestType,
@@ -21,22 +26,20 @@ import {muteAudio} from './Controls/Local/LocalAudioMute';
 import {muteVideo} from './Controls/Local/LocalVideoMute';
 import {LocalContext} from './Contexts/LocalUserContext';
 import {Platform} from 'react-native';
-import {RtmClientEvents} from 'agora-react-native-rtm/lib/typescript/src/RtmEngine';
-
-const rtmClient = new RtmClient();
+import RtmEngine from 'agora-react-native-rtm';
+import {RtmClientEvents} from 'agora-react-native-rtm/src/RtmEngine';
+import {ClientRoleType} from 'react-native-agora';
+import RTMEngine from './RTMEngine';
 
 /**
  * React component that contains the RTM logic. It manages the usernames, remote mute requests and provides data to the children components by wrapping them with context providers.
  */
-const RtmConfigure: React.FC = (props) => {
-  const {rtcProps, rtmProps} = useContext(PropsContext);
-  const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-  const timerValueRef: any = useRef(5);
-  const localUid = useRef<string>('');
+const RtmConfigure: React.FC<PropsWithChildren> = (props) => {
+  const rtmEngineRef = useRef<RtmEngine>();
   const local = useContext(LocalContext);
-  const {RtcEngine, dispatch} = useContext(RtcContext);
-  const {rtcUidRef, rtcChannelJoined} = useContext(RtcContext);
-  const {rtmCallbacks} = useContext(PropsContext);
+  const {rtcProps, rtmProps, rtmCallbacks} = useContext(PropsContext);
+  const {RtcEngine, dispatch, rtcUidRef} = useContext(RtcContext);
+  // const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
   const [uidMap, setUidMap] = useState<Record<number, string>>({});
   const [usernames, setUsernames] = useState<Record<string, string> | {}>({});
   const [userDataMap, setUserDataMap] = useState<Object>({});
@@ -46,6 +49,9 @@ const RtmConfigure: React.FC = (props) => {
   const [rtmStatus, setRtmStatus] = useState<rtmStatusEnum>(
     rtmStatusEnum.offline,
   );
+  // const localUid = useRef<string>('');
+  const rtcVersion = RtcEngine.getVersion().version;
+  const [isLogin, setLogin] = useState<boolean>(false);
 
   const login = async () => {
     const {tokenUrl} = rtcProps;
@@ -53,90 +59,90 @@ const RtmConfigure: React.FC = (props) => {
     if (tokenUrl) {
       try {
         const res = await fetch(
-          tokenUrl + '/rtm/' + (rtmProps?.uid || localUid.current),
+          tokenUrl + '/rtm/' + (rtmProps?.uid || String(rtcUidRef.current)),
         );
         const data = await res.json();
         const serverToken = data.rtmToken;
-        await rtmClient?.loginV2(
-          rtmProps?.uid || String(localUid.current),
+        await rtmEngineRef.current?.loginV2(
+          rtmProps?.uid || String(rtcUidRef.current),
           serverToken,
         );
-        timerValueRef.current = 5;
       } catch (error) {
-        setTimeout(async () => {
-          timerValueRef.current = timerValueRef.current + timerValueRef.current;
-          login();
-        }, timerValueRef.current * 1000);
+        console.log('login error tokenUrl', error);
       }
     } else {
       try {
-        await rtmClient?.loginV2(rtmProps?.uid || String(localUid.current));
-        timerValueRef.current = 5;
+        await rtmEngineRef.current?.loginV2(
+          rtmProps?.uid || String(rtcUidRef.current),
+        );
       } catch (error) {
-        setTimeout(async () => {
-          timerValueRef.current = timerValueRef.current + timerValueRef.current;
-          login();
-        }, timerValueRef.current * 1000);
+        console.log('login error', error);
       }
     }
+    setRtmStatus(rtmStatusEnum.loggedIn);
   };
 
   const joinChannel = async () => {
-    console.log('join RTM');
+    console.log('join RTM channel', rtcProps.channel);
     try {
-      await rtmClient?.joinChannel(rtcProps.channel);
-      timerValueRef.current = 5;
+      await rtmEngineRef.current?.joinChannel(rtcProps.channel);
     } catch (error) {
-      setTimeout(async () => {
-        timerValueRef.current = timerValueRef.current + timerValueRef.current;
-        joinChannel();
-      }, timerValueRef.current * 1000);
+      console.log('joinChannelError:', error);
     }
+
+    setUsernames((p) => {
+      return {...p, ['local']: rtmProps?.username};
+    });
+    sendChannelMessage(createUserData());
+    setLogin(true);
   };
 
   const init = async () => {
     setRtmStatus(rtmStatusEnum.initialising);
-    localUid.current = String(rtcUidRef.current);
-    await rtmClient.createInstance(rtcProps.appId);
+    rtmEngineRef.current = RTMEngine.getInstance(rtcProps.appId).engine;
+    rtmEngineRef.current.addListener(
+      'ConnectionStateChanged',
+      (state, reason) => {
+        console.log(
+          'ConnectionStateChanged',
+          RtmConnectionState[state],
+          ConnectionChangeReason[reason],
+        );
+      },
+    );
 
-    rtmClient.addListener('ConnectionStateChanged', (state, reason) => {
-      console.log(
-        '!ConnectionStateChanged',
-        RtmConnectionState[state],
-        ConnectionChangeReason[reason],
-      );
-    });
-
-    rtmClient.addListener('TokenExpired', async () => {
+    rtmEngineRef.current.addListener('TokenExpired', async () => {
       const {tokenUrl} = rtcProps;
       console.log('token expired - renewing');
       if (tokenUrl) {
         try {
           const res = await fetch(
-            tokenUrl + '/rtm/' + (rtmProps?.uid || localUid.current),
+            tokenUrl + '/rtm/' + (rtmProps?.uid || String(rtcUidRef.current)),
           );
           const data = await res.json();
           const serverToken = data.rtmToken;
-          await rtmClient?.renewToken(serverToken);
-          timerValueRef.current = 5;
+          await rtmEngineRef.current?.renewToken(serverToken);
         } catch (error) {
           console.error('TokenExpiredError', error);
         }
       }
     });
 
-    rtmClient.addListener('MessageReceived', (message, peerId) => {
-      console.log('MessageReceived', peerId);
+    rtmEngineRef.current.addListener('MessageReceived', (message, peerId) => {
+      // console.log('MessageReceived', peerId);
       handleReceivedMessage(message as RtmMessage, peerId);
     });
 
-    rtmClient.addListener('ChannelMessageReceived', (message, member) => {
-      console.log('ChannelMessageReceived', member.userId);
-      handleReceivedMessage(message as RtmMessage, member.userId);
-    });
+    rtmEngineRef.current.addListener(
+      'ChannelMessageReceived',
+      (message, member) => {
+        // console.log('ChannelMessageReceived', member.userId);
+        handleReceivedMessage(message as RtmMessage, member.userId);
+      },
+    );
 
-    rtmClient.addListener('ChannelMemberJoined', async (peerId) => {
-      console.log('ChannelMemberJoined', peerId.userId);
+    rtmEngineRef.current.addListener('ChannelMemberJoined', async (peerId) => {
+      // console.log('ChannelMemberJoined', peerId.userId);
       await sendPeerMessage(createUserData(), peerId.userId);
     });
 
@@ -144,7 +150,7 @@ const RtmConfigure: React.FC = (props) => {
     if (rtmCallbacks) {
       Object.keys(rtmCallbacks).map((callback) => {
         if (rtmCallbacks) {
-          rtmClient?.addListener(
+          rtmEngineRef.current?.addListener(
             callback as keyof RtmClientEvents,
             // @ts-ignore - need to extend Rtm lib and infer event type
             rtmCallbacks[callback],
@@ -155,24 +161,14 @@ const RtmConfigure: React.FC = (props) => {
 
     if (rtcProps.tokenUrl) {
       const {tokenUrl, uid} = rtcProps;
-      rtmClient.addListener('TokenExpired', async () => {
+      rtmEngineRef.current.addListener('TokenExpired', async () => {
         console.log('token expired');
         const res = await fetch(tokenUrl + '/rtm/' + (uid || 0) + '/');
         const data = await res.json();
         const token = data.rtmToken;
-        rtmClient?.renewToken(token);
+        rtmEngineRef.current?.renewToken(token);
       });
     }
-
-    setRtmStatus(rtmStatusEnum.loggingIn);
-    await login();
-    setRtmStatus(rtmStatusEnum.loggedIn);
-    await joinChannel();
-    setRtmStatus(rtmStatusEnum.connected);
-    setUsernames((p) => {
-      return {...p, ['local']: rtmProps?.username};
-    });
-    sendChannelMessage(createUserData());
   };
 
   const createUserData = () => {
@@ -181,15 +177,15 @@ const RtmConfigure: React.FC = (props) => {
       rtmId: String(rtmProps?.uid || rtcUidRef.current),
       rtcId: rtcUidRef.current as number,
       username: rtmProps?.username,
-      role: rtcProps.role === ClientRole.Audience ? 1 : 0,
+      role: rtcProps.role === ClientRoleType.ClientRoleAudience ? 1 : 0,
       uikit: {
         platform: Platform.OS,
         framework: 'reactnative',
-        version: '4.0.2',
+        version: '5.0.0',
       },
       agora: {
         rtm: rtmVersion,
-        rtc: rtcVersion,
+        rtc: rtcVersion ? rtcVersion : '4.x',
       },
     };
     return userData;
@@ -224,8 +220,9 @@ const RtmConfigure: React.FC = (props) => {
     peerId: RtmChannelMember['userId'],
   ) => {
     const payload = (message as RtmMessage).text;
+    // console.log('message', message, payload);
     const messageObject: messageObjectType = JSON.parse(payload);
-    console.log('handleReceivedMessage', messageObject, peerId);
+    // console.log('handleReceivedMessage', messageObject, peerId);
     switch (messageObject.messageType) {
       case 'UserData':
         handleReceivedUserDataMessage(messageObject);
@@ -263,7 +260,7 @@ const RtmConfigure: React.FC = (props) => {
   };
 
   const handleReceivedMuteMessage = (muteRequest: muteRequestType) => {
-    console.log('gotMuteRequest', muteRequest);
+    // console.log('gotMuteRequest', muteRequest);
     if (rtcUidRef.current === muteRequest.rtcId) {
       if (muteRequest.isForceful) {
         if (muteRequest.mute) {
@@ -307,9 +304,9 @@ const RtmConfigure: React.FC = (props) => {
       text: rawMessage,
     };
     try {
-      await rtmClient?.sendMessage(rtcProps.channel, message, {});
+      await rtmEngineRef.current?.sendMessage(rtcProps.channel, message, {});
     } catch (e) {
-      console.log(e);
+      console.log('sendMessage', e);
     }
   };
 
@@ -322,31 +319,39 @@ const RtmConfigure: React.FC = (props) => {
       text: text,
     };
     try {
-      await rtmClient.sendMessageToPeerV2(peerId, message, {});
+      await rtmEngineRef.current?.sendMessageToPeerV2(peerId, message, {});
+    } catch (e) {
+      console.log('sendMessageToPeerV2', e);
+    }
+  };
+
+  const tryLeave = async () => {
+    try {
+      await rtmEngineRef.current?.leaveChannel(rtcProps.channel);
+      rtmEngineRef.current?.removeAllListeners();
+      setLogin(false);
+      console.log('RTM cleanup done');
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    const end = async () => {
-      console.log('end');
-      await rtmClient?.leaveChannel(rtcProps.channel);
-      await rtmClient?.logout();
-      await rtmClient?.removeAllListeners();
-    };
+  const end = async () => {
+    rtcProps.callActive ? tryLeave() : {};
+  };
 
-    if (rtcChannelJoined) {
-      init();
-      setLoggedIn(true);
-    }
+  useEffect(() => {
+    const setupRtm = async () => {
+      await init();
+      await login();
+      await joinChannel();
+    };
+    setupRtm();
     return () => {
-      if (rtcChannelJoined) {
-        end();
-      }
+      end();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rtcProps.channel, rtcProps.appId, rtcChannelJoined]);
+  }, [rtcProps.channel]);
 
   return (
     <RtmProvider
@@ -355,28 +360,22 @@ const RtmConfigure: React.FC = (props) => {
         sendPeerMessage,
         sendChannelMessage,
         sendMuteRequest,
-        rtmClient,
+        rtmClient: rtmEngineRef.current as RtmEngine,
         uidMap,
         usernames,
         userDataMap,
         popUpState,
         setPopUpState,
       }}>
-      {isLoggedIn ? props.children : <React.Fragment />}
+      {isLogin ? props.children : <React.Fragment />}
     </RtmProvider>
   );
 };
 
-// const timeNow = () => new Date().getTime();
-
 let rtmVersion: string;
-let rtcVersion: string;
 
 RtmClient.getSdkVersion().then((version) => {
   rtmVersion = version;
-});
-RtcEngineSDK.getSdkVersion().then((version) => {
-  rtcVersion = version;
 });
 
 export default RtmConfigure;

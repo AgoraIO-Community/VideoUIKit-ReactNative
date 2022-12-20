@@ -9,7 +9,8 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import MaxVideoView from './MaxVideoView';
 import MinUidContext from '../Contexts/MinUidContext';
 import MaxUidContext from '../Contexts/MaxUidContext';
-import PropsContext, {ClientRole} from '../Contexts/PropsContext';
+import PropsContext from '../Contexts/PropsContext';
+import {ClientRoleType} from 'react-native-agora';
 
 const layout = (len: number, isDesktop: boolean = true) => {
   console.log('layout');
@@ -35,7 +36,7 @@ const GridVideo: React.FC = () => {
   const min = useContext(MinUidContext);
   const {rtcProps, styleProps} = useContext(PropsContext);
   const users =
-    rtcProps.role === ClientRole.Audience
+    rtcProps.role === ClientRoleType.ClientRoleAudience
       ? [...max, ...min].filter((user) => user.uid !== 'local')
       : [...max, ...min];
   let onLayout = (e: any) => {
@@ -69,7 +70,7 @@ const GridVideo: React.FC = () => {
                   ...style.gridVideoContainerInner,
                   ...(styleProps?.gridVideoView as object),
                 }}>
-                {rtcProps.role === ClientRole.Audience &&
+                {rtcProps.role === ClientRoleType.ClientRoleAudience &&
                 users[ridx * dims.c + cidx].uid === 'local' ? null : (
                   <MaxVideoView
                     user={users[ridx * dims.c + cidx]}

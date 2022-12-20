@@ -5,7 +5,7 @@ export default function UserOffline(
   action: ActionType<'UserOffline'>,
 ) {
   let stateUpdate = {};
-  if (state.max[0].uid === action.value[0]) {
+  if (state.max[0].uid === action.value[1]) {
     //If max has the remote video
     let minUpdate = [...state.min];
     stateUpdate = {
@@ -14,7 +14,7 @@ export default function UserOffline(
     };
   } else {
     stateUpdate = {
-      min: state.min.filter((user) => user.uid !== action.value[0]),
+      min: state.min.filter((user) => user.uid !== action.value[1]),
     };
   }
   return stateUpdate;

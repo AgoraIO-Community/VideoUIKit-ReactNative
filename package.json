@@ -1,6 +1,6 @@
 {
   "name": "agora-rn-uikit",
-  "version": "4.0.2",
+  "version": "5.0.0",
   "author": {
     "name": "Ekaansh Arora",
     "email": "ekaansh@agora.io"
@@ -28,10 +28,10 @@
     "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
   },
   "peerDependencies": {
-    "agora-react-native-rtm": "^1.5.0",
+    "agora-react-native-rtm": "^1.5.1",
     "react": "*",
     "react-native": ">=0.62.2",
-    "react-native-agora": "^3.7.1"
+    "react-native-agora": "^4.1.0"
   },
   "scripts": {
     "docs": "typedoc  --entryPoints index.ts  --entryPoints Components.ts  --entryPoints Contexts.ts && cp 'UI Kit.png' './docs/UI Kit.png'"
@@ -45,6 +45,7 @@
     "@typescript-eslint/parser": "^5.40.1",
     "eslint": "^8.25.0",
     "typedoc": "^0.22.15",
-    "typedoc-plugin-missing-exports": "^0.22.6"
+    "typedoc-plugin-missing-exports": "^0.22.6",
+    "typedoc-plugin-rename-defaults": "^0.6.4"
   }
 }

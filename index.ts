@@ -2,14 +2,13 @@
  * @module Agora UIKit
  */
 import AgoraUIKit from './src/AgoraUIKit';
-export {StreamFallbackOptions, VideoRenderMode} from 'react-native-agora';
 export {
-  Layout,
-  DualStreamMode,
-  ChannelProfile,
-  ClientRole,
-  ToggleState,
-} from './src/Contexts/PropsContext';
+  StreamFallbackOptions,
+  RenderModeType,
+  ChannelProfileType,
+  ClientRoleType,
+} from 'react-native-agora';
+export {Layout, DualStreamMode, ToggleState} from './src/Contexts/PropsContext';
 export {default as icons} from './src/Controls/Icons';
 export type {
   IconsInterface,
