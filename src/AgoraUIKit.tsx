@@ -2,7 +2,7 @@
  * @module AgoraUIKit
  */
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { View } from 'react-native';
 import LocalUserContext from './Contexts/LocalUserContext';
 import {
   AgoraUIKitProps, Layout, PropsInterface, PropsProvider
@@ -79,6 +79,4 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
 };
 
 const containerStyle = {backgroundColor: '#000', flex: 1};
-const fullScreenStyle = {height: Dimensions.get('screen').height - 120, zIndex: 55, position: 'absolute'};
-console.log(fullScreenStyle)
 export default AgoraUIKit;
