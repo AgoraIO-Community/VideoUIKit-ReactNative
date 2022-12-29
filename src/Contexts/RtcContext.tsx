@@ -13,6 +13,7 @@ export interface RenderStateInterface {
   renderList: RenderObjects;
   activeUids: Array<UidType>;
   activeSpeaker?: UidType;
+  pinnedUid?: UidType;
 }
 
 export interface ActionInterface<T extends keyof CallbacksInterface> {
