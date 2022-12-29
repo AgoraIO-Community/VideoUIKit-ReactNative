@@ -216,22 +216,13 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       // console.log('callback not found', action.type);
     }
 
+    console.log('debugging action', action.type);
+
     // console.log(state, action, stateUpdate);
 
-    const newState = {
+    return {
       ...state,
       ...stateUpdate,
-    };
-    let newActiveUids = newState.activeUids;
-    if (newState?.pinnedUid) {
-      newActiveUids = [
-        newState.pinnedUid,
-        ...newActiveUids.filter((i) => i !== newState.pinnedUid),
-      ];
-    }
-    return {
-      ...newState,
-      activeUids: newActiveUids,
     };
   };
 
