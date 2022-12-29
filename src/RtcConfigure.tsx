@@ -14,7 +14,6 @@ import PropsContext, {
   PermissionState,
 } from './Contexts/PropsContext';
 import {RenderProvider} from './Contexts/RenderContext';
-import {LastJoinedUserProvider} from './Contexts/LastJoinedUserContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
@@ -55,6 +54,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     activeUids: [localUid],
     activeSpeaker: undefined,
     pinnedUid: undefined,
+    lastJoinedUid: 0,
   };
 
   const [initialState, setInitialState] = React.useState(
@@ -359,11 +359,9 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                 activeUids: uidState.activeUids,
                 activeSpeaker: uidState.activeSpeaker,
                 pinnedUid: uidState.pinnedUid,
+                lastJoinedUid: uidState.lastJoinedUid,
               }}>
-              <LastJoinedUserProvider
-                value={{lastUserJoined: uidState.lastJoinedUser}}>
-                {props.children}
-              </LastJoinedUserProvider>
+              {props.children}
             </RenderProvider>
           </RtcProvider>
         </Join>
