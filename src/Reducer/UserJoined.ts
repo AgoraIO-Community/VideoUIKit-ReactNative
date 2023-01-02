@@ -47,14 +47,7 @@ export default function UserJoined(
       activeSpeaker: state.activeSpeaker,
       renderList: renderList,
       activeUids: activeUids.reverse(),
-      lastJoinedUser: {
-        ...state.renderList[newUid],
-        uid: newUid,
-        audio: ToggleState.disabled,
-        video: ToggleState.disabled,
-        streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
-        ...typeData,
-      },
+      lastJoinedUid: newUid,
     };
   } else {
     //More than one remote
@@ -62,14 +55,7 @@ export default function UserJoined(
       activeSpeaker: state.activeSpeaker,
       renderList: renderList,
       activeUids: activeUids,
-      lastJoinedUser: {
-        ...state.renderList[newUid],
-        uid: newUid,
-        audio: ToggleState.disabled,
-        video: ToggleState.disabled,
-        streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
-        ...typeData,
-      },
+      lastJoinedUid: newUid,
     };
   }
 

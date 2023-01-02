@@ -14,7 +14,6 @@ import PropsContext, {
   PermissionState,
 } from './Contexts/PropsContext';
 import {RenderProvider} from './Contexts/RenderContext';
-import {LastJoinedUserProvider} from './Contexts/LastJoinedUserContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
@@ -29,6 +28,7 @@ import {
   UserMuteRemoteAudio,
   UserMuteRemoteVideo,
   UserOffline,
+  UserPin,
 } from './Reducer';
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
@@ -53,6 +53,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     },
     activeUids: [localUid],
     activeSpeaker: undefined,
+    pinnedUid: undefined,
+    lastJoinedUid: 0,
   };
 
   const [initialState, setInitialState] = React.useState(
@@ -197,6 +199,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
           stateUpdate = ActiveSpeakerDetected(state, action);
         }
         break;
+      case 'UserPin':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UserPin(state, action);
+        }
+        break;
     }
 
     // TODO: remove Handle event listeners
@@ -208,6 +215,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     } else {
       // console.log('callback not found', action.type);
     }
+
+    console.log('debugging action', action.type);
 
     // console.log(state, action, stateUpdate);
 
@@ -340,11 +349,10 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                 renderList: uidState.renderList,
                 activeUids: uidState.activeUids,
                 activeSpeaker: uidState.activeSpeaker,
+                pinnedUid: uidState.pinnedUid,
+                lastJoinedUid: uidState.lastJoinedUid,
               }}>
-              <LastJoinedUserProvider
-                value={{lastUserJoined: uidState.lastJoinedUser}}>
-                {props.children}
-              </LastJoinedUserProvider>
+              {props.children}
             </RenderProvider>
           </RtcProvider>
         </Join>
