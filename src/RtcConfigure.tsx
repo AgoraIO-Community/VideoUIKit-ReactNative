@@ -216,8 +216,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       // console.log('callback not found', action.type);
     }
 
-    console.log('debugging action', action.type);
-
     // console.log(state, action, stateUpdate);
 
     return {
