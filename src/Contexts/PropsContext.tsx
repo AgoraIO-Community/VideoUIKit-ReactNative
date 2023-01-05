@@ -52,6 +52,8 @@ export interface DefaultRenderInterface {
   streamType: 'high' | 'low';
   type: 'rtc';
   permissionStatus?: PermissionState;
+  //applicable only to the screenshare
+  parentUid?: UidType;
 }
 export interface CustomRenderInterface<T> {
   type: T extends DefaultRenderInterface['type'] ? never : T;
