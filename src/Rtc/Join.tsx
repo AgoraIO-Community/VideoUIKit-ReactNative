@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useRef, PropsWithChildren} from 'react';
+import React, {useEffect, useContext, PropsWithChildren} from 'react';
 import {IRtcEngine, RtcConnection} from 'react-native-agora';
 import {UidStateInterface, DispatchType} from '../Contexts/RtcContext';
 import PropsContext, {ToggleState} from '../Contexts/PropsContext';
@@ -10,9 +10,10 @@ const Join: React.FC<
     engineRef: React.MutableRefObject<IRtcEngine>;
     uidState: UidStateInterface;
     dispatch: DispatchType;
+    joinState: React.MutableRefObject<boolean>;
   }>
-> = ({children, precall, engineRef, uidState, dispatch}) => {
-  let joinState = useRef(false);
+> = ({children, precall, engineRef, uidState, dispatch, joinState}) => {
+  // let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
 
   useEffect(() => {
