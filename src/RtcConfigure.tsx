@@ -347,7 +347,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                 renderList: uidState.renderList,
                 activeUids: uidState.activeUids,
                 activeSpeaker: uidState.activeSpeaker,
-                pinnedUid: uidState.pinnedUid,
+                pinnedUid:
+                  uidState?.pinnedUid &&
+                  uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
+                    ? uidState.pinnedUid
+                    : undefined,
                 lastJoinedUid: uidState.lastJoinedUid,
               }}>
               {props.children}
