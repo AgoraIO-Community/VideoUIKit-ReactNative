@@ -181,7 +181,7 @@ const RtmConfigure: React.FC<PropsWithChildren> = (props) => {
       uikit: {
         platform: Platform.OS,
         framework: 'reactnative',
-        version: '5.0.0',
+        version: '5.0.1',
       },
       agora: {
         rtm: rtmVersion,

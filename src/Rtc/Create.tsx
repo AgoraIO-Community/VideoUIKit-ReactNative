@@ -202,7 +202,7 @@ const Create: React.FC<{
       }
     }
     init();
-    const temp = joinState.current;
+    const isJoinedRefValue = joinState.current;
     return () => {
       try {
         engine.current.removeAllListeners('onJoinChannelSuccess');
@@ -213,7 +213,7 @@ const Create: React.FC<{
         engine.current.removeAllListeners('onTokenPrivilegeWillExpire');
         engine.current.removeAllListeners('onRemoteAudioStateChanged');
         engine.current.removeAllListeners('onError');
-        if (temp) {
+        if (isJoinedRefValue) {
           engine.current.release();
         }
       } catch (e) {
