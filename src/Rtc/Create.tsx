@@ -17,12 +17,16 @@ const Create: React.FC<{
   dispatch: DispatchType;
   rtcUidRef: React.MutableRefObject<number | undefined>;
   setRtcChannelJoined: React.Dispatch<React.SetStateAction<boolean>>;
-  children: (engine: React.MutableRefObject<IRtcEngine>) => React.ReactElement;
+  children: (
+    engine: React.MutableRefObject<IRtcEngine>,
+    joinState: any,
+  ) => React.ReactElement;
 }> = ({dispatch, rtcUidRef, setRtcChannelJoined, children}) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps} = useContext(PropsContext);
   let engine = useRef<IRtcEngine>({} as IRtcEngine);
   const isVideoEnabledRef = useRef<boolean>(false);
+  const joinState = useRef<boolean>(false);
   const firstUpdate = useRef(true);
 
   useEffect(() => {
@@ -198,6 +202,7 @@ const Create: React.FC<{
       }
     }
     init();
+    const temp = joinState.current;
     return () => {
       try {
         engine.current.removeAllListeners('onJoinChannelSuccess');
@@ -208,7 +213,9 @@ const Create: React.FC<{
         engine.current.removeAllListeners('onTokenPrivilegeWillExpire');
         engine.current.removeAllListeners('onRemoteAudioStateChanged');
         engine.current.removeAllListeners('onError');
-        engine.current.release();
+        if (temp) {
+          engine.current.release();
+        }
       } catch (e) {
         console.log('release error', e);
       }
@@ -307,7 +314,7 @@ const Create: React.FC<{
     <>
       {
         // Render children once RTCEngine has been initialized
-        ready && engine ? children(engine) : <></>
+        ready && engine ? children(engine, joinState) : <></>
       }
     </>
   );

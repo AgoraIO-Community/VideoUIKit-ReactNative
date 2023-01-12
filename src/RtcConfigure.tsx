@@ -222,11 +222,12 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
       dispatch={dispatch}
       rtcUidRef={rtcUidRef}
       setRtcChannelJoined={setRtcChannelJoined}>
-      {(engineRef) => (
+      {(engineRef, joinState) => (
         <Join
           precall={rtcProps.callActive === false}
           engineRef={engineRef}
           uidState={uidState}
+          joinState={joinState}
           dispatch={dispatch}>
           <RtcProvider
             value={{
