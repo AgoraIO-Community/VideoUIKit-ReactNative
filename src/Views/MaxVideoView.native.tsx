@@ -29,7 +29,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
           ...(maxViewStyles as object),
           ...containerStyle,
         }}
-        renderMode={VideoRenderMode.FILL}
+        renderMode={VideoRenderMode.Fit}
       />
     ) : Fallback ? (
       <Fallback />
@@ -44,7 +44,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
         ...containerStyle,
       }}
       uid={uid as number}
-      renderMode={VideoRenderMode.FILL}
+      renderMode={VideoRenderMode.Fit}
     />
   ) : Fallback ? (
     <Fallback />

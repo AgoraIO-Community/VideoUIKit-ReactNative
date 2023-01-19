@@ -354,7 +354,7 @@ const Create = ({
         engine.current!.destroy();
       }
     };
-  }, [rtcProps.appId]);
+  }, [rtcProps.appId, rtcProps.uid]);
 
   useEffect(() => {
     const toggleRole = async () => {
