@@ -15,8 +15,11 @@ interface LocalUserContextInterface {
 }
 
 const LocalUserContext: React.FC<LocalUserContextInterface> = (props) => {
-  const {renderList} = useContext(RenderContext);
-  let localUser: RenderInterface = renderList[props?.localUid];
+  const {renderList, activeUids} = useContext(RenderContext);
+  let localUser: RenderInterface =
+    renderList[
+      props?.localUid || (activeUids && activeUids.length) ? activeUids[0] : 0
+    ];
   if (!localUser) {
     console.error("Error: we couldn't find the local user data");
     return null;
