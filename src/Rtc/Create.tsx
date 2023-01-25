@@ -228,7 +228,7 @@ const Create = ({
         } else {
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
-        await engine.current.enableAudioVolumeIndication(200, 3, true);
+        await engine.current.enableAudioVolumeIndication(500, 3, true);
         if (!audioRoom) {
           if (rtcProps.profile) {
             if (Platform.OS === 'web') {
