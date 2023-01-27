@@ -12,6 +12,8 @@ import PropsContext, {
   CallbacksInterface,
   DualStreamMode,
   PermissionState,
+  ChannelProfile,
+  ClientRole,
 } from './Contexts/PropsContext';
 import {RenderProvider} from './Contexts/RenderContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
@@ -35,7 +37,7 @@ import Join from './Rtc/Join';
 import useLocalUid from './Utils/useLocalUid';
 
 const RtcConfigure = (props: {children: React.ReactNode}) => {
-  const {callbacks, rtcProps} = useContext(PropsContext);
+  const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
@@ -345,7 +347,12 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
             <RenderProvider
               value={{
                 renderList: uidState.renderList,
-                activeUids: uidState.activeUids,
+                activeUids:
+                  //In livestreaming mode ->audience should not see their local video tile
+                  mode == ChannelProfile.LiveBroadcasting &&
+                  rtcProps?.role == ClientRole.Audience
+                    ? uidState.activeUids.filter((i) => i !== localUid)
+                    : uidState.activeUids,
                 activeSpeaker: uidState.activeSpeaker,
                 pinnedUid:
                   uidState?.pinnedUid &&
