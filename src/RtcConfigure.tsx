@@ -67,6 +67,14 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     setInitialState(JSON.parse(JSON.stringify(initialLocalState)));
   }, []);
 
+  //rejoin hot fix
+  //When user navigate using the browser back button, localUid will change. so need to update the reduce state
+  React.useEffect(() => {
+    if (!rtcProps.callActive) {
+      dispatch({type: 'UpdateLocalUid', value: [localUid]});
+    }
+  }, [localUid, rtcProps.callActive]);
+
   /**
    *
    * @param state RenderStateInterface
@@ -119,6 +127,28 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     return newState;
   };
 
+  //rejoin hot fix
+  const UpdateLocalUid = (
+    state: RenderStateInterface,
+    action: ActionType<'UpdateLocalUid'>,
+  ) => {
+    const oldLocalUid = state.activeUids[0];
+    const newLocalUid = action.value[0];
+    const newState: RenderStateInterface = {
+      activeUids: [action.value[0]],
+      renderList: {
+        [newLocalUid]: {
+          ...state.renderList[oldLocalUid],
+          uid: newLocalUid,
+        },
+      },
+      activeSpeaker: undefined,
+      pinnedUid: undefined,
+      lastJoinedUid: 0,
+    };
+    return newState;
+  };
+
   const reducer = (
     state: RenderStateInterface,
     action: ActionType<keyof CallbacksInterface>,
@@ -126,6 +156,12 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     let stateUpdate = {};
 
     switch (action.type) {
+      //rejoin hot fix
+      case 'UpdateLocalUid':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UpdateLocalUid(state, action);
+        }
+        break;
       case 'AddCustomContent':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = AddCustomContent(state, action);

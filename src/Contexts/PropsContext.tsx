@@ -145,6 +145,8 @@ export interface CallbacksInterface {
   UpdateRenderList(uid: UidType, user: Partial<RenderInterface>): void;
   AddCustomContent(uid: UidType, data: any): void;
   UserPin(Uid: UidType): void;
+  //rejoin hot fix
+  UpdateLocalUid(Uid: UidType): void;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;
