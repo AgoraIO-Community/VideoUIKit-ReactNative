@@ -330,6 +330,30 @@ const Create = ({
           });
         });
 
+        engine.current.addListener('AudioVolumeIndication', (...args) => {
+          const [remoteUserVolumes, localUserVolume] = args;
+          const localUserObj = {
+            uid: rtcProps.uid,
+            volume: localUserVolume,
+          };
+          const volumes = [...remoteUserVolumes, localUserObj];
+          /* finding obj with highest volume level from local & remote users*/
+          const highestvolumeObj = volumes.reduce(function (prev, current) {
+            return prev.volume > current.volume ? prev : current;
+          });
+
+          const activeSpeakerUid = highestvolumeObj
+            ? highestvolumeObj.uid
+            : undefined;
+          // console.log('highest volume obj', highestvolumeObj);
+
+          highestvolumeObj.volume > 0 &&
+            dispatch({
+              type: 'ActiveSpeakerDetected',
+              value: [activeSpeakerUid],
+            });
+        });
+
         engine.current.addListener('ActiveSpeaker', (...args) => {
           // used as a callback from the web bridge
           dispatch({
