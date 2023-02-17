@@ -25,7 +25,11 @@ const Create = ({
 }) => {
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
-  const {geoFencing = true, audioRoom = false} = rtcProps || {};
+  const {
+    geoFencing = true,
+    audioRoom = false,
+    activeSpeaker = false,
+  } = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
   // commented for v1 release
   // const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
@@ -228,7 +232,9 @@ const Create = ({
         } else {
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
-        await engine.current.enableAudioVolumeIndication(500, 3, true);
+        if (activeSpeaker) {
+          await engine.current.enableAudioVolumeIndication(500, 3, true);
+        }
         if (!audioRoom) {
           if (rtcProps.profile) {
             if (Platform.OS === 'web') {

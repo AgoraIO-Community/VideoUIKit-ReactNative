@@ -120,6 +120,7 @@ export interface RtcPropsInterface {
   // };
   geoFencing?: boolean;
   audioRoom?: boolean;
+  activeSpeaker?: boolean;
 }
 
 export interface CallbacksInterface {
