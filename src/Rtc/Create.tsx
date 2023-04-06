@@ -391,7 +391,10 @@ const Create = ({
 
   useEffect(() => {
     const toggleRole = async () => {
-      if (mode == ChannelProfile.LiveBroadcasting) {
+      if (
+        mode == ChannelProfile.LiveBroadcasting &&
+        engine.current.setClientRole // Check if engine initialized
+      ) {
         if (rtcProps.role == ClientRole.Broadcaster) {
           await engine.current?.setClientRole(ClientRole.Broadcaster);
           // isVideoEnabledRef checks if the permission is already taken once
@@ -407,12 +410,12 @@ const Create = ({
             }
             // This updates the uid interface
             dispatch({
-              type: 'LocalMuteAudio',
+              type: "LocalMuteAudio",
               value: [ToggleState.disabled],
             });
             if (!audioRoom) {
               dispatch({
-                type: 'LocalMuteVideo',
+                type: "LocalMuteVideo",
                 value: [ToggleState.disabled],
               });
             }
@@ -428,12 +431,12 @@ const Create = ({
             await engine.current?.muteLocalVideoStream(true);
           }
           dispatch({
-            type: 'LocalMuteAudio',
+            type: "LocalMuteAudio",
             value: [ToggleState.disabled],
           });
           if (!audioRoom) {
             dispatch({
-              type: 'LocalMuteVideo',
+              type: "LocalMuteVideo",
               value: [ToggleState.disabled],
             });
           }
