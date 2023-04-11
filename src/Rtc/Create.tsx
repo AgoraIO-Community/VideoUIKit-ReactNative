@@ -23,6 +23,7 @@ const Create = ({
   dispatch: DispatchType;
   children: (engine: React.MutableRefObject<RtcEngine>) => JSX.Element;
 }) => {
+  const mutexLock = useRef(false);
   const [ready, setReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {
@@ -194,6 +195,7 @@ const Create = ({
 
   useEffect(() => {
     async function init() {
+      mutexLock.current = true;
       if (Platform.OS === 'android') {
         //Request required permissions from Android
         await requestCameraAndAudioPermission(audioRoom);
@@ -375,8 +377,11 @@ const Create = ({
       } catch (e) {
         console.error(e);
       }
+      mutexLock.current = false;
     }
-    init();
+    if (!mutexLock.current) {
+      init();
+    }
     return () => {
       /**
        * if condition add for websdk issue
