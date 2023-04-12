@@ -187,9 +187,9 @@ const Create = ({
       mode == ChannelProfile.LiveBroadcasting &&
       rtcProps?.role == ClientRole.Audience
     ) {
-      enableVideoAndAudioWithDisabledState();
+      await enableVideoAndAudioWithDisabledState();
     } else {
-      enableVideoAndAudioWithEnabledState();
+      await enableVideoAndAudioWithEnabledState();
     }
   };
 
