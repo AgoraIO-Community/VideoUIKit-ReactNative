@@ -4,6 +4,7 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
+import DispatchContext from '../../Contexts/DispatchContext';
 
 interface LocalVideoMuteProps {
   btnText?: string;
@@ -16,7 +17,8 @@ function LocalVideoMute(props: LocalVideoMuteProps) {
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalVideo} = localBtnStyles || {};
   const {muteRemoteVideo} = remoteBtnStyles || {};
-  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const {RtcEngineUnsafe} = useContext(RtcContext);
+  const {dispatch} = useContext(DispatchContext);
   const local = useContext(LocalContext);
 
   return (
@@ -47,7 +49,7 @@ function LocalVideoMute(props: LocalVideoMuteProps) {
           });
 
           try {
-            await RtcEngine.muteLocalVideoStream(
+            await RtcEngineUnsafe.muteLocalVideoStream(
               localState === ToggleState.enabled ? true : false,
             );
             console.log('muted video', localState);

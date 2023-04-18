@@ -2,10 +2,10 @@ import React, {useState, useReducer, useContext, useCallback} from 'react';
 import {
   RtcProvider,
   RenderStateInterface,
-  DispatchType,
   ActionType,
   UidType,
 } from './Contexts/RtcContext';
+import {DispatchType} from './Contexts/DispatchContext';
 import PropsContext, {
   ToggleState,
   RtcPropsInterface,
@@ -35,6 +35,7 @@ import {
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
 import useLocalUid from './Utils/useLocalUid';
+import {DispatchProvider} from './Contexts/DispatchContext';
 
 const RtcConfigure = (props: {children: React.ReactNode}) => {
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
@@ -338,32 +339,33 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
           engineRef={engineRef}
           uidState={uidState}
           dispatch={dispatch}>
-          <RtcProvider
-            value={{
-              RtcEngine: engineRef.current,
-              dispatch,
-              setDualStreamMode,
-            }}>
-            <RenderProvider
+          <DispatchProvider value={{dispatch}}>
+            <RtcProvider
               value={{
-                renderList: uidState.renderList,
-                activeUids:
-                  //In livestreaming mode ->audience should not see their local video tile
-                  mode == ChannelProfile.LiveBroadcasting &&
-                  rtcProps?.role == ClientRole.Audience
-                    ? uidState.activeUids.filter((i) => i !== localUid)
-                    : uidState.activeUids,
-                activeSpeaker: uidState.activeSpeaker,
-                pinnedUid:
-                  uidState?.pinnedUid &&
-                  uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
-                    ? uidState.pinnedUid
-                    : undefined,
-                lastJoinedUid: uidState.lastJoinedUid,
+                RtcEngineUnsafe: engineRef.current,
+                setDualStreamMode,
               }}>
-              {props.children}
-            </RenderProvider>
-          </RtcProvider>
+              <RenderProvider
+                value={{
+                  renderList: uidState.renderList,
+                  activeUids:
+                    //In livestreaming mode ->audience should not see their local video tile
+                    mode == ChannelProfile.LiveBroadcasting &&
+                    rtcProps?.role == ClientRole.Audience
+                      ? uidState.activeUids.filter((i) => i !== localUid)
+                      : uidState.activeUids,
+                  activeSpeaker: uidState.activeSpeaker,
+                  pinnedUid:
+                    uidState?.pinnedUid &&
+                    uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
+                      ? uidState.pinnedUid
+                      : undefined,
+                  lastJoinedUid: uidState.lastJoinedUid,
+                }}>
+                {props.children}
+              </RenderProvider>
+            </RtcProvider>
+          </DispatchProvider>
         </Join>
       )}
     </Create>

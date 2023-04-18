@@ -4,6 +4,7 @@ import RtcContext from '../../Contexts/RtcContext';
 import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import {LocalContext} from '../../Contexts/LocalUserContext';
+import DispatchContext from '../../Contexts/DispatchContext';
 
 interface LocalAudioMuteProps {
   btnText?: string;
@@ -15,7 +16,8 @@ function LocalAudioMute(props: LocalAudioMuteProps) {
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalAudio} = localBtnStyles || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};
-  const {RtcEngine, dispatch} = useContext(RtcContext);
+  const {RtcEngineUnsafe} = useContext(RtcContext);
+  const {dispatch} = useContext(DispatchContext);
   const local = useContext(LocalContext);
 
   return (
@@ -46,7 +48,7 @@ function LocalAudioMute(props: LocalAudioMuteProps) {
           });
 
           try {
-            await RtcEngine.muteLocalAudioStream(
+            await RtcEngineUnsafe.muteLocalAudioStream(
               localState === ToggleState.enabled,
             );
             // Enable UI

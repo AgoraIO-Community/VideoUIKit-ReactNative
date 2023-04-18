@@ -1,6 +1,7 @@
 import React, {useEffect, useContext, useRef} from 'react';
 import RtcEngine from 'react-native-agora';
-import {RenderStateInterface, DispatchType} from '../Contexts/RtcContext';
+import {RenderStateInterface} from '../Contexts/RtcContext';
+import {DispatchType} from '../Contexts/DispatchContext';
 import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
 

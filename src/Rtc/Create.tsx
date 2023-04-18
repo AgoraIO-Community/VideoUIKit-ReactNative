@@ -7,7 +7,7 @@ import RtcEngine, {
 } from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
-import {DispatchType} from '../Contexts/RtcContext';
+import {DispatchType} from '../Contexts/DispatchContext';
 import PropsContext, {
   ToggleState,
   ClientRole,
@@ -415,12 +415,12 @@ const Create = ({
             }
             // This updates the uid interface
             dispatch({
-              type: "LocalMuteAudio",
+              type: 'LocalMuteAudio',
               value: [ToggleState.disabled],
             });
             if (!audioRoom) {
               dispatch({
-                type: "LocalMuteVideo",
+                type: 'LocalMuteVideo',
                 value: [ToggleState.disabled],
               });
             }
@@ -436,12 +436,12 @@ const Create = ({
             await engine.current?.muteLocalVideoStream(true);
           }
           dispatch({
-            type: "LocalMuteAudio",
+            type: 'LocalMuteAudio',
             value: [ToggleState.disabled],
           });
           if (!audioRoom) {
             dispatch({
-              type: "LocalMuteVideo",
+              type: 'LocalMuteVideo',
               value: [ToggleState.disabled],
             });
           }

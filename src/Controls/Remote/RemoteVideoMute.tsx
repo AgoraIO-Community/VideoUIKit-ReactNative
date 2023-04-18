@@ -14,7 +14,7 @@ interface RemoteVideoMuteInterface {
 }
 
 const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
-  const {RtcEngine} = useContext(RtcContext);
+  const {RtcEngineUnsafe} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles} = styleProps || {};
   const {muteRemoteVideo} = remoteBtnStyles || {};
@@ -30,7 +30,7 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
           : {...(muteRemoteVideo as object)}
       }
       onPress={() => {
-        RtcEngine.muteRemoteVideoStream(
+        RtcEngineUnsafe.muteRemoteVideoStream(
           props.user.uid as number,
           props.user.video === ToggleState.enabled, //If enabled, disable or vice-versa
         );

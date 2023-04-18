@@ -13,7 +13,7 @@ interface RemoteAudioMuteInterface {
 }
 
 const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
-  const {RtcEngine} = useContext(RtcContext);
+  const {RtcEngineUnsafe} = useContext(RtcContext);
   const {styleProps} = useContext(PropsContext);
   const {remoteBtnStyles} = styleProps || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};
@@ -23,7 +23,7 @@ const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
       name={props.user.audio === ToggleState.enabled ? 'mic' : 'micOff'}
       style={{...styles.leftRemoteBtn, ...(muteRemoteAudio as object)}}
       onPress={() => {
-        RtcEngine.muteRemoteAudioStream(
+        RtcEngineUnsafe.muteRemoteAudioStream(
           props.user.uid as number,
           props.user.audio === ToggleState.enabled,
         );

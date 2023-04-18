@@ -22,19 +22,10 @@ export interface ActionInterface<T extends keyof CallbacksInterface> {
   value: Parameters<CallbacksInterface[T]>;
 }
 
-export type DispatchType = <
-  T extends keyof CallbacksInterface,
-  V extends Parameters<CallbacksInterface[T]>,
->(action: {
-  type: T;
-  value: V;
-}) => void;
-
 export type ActionType<T extends keyof CallbacksInterface> = ActionInterface<T>;
 
 export interface RtcContextInterface {
-  RtcEngine: RtcEngine;
-  dispatch: DispatchType;
+  RtcEngineUnsafe: RtcEngine;
   setDualStreamMode: React.Dispatch<React.SetStateAction<DualStreamMode>>;
 }
 

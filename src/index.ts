@@ -18,6 +18,12 @@ export {
 } from './Contexts/RenderContext';
 
 export {
+  default as DispatchContext,
+  DispatchConsumer,
+  DispatchProvider,
+} from './Contexts/DispatchContext';
+
+export {
   default as PropsContext,
   PropsConsumer,
   PropsProvider,
@@ -46,11 +52,11 @@ export {
 export type {
   UidType,
   RtcContextInterface,
-  DispatchType,
   RenderStateInterface,
   ActionInterface,
   ActionType,
 } from './Contexts/RtcContext';
+export type {DispatchType} from './Contexts/DispatchContext';
 
 export {default as BtnTemplate} from './Controls/BtnTemplate';
 export type {BtnTemplateInterface} from './Controls/BtnTemplate';
