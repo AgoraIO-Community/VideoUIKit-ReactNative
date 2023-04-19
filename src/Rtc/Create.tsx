@@ -187,9 +187,9 @@ const Create = ({
       mode == ChannelProfile.LiveBroadcasting &&
       rtcProps?.role == ClientRole.Audience
     ) {
-      await enableVideoAndAudioWithDisabledState();
+      enableVideoAndAudioWithDisabledState();
     } else {
-      await enableVideoAndAudioWithEnabledState();
+      enableVideoAndAudioWithEnabledState();
     }
   };
 
@@ -415,12 +415,12 @@ const Create = ({
             }
             // This updates the uid interface
             dispatch({
-              type: "LocalMuteAudio",
+              type: 'LocalMuteAudio',
               value: [ToggleState.disabled],
             });
             if (!audioRoom) {
               dispatch({
-                type: "LocalMuteVideo",
+                type: 'LocalMuteVideo',
                 value: [ToggleState.disabled],
               });
             }
@@ -436,12 +436,12 @@ const Create = ({
             await engine.current?.muteLocalVideoStream(true);
           }
           dispatch({
-            type: "LocalMuteAudio",
+            type: 'LocalMuteAudio',
             value: [ToggleState.disabled],
           });
           if (!audioRoom) {
             dispatch({
-              type: "LocalMuteVideo",
+              type: 'LocalMuteVideo',
               value: [ToggleState.disabled],
             });
           }
