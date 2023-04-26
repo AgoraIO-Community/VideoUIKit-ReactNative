@@ -24,7 +24,6 @@ const Join: React.FC<{
     if (joinState.current && tracksReady && Platform.OS === 'web') {
       //@ts-ignore
       engineRef.current.publish();
-      console.log('!!They published using me');
     }
   }, [tracksReady]);
 
