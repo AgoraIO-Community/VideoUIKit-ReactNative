@@ -10,7 +10,8 @@ const Join: React.FC<{
   engineRef: React.MutableRefObject<RtcEngine>;
   uidState: RenderStateInterface;
   dispatch: DispatchType;
-}> = ({children, precall, engineRef, uidState, dispatch}) => {
+  tracksReady: boolean;
+}> = ({children, precall, engineRef, uidState, dispatch, tracksReady}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
   const {audioRoom = false} = rtcProps;
@@ -18,6 +19,14 @@ const Join: React.FC<{
   // const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
   //   ? rtcProps.lifecycle.useBeforeJoin()
   //   : null;
+
+  useEffect(() => {
+    if (joinState.current && tracksReady && Platform.OS === 'web') {
+      //@ts-ignore
+      engineRef.current.publish();
+      console.log('!!They published using me');
+    }
+  }, [tracksReady]);
 
   useEffect(() => {
     const engine = engineRef.current;
