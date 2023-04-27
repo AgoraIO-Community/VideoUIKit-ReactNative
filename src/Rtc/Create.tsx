@@ -21,10 +21,14 @@ const Create = ({
   children,
 }: {
   dispatch: DispatchType;
-  children: (engine: React.MutableRefObject<RtcEngine>) => JSX.Element;
+  children: (
+    engine: React.MutableRefObject<RtcEngine>,
+    tracksReady: boolean,
+  ) => JSX.Element;
 }) => {
   const mutexLock = useRef(false);
   const [ready, setReady] = useState(false);
+  const [tracksReady, setTracksReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {
     geoFencing = true,
@@ -285,8 +289,10 @@ const Create = ({
             Platform.OS === 'web'
           )
         ) {
-          await enableVideoAndAudioWithInitialStates();
-          isVideoEnabledRef.current = true;
+          enableVideoAndAudioWithInitialStates().then(() => {
+            setTracksReady(true);
+            isVideoEnabledRef.current = true;
+          });
         }
 
         engine.current.addListener(
@@ -415,12 +421,12 @@ const Create = ({
             }
             // This updates the uid interface
             dispatch({
-              type: "LocalMuteAudio",
+              type: 'LocalMuteAudio',
               value: [ToggleState.disabled],
             });
             if (!audioRoom) {
               dispatch({
-                type: "LocalMuteVideo",
+                type: 'LocalMuteVideo',
                 value: [ToggleState.disabled],
               });
             }
@@ -436,12 +442,12 @@ const Create = ({
             await engine.current?.muteLocalVideoStream(true);
           }
           dispatch({
-            type: "LocalMuteAudio",
+            type: 'LocalMuteAudio',
             value: [ToggleState.disabled],
           });
           if (!audioRoom) {
             dispatch({
-              type: "LocalMuteVideo",
+              type: 'LocalMuteVideo',
               value: [ToggleState.disabled],
             });
           }
@@ -461,7 +467,7 @@ const Create = ({
     <>
       {
         // Render children once RTCEngine has been initialized
-        ready && engine ? children(engine) : <></>
+        ready && engine ? children(engine, tracksReady) : <></>
       }
     </>
   );
