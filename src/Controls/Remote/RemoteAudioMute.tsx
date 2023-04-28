@@ -4,12 +4,12 @@ import BtnTemplate from '../BtnTemplate';
 import styles from '../../Style';
 import PropsContext, {
   ToggleState,
-  RenderInterface,
+  ContentInterface,
 } from '../../Contexts/PropsContext';
 import useLocalUid from '../../Utils/useLocalUid';
 
 interface RemoteAudioMuteInterface {
-  user: RenderInterface;
+  user: ContentInterface;
 }
 
 const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {

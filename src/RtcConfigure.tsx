@@ -1,7 +1,7 @@
 import React, {useState, useReducer, useContext, useCallback} from 'react';
 import {
   RtcProvider,
-  RenderStateInterface,
+  ContentStateInterface,
   ActionType,
   UidType,
 } from './Contexts/RtcContext';
@@ -15,7 +15,7 @@ import PropsContext, {
   ChannelProfile,
   ClientRole,
 } from './Contexts/PropsContext';
-import {RenderProvider} from './Contexts/RenderContext';
+import {ContentProvider} from './Contexts/ContentContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
@@ -43,8 +43,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
   const localUid = useLocalUid();
-  const initialLocalState: RenderStateInterface = {
-    renderList: {
+  const initialLocalState: ContentStateInterface = {
+    defaultContent: {
       [localUid]: {
         uid: localUid,
         audio: ToggleState.disabled,
@@ -70,7 +70,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
   /**
    *
-   * @param state RenderStateInterface
+   * @param state ContentStateInterface
    * @param action ActionType<'UpdateRenderList'>
    * @returns void
    *
@@ -78,15 +78,15 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
    *
    */
   const UpdateRenderList = (
-    state: RenderStateInterface,
+    state: ContentStateInterface,
     action: ActionType<'UpdateRenderList'>,
   ) => {
     const newState = {
       ...state,
-      renderList: {
-        ...state.renderList,
+      defaultContent: {
+        ...state.defaultContent,
         [action.value[0]]: {
-          ...state.renderList[action.value[0]],
+          ...state.defaultContent[action.value[0]],
           ...action.value[1],
         },
       },
@@ -96,23 +96,23 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
   /**
    *
-   * @param state RenderStateInterface
+   * @param state ContentStateInterface
    * @param action ActionType<'AddCustomContent'>
    * @returns void
    *
    * AddCustomContent use to add new data into render position and render list
    */
   const AddCustomContent = (
-    state: RenderStateInterface,
+    state: ContentStateInterface,
     action: ActionType<'AddCustomContent'>,
   ) => {
     const newState = {
       ...state,
       activeUids: [...state.activeUids, action.value[0]],
-      renderList: {
-        ...state.renderList,
+      defaultContent: {
+        ...state.defaultContent,
         [action.value[0]]: {
-          ...state.renderList[action.value[0]],
+          ...state.defaultContent[action.value[0]],
           ...action.value[1],
         },
       },
@@ -121,7 +121,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
   };
 
   const reducer = (
-    state: RenderStateInterface,
+    state: ContentStateInterface,
     action: ActionType<keyof CallbacksInterface>,
   ) => {
     let stateUpdate = {};
@@ -228,16 +228,16 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
   };
 
   const swapVideo = useCallback(
-    (state: RenderStateInterface, newMaxUid: UidType) => {
+    (state: ContentStateInterface, newMaxUid: UidType) => {
       if (state?.activeUids?.indexOf(newMaxUid) === -1) {
         //skip the update if new max uid is not joined yet.
         return {};
       }
-      let activeUids: RenderStateInterface['activeUids'] = [
+      let activeUids: ContentStateInterface['activeUids'] = [
         ...state.activeUids,
       ];
-      let renderList: RenderStateInterface['renderList'] = {
-        ...state.renderList,
+      let defaultContent: ContentStateInterface['defaultContent'] = {
+        ...state.defaultContent,
       };
 
       // Element which is currently maximized
@@ -255,8 +255,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       }
 
       if (dualStreamMode === DualStreamMode.DYNAMIC) {
-        renderList[currentMaxUid].streamType = 'low';
-        renderList[newMaxUid].streamType = 'high';
+        defaultContent[currentMaxUid].streamType = 'low';
+        defaultContent[newMaxUid].streamType = 'high';
         // No need to modify the streamType if the mode is not dynamic
       }
 
@@ -271,7 +271,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
       return {
         activeUids: activeUids,
-        renderList: renderList,
+        defaultContent: defaultContent,
         activeSpeaker: state.activeSpeaker,
       };
     },
@@ -282,18 +282,18 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
    * deque will
    */
   const dequeVideo = useCallback(
-    (state: RenderStateInterface, newMaxUid: UidType) => {
+    (state: ContentStateInterface, newMaxUid: UidType) => {
       if (state?.activeUids?.indexOf(newMaxUid) === -1) {
         //skip the update if new max uid is not joined yet.
         return {};
       }
-      let activeUids: RenderStateInterface['activeUids'] = [
+      let activeUids: ContentStateInterface['activeUids'] = [
         ...state.activeUids,
       ];
-      let renderList: RenderStateInterface['renderList'] = {
-        ...state.renderList,
+      let defaultContent: ContentStateInterface['defaultContent'] = {
+        ...state.defaultContent,
       };
-      if (!(newMaxUid in renderList)) {
+      if (!(newMaxUid in defaultContent)) {
         //skip the update if new max uid is not joined yet.
         return {};
       }
@@ -306,8 +306,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       }
 
       if (dualStreamMode === DualStreamMode.DYNAMIC) {
-        renderList[currentMaxUid].streamType = 'low';
-        renderList[newMaxUid].streamType = 'high';
+        defaultContent[currentMaxUid].streamType = 'low';
+        defaultContent[newMaxUid].streamType = 'high';
         // No need to modify the streamType if the mode is not dynamic
       }
 
@@ -320,16 +320,14 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       return {
         activeSpeaker: state.activeSpeaker,
         activeUids: activeUids,
-        renderList: renderList,
+        defaultContent: defaultContent,
       };
     },
     [dualStreamMode],
   );
 
-  const [uidState, dispatch]: [RenderStateInterface, DispatchType] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [uidState, dispatch]: [ContentStateInterface, DispatchType] =
+    useReducer(reducer, initialState);
 
   return (
     <Create dispatch={dispatch}>
@@ -345,9 +343,9 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                 RtcEngineUnsafe: engineRef.current,
                 setDualStreamMode,
               }}>
-              <RenderProvider
+              <ContentProvider
                 value={{
-                  renderList: uidState.renderList,
+                  defaultContent: uidState.defaultContent,
                   activeUids:
                     //In livestreaming mode ->audience should not see their local video tile
                     mode == ChannelProfile.LiveBroadcasting &&
@@ -363,7 +361,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                   lastJoinedUid: uidState.lastJoinedUid,
                 }}>
                 {props.children}
-              </RenderProvider>
+              </ContentProvider>
             </RtcProvider>
           </DispatchProvider>
         </Join>

@@ -1,15 +1,15 @@
-import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
+import {ActionType, ContentStateInterface} from '../Contexts/RtcContext';
 
 export default function UserMuteRemoteAudio(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'UserMuteRemoteAudio'>,
 ) {
-  let stateUpdate: RenderStateInterface = {
+  let stateUpdate: ContentStateInterface = {
     activeSpeaker: state.activeSpeaker,
-    renderList: {
-      ...state.renderList,
+    defaultContent: {
+      ...state.defaultContent,
       [action.value[0]]: {
-        ...state.renderList[action.value[0]],
+        ...state.defaultContent[action.value[0]],
         audio: action.value[1],
       },
     },

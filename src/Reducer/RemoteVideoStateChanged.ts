@@ -1,8 +1,8 @@
 import {ToggleState} from '../Contexts/PropsContext';
-import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
+import {ActionType, ContentStateInterface} from '../Contexts/RtcContext';
 
 export default function RemoteVideoStateChanged(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'RemoteVideoStateChanged'>,
 ) {
   let videoState: ToggleState;
@@ -12,16 +12,16 @@ export default function RemoteVideoStateChanged(
     videoState = ToggleState.enabled;
   }
 
-  const stateUpdate: RenderStateInterface = {
+  const stateUpdate: ContentStateInterface = {
     activeSpeaker: state.activeSpeaker,
-    renderList: {
-      ...state.renderList,
+    defaultContent: {
+      ...state.defaultContent,
       [action.value[0]]: {
-        ...state.renderList[action.value[0]],
+        ...state.defaultContent[action.value[0]],
         video:
           videoState !== undefined
             ? videoState
-            : state.renderList[action.value[0]].video,
+            : state.defaultContent[action.value[0]].video,
       },
     },
     activeUids: [...state.activeUids],

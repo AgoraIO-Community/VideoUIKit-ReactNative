@@ -12,10 +12,10 @@ export {
 } from './Contexts/LocalUserContext';
 
 export {
-  default as RenderContext,
-  RenderConsumer,
-  RenderProvider,
-} from './Contexts/RenderContext';
+  default as ContentContext,
+  ContentConsumer,
+  ContentProvider,
+} from './Contexts/ContentContext';
 
 export {
   default as DispatchContext,
@@ -34,8 +34,8 @@ export {DualStreamMode} from './Contexts/PropsContext';
 export {ToggleState, PermissionState} from './Contexts/PropsContext';
 
 export type {
-  DefaultRenderInterface,
-  RenderInterface,
+  DefaultContentInterface,
+  ContentInterface,
   RtcPropsInterface,
   CallbacksInterface,
   CustomCallbacksInterface,
@@ -52,7 +52,7 @@ export {
 export type {
   UidType,
   RtcContextInterface,
-  RenderStateInterface,
+  ContentStateInterface,
   ActionInterface,
   ActionType,
 } from './Contexts/RtcContext';

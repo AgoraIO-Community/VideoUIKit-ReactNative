@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native';
 import RtcConfigure from './RtcConfigure';
 import MaxVideoView from './Views/MaxVideoView';
 import MinVideoView from './Views/MinVideoView';
-import {RenderConsumer} from './Contexts/RenderContext';
+import {ContentConsumer} from './Contexts/ContentContext';
 import {PropsProvider, PropsInterface} from './Contexts/PropsContext';
 
 import styles from './Style';
@@ -16,12 +16,12 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
     <PropsProvider value={props}>
       <View style={{backgroundColor: '#000', flex: 1}}>
         <RtcConfigure>
-          <RenderConsumer>
-            {({renderList, activeUids}) => {
+          <ContentConsumer>
+            {({defaultContent, activeUids}) => {
               const [maxUid, ...minUids] = activeUids;
               return (
                 <>
-                  <MaxVideoView user={renderList[maxUid]} key={maxUid} />
+                  <MaxVideoView user={defaultContent[maxUid]} key={maxUid} />
                   <ScrollView
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}
@@ -29,7 +29,7 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
                     {minUids.map((minUid) => (
                       <MinVideoView
                         showOverlay
-                        user={renderList[minUid]}
+                        user={defaultContent[minUid]}
                         key={minUid}
                       />
                     ))}
@@ -37,7 +37,7 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
                 </>
               );
             }}
-          </RenderConsumer>
+          </ContentConsumer>
           <LocalControls />
         </RtcConfigure>
       </View>

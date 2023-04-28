@@ -1,20 +1,20 @@
 import {
   ActionType,
-  RenderStateInterface,
+  ContentStateInterface,
   UidType,
 } from '../Contexts/RtcContext';
 
 export default function LocalMuteVideo(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'LocalMuteVideo'>,
   localUid: UidType,
 ) {
-  let stateUpdate: RenderStateInterface = {
+  let stateUpdate: ContentStateInterface = {
     activeSpeaker: state.activeSpeaker,
-    renderList: {
-      ...state.renderList,
+    defaultContent: {
+      ...state.defaultContent,
       [localUid]: {
-        ...state.renderList[localUid],
+        ...state.defaultContent[localUid],
         video: action.value[0],
       },
     },

@@ -1,8 +1,8 @@
 import {ToggleState} from '../Contexts/PropsContext';
-import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
+import {ActionType, ContentStateInterface} from '../Contexts/RtcContext';
 
 export default function RemoteAudioStateChanged(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'RemoteAudioStateChanged'>,
 ) {
   let audioState: ToggleState;
@@ -12,12 +12,12 @@ export default function RemoteAudioStateChanged(
     audioState = ToggleState.disabled;
   }
 
-  const stateUpdate: RenderStateInterface = {
+  const stateUpdate: ContentStateInterface = {
     activeSpeaker: state.activeSpeaker,
-    renderList: {
-      ...state.renderList,
+    defaultContent: {
+      ...state.defaultContent,
       [action.value[0]]: {
-        ...state.renderList[action.value[0]],
+        ...state.defaultContent[action.value[0]],
         audio: audioState,
       },
     },

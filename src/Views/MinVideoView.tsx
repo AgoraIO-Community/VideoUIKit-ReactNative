@@ -4,14 +4,14 @@ import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
-import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
+import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
 import useLocalUid from '../Utils/useLocalUid';
 
 const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
 interface MinViewInterface {
-  user: RenderInterface;
+  user: ContentInterface;
   color?: string;
   showOverlay?: boolean;
 }

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
+import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
 import styles from '../Style';
 import RemoteAudioMute from './Remote/RemoteAudioMute';
 import RemoteSwap from './Remote/RemoteSwap';
@@ -10,7 +10,7 @@ interface RemoteControlsInterface {
   showMuteRemoteVideo?: boolean;
   showMuteRemoteAudio?: boolean;
   showRemoteSwap?: boolean;
-  user: RenderInterface;
+  user: ContentInterface;
 }
 
 const RemoteControls: React.FC<RemoteControlsInterface> = (props) => {

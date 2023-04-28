@@ -45,7 +45,7 @@ export enum PermissionState {
 export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
-export interface DefaultRenderInterface {
+export interface DefaultContentInterface {
   uid: UidType;
   audio: ToggleState;
   video: ToggleState;
@@ -55,13 +55,15 @@ export interface DefaultRenderInterface {
   //applicable only to the screenshare
   parentUid?: UidType;
 }
-export interface CustomRenderInterface<T> {
-  type: T extends DefaultRenderInterface['type'] ? never : T;
+export interface CustomContentInterface<T> {
+  type: T extends DefaultContentInterface['type'] ? never : T;
 }
-interface ExtenedRenderInterface extends CustomRenderInterface<string> {
+interface ExtenedContentInterface extends CustomContentInterface<string> {
   [key: string]: any;
 }
-export type RenderInterface = DefaultRenderInterface | ExtenedRenderInterface;
+export type ContentInterface =
+  | DefaultContentInterface
+  | ExtenedContentInterface;
 
 interface remoteBtnStylesInterface {
   muteRemoteAudio?: StyleProp<ViewStyle>;
@@ -132,18 +134,18 @@ export interface CallbacksInterface {
   UserOffline: RtcEngineEvents['UserOffline'];
   SwapVideo(uid: UidType): void;
   DequeVideo(uid: UidType): void;
-  UserMuteRemoteAudio(uid: UidType, muted: RenderInterface['audio']): void;
-  UserMuteRemoteVideo(uid: UidType, muted: RenderInterface['video']): void;
+  UserMuteRemoteAudio(uid: UidType, muted: ContentInterface['audio']): void;
+  UserMuteRemoteVideo(uid: UidType, muted: ContentInterface['video']): void;
   LocalMuteAudio(muted: ToggleState): void;
   LocalMuteVideo(muted: ToggleState): void;
   LocalPermissionState(
-    permissionState: RenderInterface['permissionStatus'],
+    permissionState: ContentInterface['permissionStatus'],
   ): void;
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
   ActiveSpeakerDetected: RtcEngineEvents['ActiveSpeaker'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
-  UpdateRenderList(uid: UidType, user: Partial<RenderInterface>): void;
+  UpdateRenderList(uid: UidType, user: Partial<ContentInterface>): void;
   AddCustomContent(uid: UidType, data: any): void;
   UserPin(Uid: UidType): void;
 }

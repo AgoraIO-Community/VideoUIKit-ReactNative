@@ -1,7 +1,7 @@
-import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
+import {ActionType, ContentStateInterface} from '../Contexts/RtcContext';
 
 export default function ActiveSpeakerDetected(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'ActiveSpeakerDetected'>,
 ) {
   return {

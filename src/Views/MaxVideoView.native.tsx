@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
-import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
+import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
 import {View, ViewStyle} from 'react-native';
 import useLocalUid from '../Utils/useLocalUid';
 
@@ -9,7 +9,7 @@ const LocalView = RtcLocalView.SurfaceView;
 const RemoteView = RtcRemoteView.SurfaceView;
 
 interface MaxViewInterface {
-  user: RenderInterface;
+  user: ContentInterface;
   fallback?: React.ComponentType;
   containerStyle?: ViewStyle;
 }

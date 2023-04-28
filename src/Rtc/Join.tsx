@@ -1,6 +1,6 @@
 import React, {useEffect, useContext, useRef} from 'react';
 import RtcEngine from 'react-native-agora';
-import {RenderStateInterface} from '../Contexts/RtcContext';
+import {ContentStateInterface} from '../Contexts/RtcContext';
 import {DispatchType} from '../Contexts/DispatchContext';
 import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import {Platform} from 'react-native';
@@ -9,7 +9,7 @@ const Join: React.FC<{
   children: React.ReactNode;
   precall: boolean;
   engineRef: React.MutableRefObject<RtcEngine>;
-  uidState: RenderStateInterface;
+  uidState: ContentStateInterface;
   dispatch: DispatchType;
 }> = ({children, precall, engineRef, uidState, dispatch}) => {
   let joinState = useRef(false);
@@ -31,9 +31,9 @@ const Join: React.FC<{
         console.error('Cannot leave the channel:', err);
       }
     }
-    const {renderList, activeUids} = uidState;
+    const {defaultContent, activeUids} = uidState;
     const [maxUid] = activeUids;
-    const videoState = renderList[maxUid].video;
+    const videoState = defaultContent[maxUid].video;
     async function join() {
       if (
         rtcProps.encryption &&

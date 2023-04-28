@@ -1,16 +1,16 @@
 import React from 'react';
 import {CallbacksInterface} from './PropsContext';
 import RtcEngine from 'react-native-agora';
-import type {DualStreamMode, RenderInterface} from './PropsContext';
+import type {DualStreamMode, ContentInterface} from './PropsContext';
 
 export type UidType = number;
 
-export interface RenderObjects {
-  [key: number]: RenderInterface;
+export interface ContentObjects {
+  [key: number]: ContentInterface;
 }
 
-export interface RenderStateInterface {
-  renderList: RenderObjects;
+export interface ContentStateInterface {
+  defaultContent: ContentObjects;
   activeUids: Array<UidType>;
   activeSpeaker?: UidType;
   pinnedUid?: UidType;

@@ -1,11 +1,11 @@
-import {ActionType, RenderStateInterface} from '../Contexts/RtcContext';
+import {ActionType, ContentStateInterface} from '../Contexts/RtcContext';
 
 export default function UserOffline(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'UserOffline'>,
 ) {
   // let updatedRenderList = {
-  //   ...state.renderList,
+  //   ...state.defaultContent,
   // };
   // //don't delete user data from renderlist
   // //we will update user data with {offline:true} from RTM user left event
@@ -15,9 +15,9 @@ export default function UserOffline(
   const updatedActiveUids = [...state.activeUids].filter(
     (uid) => uid !== action.value[0],
   );
-  const stateUpdate: RenderStateInterface = {
+  const stateUpdate: ContentStateInterface = {
     activeSpeaker: state.activeSpeaker,
-    renderList: state.renderList,
+    defaultContent: state.defaultContent,
     activeUids: updatedActiveUids,
   };
 

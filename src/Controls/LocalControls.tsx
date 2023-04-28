@@ -6,7 +6,7 @@ import LocalAudioMute from './Local/LocalAudioMute';
 import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
 import RemoteControls from './RemoteControls';
-import {RenderConsumer} from '../Contexts/RenderContext';
+import {ContentConsumer} from '../Contexts/ContentContext';
 import PropsContext from '../Contexts/PropsContext';
 import LocalUserContextComponent from '../Contexts/LocalUserContext';
 import useLocalUid from '../Utils/useLocalUid';
@@ -29,16 +29,16 @@ function Controls(props: ControlsPropsInterface) {
         <EndCall />
       </View>
       {showButton ? (
-        <RenderConsumer>
-          {({renderList, activeUids}) => (
+        <ContentConsumer>
+          {({defaultContent, activeUids}) => (
             <View style={{...styles.Controls, top: styles.Controls.top - 100}}>
               <RemoteControls
-                user={renderList[activeUids[0]]}
+                user={defaultContent[activeUids[0]]}
                 showRemoteSwap={false}
               />
             </View>
           )}
-        </RenderConsumer>
+        </ContentConsumer>
       ) : (
         <></>
       )}

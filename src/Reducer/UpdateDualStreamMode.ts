@@ -1,23 +1,23 @@
 import {DualStreamMode} from '../Contexts/PropsContext';
 import {
   ActionType,
-  RenderStateInterface,
+  ContentStateInterface,
   UidType,
 } from '../Contexts/RtcContext';
 
 export default function UpdateDualStreamMode(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'UpdateDualStreamMode'>,
 ) {
   const newMode = action.value[0];
-  let renderList = {...state.renderList};
-  let stateUpdate: RenderStateInterface;
+  let defaultContent = {...state.defaultContent};
+  let stateUpdate: ContentStateInterface;
   const setHighStreamType = (uid: UidType) => {
-    renderList[uid].streamType = 'high';
+    defaultContent[uid].streamType = 'high';
   };
 
   const setLowStreamType = (uid: UidType) => {
-    renderList[uid].streamType = 'low';
+    defaultContent[uid].streamType = 'low';
   };
 
   if (newMode === DualStreamMode.HIGH) {
@@ -37,7 +37,7 @@ export default function UpdateDualStreamMode(
   }
   stateUpdate = {
     activeSpeaker: state.activeSpeaker,
-    renderList: renderList,
+    defaultContent: defaultContent,
     activeUids: [...state.activeUids],
   };
   return stateUpdate;

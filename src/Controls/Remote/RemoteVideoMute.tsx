@@ -2,14 +2,14 @@ import React, {useContext} from 'react';
 import useLocalUid from '../../Utils/useLocalUid';
 import PropsContext, {
   ToggleState,
-  RenderInterface,
+  ContentInterface,
 } from '../../Contexts/PropsContext';
 import RtcContext from '../../Contexts/RtcContext';
 import styles from '../../Style';
 import BtnTemplate from '../BtnTemplate';
 
 interface RemoteVideoMuteInterface {
-  user: RenderInterface;
+  user: ContentInterface;
   rightButton: boolean;
 }
 

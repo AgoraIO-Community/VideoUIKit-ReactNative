@@ -1,12 +1,12 @@
 import {DualStreamMode, ToggleState} from '../Contexts/PropsContext';
 import {
   ActionType,
-  RenderStateInterface,
+  ContentStateInterface,
   UidType,
 } from '../Contexts/RtcContext';
 
 export default function UserJoined(
-  state: RenderStateInterface,
+  state: ContentStateInterface,
   action: ActionType<'UserJoined'>,
   dualStreamMode: DualStreamMode,
   localUid: UidType,
@@ -17,14 +17,14 @@ export default function UserJoined(
   let typeData = {
     type: 'rtc',
   };
-  if (state.renderList[newUid] && 'type' in state.renderList[newUid]) {
-    typeData.type = state.renderList[newUid].type;
+  if (state.defaultContent[newUid] && 'type' in state.defaultContent[newUid]) {
+    typeData.type = state.defaultContent[newUid].type;
   }
 
-  let renderList: RenderStateInterface['renderList'] = {
-    ...state.renderList,
+  let defaultContent: ContentStateInterface['defaultContent'] = {
+    ...state.defaultContent,
     [newUid]: {
-      ...state.renderList[newUid],
+      ...state.defaultContent[newUid],
       uid: newUid,
       audio: ToggleState.disabled,
       video: ToggleState.disabled,
@@ -40,12 +40,12 @@ export default function UserJoined(
     //Only one remote and local is maximized
     //Change stream type to high if dualStreaMode is DYNAMIC
     if (dualStreamMode === DualStreamMode.DYNAMIC) {
-      renderList[newUid].streamType = 'high';
+      defaultContent[newUid].streamType = 'high';
     }
     //Swap render positions
     stateUpdate = {
       activeSpeaker: state.activeSpeaker,
-      renderList: renderList,
+      defaultContent: defaultContent,
       activeUids: activeUids.reverse(),
       lastJoinedUid: newUid,
     };
@@ -53,7 +53,7 @@ export default function UserJoined(
     //More than one remote
     stateUpdate = {
       activeSpeaker: state.activeSpeaker,
-      renderList: renderList,
+      defaultContent: defaultContent,
       activeUids: activeUids,
       lastJoinedUid: newUid,
     };
