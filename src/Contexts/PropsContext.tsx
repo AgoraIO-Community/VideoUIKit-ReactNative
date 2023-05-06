@@ -143,7 +143,6 @@ export interface CallbacksInterface {
   ): void;
   RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
   RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
-  ActiveSpeakerDetected: RtcEngineEvents['ActiveSpeaker'];
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
   UpdateRenderList(uid: UidType, user: Partial<ContentInterface>): void;
   AddCustomContent(uid: UidType, data: any): void;

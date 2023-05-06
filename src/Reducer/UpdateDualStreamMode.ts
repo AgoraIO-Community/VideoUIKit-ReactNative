@@ -36,7 +36,6 @@ export default function UpdateDualStreamMode(
     minUids.forEach(setLowStreamType);
   }
   stateUpdate = {
-    activeSpeaker: state.activeSpeaker,
     defaultContent: defaultContent,
     activeUids: [...state.activeUids],
   };

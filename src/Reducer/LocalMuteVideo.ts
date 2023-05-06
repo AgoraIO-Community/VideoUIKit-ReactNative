@@ -10,7 +10,6 @@ export default function LocalMuteVideo(
   localUid: UidType,
 ) {
   let stateUpdate: ContentStateInterface = {
-    activeSpeaker: state.activeSpeaker,
     defaultContent: {
       ...state.defaultContent,
       [localUid]: {

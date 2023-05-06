@@ -12,7 +12,6 @@ export interface ContentObjects {
 export interface ContentStateInterface {
   defaultContent: ContentObjects;
   activeUids: Array<UidType>;
-  activeSpeaker?: UidType;
   pinnedUid?: UidType;
   lastJoinedUid?: UidType;
 }

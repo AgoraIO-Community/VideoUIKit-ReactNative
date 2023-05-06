@@ -19,7 +19,6 @@ import {ContentProvider} from './Contexts/ContentContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
 
 import {
-  ActiveSpeakerDetected,
   LocalMuteAudio,
   LocalMuteVideo,
   LocalPermissionState,
@@ -55,7 +54,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       },
     },
     activeUids: [localUid],
-    activeSpeaker: undefined,
     pinnedUid: undefined,
     lastJoinedUid: 0,
   };
@@ -197,11 +195,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
           stateUpdate = RemoteVideoStateChanged(state, action);
         }
         break;
-      case 'ActiveSpeakerDetected':
-        if (actionTypeGuard(action, action.type)) {
-          stateUpdate = ActiveSpeakerDetected(state, action);
-        }
-        break;
       case 'UserPin':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = UserPin(state, action);
@@ -272,7 +265,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       return {
         activeUids: activeUids,
         defaultContent: defaultContent,
-        activeSpeaker: state.activeSpeaker,
       };
     },
     [dualStreamMode],
@@ -318,7 +310,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       activeUids = [newMaxUid, currentMaxUid, ...minIds];
 
       return {
-        activeSpeaker: state.activeSpeaker,
         activeUids: activeUids,
         defaultContent: defaultContent,
       };
@@ -352,7 +343,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                     rtcProps?.role == ClientRole.Audience
                       ? uidState.activeUids.filter((i) => i !== localUid)
                       : uidState.activeUids,
-                  activeSpeaker: uidState.activeSpeaker,
                   pinnedUid:
                     uidState?.pinnedUid &&
                     uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1

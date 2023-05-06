@@ -16,7 +16,6 @@ export default function UserOffline(
     (uid) => uid !== action.value[0],
   );
   const stateUpdate: ContentStateInterface = {
-    activeSpeaker: state.activeSpeaker,
     defaultContent: state.defaultContent,
     activeUids: updatedActiveUids,
   };

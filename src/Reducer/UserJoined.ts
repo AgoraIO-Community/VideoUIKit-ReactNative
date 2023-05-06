@@ -44,7 +44,6 @@ export default function UserJoined(
     }
     //Swap render positions
     stateUpdate = {
-      activeSpeaker: state.activeSpeaker,
       defaultContent: defaultContent,
       activeUids: activeUids.reverse(),
       lastJoinedUid: newUid,
@@ -52,7 +51,6 @@ export default function UserJoined(
   } else {
     //More than one remote
     stateUpdate = {
-      activeSpeaker: state.activeSpeaker,
       defaultContent: defaultContent,
       activeUids: activeUids,
       lastJoinedUid: newUid,

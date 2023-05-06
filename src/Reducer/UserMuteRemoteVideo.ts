@@ -5,7 +5,6 @@ export default function UserMuteRemoteVideo(
   action: ActionType<'UserMuteRemoteVideo'>,
 ) {
   let stateUpdate: ContentStateInterface = {
-    activeSpeaker: state.activeSpeaker,
     defaultContent: {
       ...state.defaultContent,
       [action.value[0]]: {

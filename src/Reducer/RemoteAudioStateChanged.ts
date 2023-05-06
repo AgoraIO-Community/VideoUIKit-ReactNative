@@ -13,7 +13,6 @@ export default function RemoteAudioStateChanged(
   }
 
   const stateUpdate: ContentStateInterface = {
-    activeSpeaker: state.activeSpeaker,
     defaultContent: {
       ...state.defaultContent,
       [action.value[0]]: {

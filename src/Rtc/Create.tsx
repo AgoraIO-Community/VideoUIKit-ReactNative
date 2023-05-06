@@ -338,41 +338,6 @@ const Create = ({
           });
         });
 
-        engine.current.addListener('AudioVolumeIndication', (...args) => {
-          // console.log('-- AudioVolumeCallback', args);
-          const [speakers, totalVolume] = args;
-          if (speakers[0]?.uid === 0) {
-            //callback for local user
-            const isLocalUserSpeaking = speakers[0].vad; //1-speaking ,  0-not speaking
-            const localUserVolumeLevel = speakers[0].volume;
-            // vad value is not consistent while speaking so using volume level
-            if (localUserVolumeLevel > 0) {
-              dispatch({
-                type: 'ActiveSpeakerDetected',
-                value: [rtcProps.uid],
-              });
-            } else {
-              dispatch({
-                type: 'ActiveSpeakerDetected',
-                value: [undefined],
-              });
-            }
-          } else {
-            // remote users callback, this will be handeled in ActiveSpeaker callback(367)
-            // const highestvolumeObj = speakers.reduce(function (prev, current) {
-            //   return prev.volume > current.volume ? prev : current;
-            // }, null);
-          }
-        });
-
-        engine.current.addListener('ActiveSpeaker', (...args) => {
-          // used as a callback from the web bridge as well remote users
-          dispatch({
-            type: 'ActiveSpeakerDetected',
-            value: args,
-          });
-        });
-
         setReady(true);
       } catch (e) {
         console.error(e);
