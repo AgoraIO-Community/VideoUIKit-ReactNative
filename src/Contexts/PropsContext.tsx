@@ -113,6 +113,7 @@ export interface RtcPropsInterface {
       | EncryptionMode.AES256XTS
       | EncryptionMode.AES128ECB;
   };
+  preferredCameraId?: string;
   // commented for v1 release
   // lifecycle?: {
   //   useBeforeJoin?: () => () => Promise<void>;
