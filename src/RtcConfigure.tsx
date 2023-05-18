@@ -4,6 +4,8 @@ import {
   ContentStateInterface,
   ActionType,
   UidType,
+  CustomContentObjects,
+  CustomContentInferface,
 } from './Contexts/RtcContext';
 import {DispatchType} from './Contexts/DispatchContext';
 import PropsContext, {
@@ -42,7 +44,9 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
   );
   const localUid = useLocalUid();
-  const initialLocalState: ContentStateInterface = {
+
+  const initialLocalState: Partial<ContentStateInterface> = {
+    customContent: {},
     defaultContent: {
       [localUid]: {
         uid: localUid,
@@ -100,20 +104,56 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
    *
    * AddCustomContent use to add new data into render position and render list
    */
+  // const AddCustomContent = (
+  //   state: ContentStateInterface,
+  //   action: ActionType<'AddCustomContent'>,
+  // ) => {
+  //   const newState = {
+  //     ...state,
+  //     activeUids: [...state.activeUids, action.value[0]],
+  //     defaultContent: {
+  //       ...state.defaultContent,
+  //       [action.value[0]]: {
+  //         ...state.defaultContent[action.value[0]],
+  //         ...action.value[1],
+  //       },
+  //     },
+  //   };
+  //   return newState;
+  // };
+
   const AddCustomContent = (
     state: ContentStateInterface,
     action: ActionType<'AddCustomContent'>,
   ) => {
     const newState = {
       ...state,
-      activeUids: [...state.activeUids, action.value[0]],
-      defaultContent: {
-        ...state.defaultContent,
+      activeUids: state.activeUids.filter((i) => i === action.value[0])?.length
+        ? [...state.activeUids]
+        : [...state.activeUids, action.value[0]],
+      customContent: {
+        ...state.customContent,
         [action.value[0]]: {
-          ...state.defaultContent[action.value[0]],
-          ...action.value[1],
+          component: action.value[1]?.component,
+          props: action.value[1]?.props,
+          onStage: action.value[1]?.onStage,
         },
       },
+    };
+    return newState;
+  };
+  const RemoveCustomContent = (
+    state: ContentStateInterface,
+    action: ActionType<'RemoveCustomContent'>,
+  ) => {
+    const customContent = state.customContent;
+    if (customContent && customContent[action.value[0]]) {
+      delete customContent[action.value[0]];
+    }
+    const newState = {
+      ...state,
+      activeUids: [...state.activeUids.filter((i) => i !== action.value[0])],
+      ...customContent,
     };
     return newState;
   };
@@ -128,6 +168,11 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       case 'AddCustomContent':
         if (actionTypeGuard(action, action.type)) {
           stateUpdate = AddCustomContent(state, action);
+        }
+        break;
+      case 'RemoveCustomContent':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = RemoveCustomContent(state, action);
         }
         break;
       case 'UpdateRenderList':
@@ -248,8 +293,12 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       }
 
       if (dualStreamMode === DualStreamMode.DYNAMIC) {
-        defaultContent[currentMaxUid].streamType = 'low';
-        defaultContent[newMaxUid].streamType = 'high';
+        defaultContent[currentMaxUid]
+          ? (defaultContent[currentMaxUid].streamType = 'low')
+          : null;
+        defaultContent[newMaxUid]
+          ? (defaultContent[newMaxUid].streamType = 'high')
+          : null;
         // No need to modify the streamType if the mode is not dynamic
       }
 
@@ -320,6 +369,32 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
   const [uidState, dispatch]: [ContentStateInterface, DispatchType] =
     useReducer(reducer, initialState);
 
+  const setCustomContent = (
+    uid: CustomContentInferface['uid'],
+    component: CustomContentInferface['component'],
+    props?: CustomContentInferface['props'],
+    onStage?: CustomContentInferface['onStage'],
+  ) => {
+    if (!uid) {
+      console.log('debugging UID is not given');
+      return;
+    } else {
+      if (!component) {
+        dispatch({
+          type: 'RemoveCustomContent',
+          value: [uid],
+        });
+      } else {
+        dispatch({
+          type: 'AddCustomContent',
+          value: [
+            uid,
+            {component, props, onStage: onStage === undefined ? true : onStage},
+          ],
+        });
+      }
+    }
+  };
   return (
     <Create dispatch={dispatch}>
       {(engineRef) => (
@@ -336,6 +411,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
               }}>
               <ContentProvider
                 value={{
+                  customContent: uidState.customContent,
+                  setCustomContent: setCustomContent,
                   defaultContent: uidState.defaultContent,
                   activeUids:
                     //In livestreaming mode ->audience should not see their local video tile

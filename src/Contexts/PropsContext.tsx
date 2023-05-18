@@ -146,6 +146,7 @@ export interface CallbacksInterface {
   JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
   UpdateRenderList(uid: UidType, user: Partial<ContentInterface>): void;
   AddCustomContent(uid: UidType, data: any): void;
+  RemoveCustomContent(uid: UidType): void;
   UserPin(Uid: UidType): void;
 }
 
