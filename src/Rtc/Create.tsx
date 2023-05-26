@@ -15,6 +15,15 @@ import PropsContext, {
   PermissionState,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const geBotID = async () => {
+  try {
+    const value = await AsyncStorage.getItem('STT_BOT_UID');
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {}
+};
 
 const Create = ({
   dispatch,
@@ -304,7 +313,12 @@ const Create = ({
           },
         );
 
-        engine.current.addListener('UserJoined', (...args) => {
+        engine.current.addListener('UserJoined', async (...args) => {
+          // preventing STT pusher bot in renderlist
+          const value = await geBotID();
+          if (Number(value) === args[0]) {
+            return;
+          }
           //Get current peer IDs
           dispatch({
             type: 'UserJoined',
