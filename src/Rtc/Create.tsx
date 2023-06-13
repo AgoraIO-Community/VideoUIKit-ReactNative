@@ -191,9 +191,9 @@ const Create = ({
       mode == ChannelProfile.LiveBroadcasting &&
       rtcProps?.role == ClientRole.Audience
     ) {
-      await enableVideoAndAudioWithDisabledState();
+      enableVideoAndAudioWithDisabledState();
     } else {
-      await enableVideoAndAudioWithEnabledState();
+      enableVideoAndAudioWithEnabledState();
     }
   };
 
@@ -310,7 +310,11 @@ const Create = ({
           },
         );
 
-        engine.current.addListener('UserJoined', (...args) => {
+        engine.current.addListener('UserJoined', async (...args) => {
+          // preventing STT pusher bot in renderlist
+          if (args[0] === 111111) {
+            return;
+          }
           //Get current peer IDs
           dispatch({
             type: 'UserJoined',
