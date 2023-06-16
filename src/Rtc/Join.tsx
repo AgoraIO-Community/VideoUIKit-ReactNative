@@ -13,7 +13,6 @@ const Join: React.FC<{
   tracksReady: boolean;
 }> = ({children, precall, engineRef, uidState, dispatch, tracksReady}) => {
   let joinState = useRef(false);
-  const mounState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
   const {audioRoom = false} = rtcProps;
   //commented for v1 release
@@ -29,10 +28,6 @@ const Join: React.FC<{
   }, [tracksReady]);
 
   useEffect(() => {
-    if (!mounState.current) {
-      mounState.current = true;
-      return () => {};
-    }
     const engine = engineRef.current;
     async function leave() {
       try {
