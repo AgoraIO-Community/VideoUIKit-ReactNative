@@ -28,7 +28,27 @@ const Join: React.FC<
       }
     }
     const videoState = uidState.max[0].video;
+
+    function setDefaults() {
+      // explictly checking for false as anything else will be treated as default case with video enabled.
+      if(rtcProps.defaultVideo === false){
+        engine.muteLocalVideoStream(true)
+        dispatch({
+          type: 'LocalMuteVideo',
+          value: [ToggleState.disabled],
+        });
+      }
+      if(rtcProps.defaultAudio === false){
+        engine.muteLocalAudioStream(true)
+        dispatch({
+          type: 'LocalMuteAudio',
+          value: [ToggleState.disabled],
+        });
+      }
+    }
+
     async function join() {
+
       if (
         rtcProps.encryption &&
         rtcProps.encryption.key &&
@@ -59,6 +79,7 @@ const Join: React.FC<
         )
           .then((response) => {
             response.json().then((data) => {
+              setDefaults()
               engine.joinChannel(data.rtcToken, rtcProps.channel, UID, {});
             });
           })
@@ -66,6 +87,7 @@ const Join: React.FC<
             console.log('Fetch Error', err);
           });
       } else {
+        setDefaults()
         await engine.joinChannel(
           rtcProps.token ? rtcProps.token : '',
           rtcProps.channel,
