@@ -332,12 +332,14 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
   return (
     <Create dispatch={dispatch}>
-      {(engineRef) => (
+      {(engineRef, tracksReady) => (
         <Join
           precall={!rtcProps.callActive}
           engineRef={engineRef}
           uidState={uidState}
-          dispatch={dispatch}>
+          dispatch={dispatch}
+          tracksReady={tracksReady}
+          >
           <RtcProvider
             value={{
               RtcEngine: engineRef.current,
