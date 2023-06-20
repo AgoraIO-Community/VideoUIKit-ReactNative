@@ -20,7 +20,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     props.user.video ? (
       <RtcSurfaceView
         style={{...styles.fullView, ...(maxViewStyles as object)}}
-        canvas={{renderMode: RenderModeType.RenderModeFit, uid: 0}}
+        canvas={{renderMode: RenderModeType.RenderModeHidden, uid: 0}}
       />
     ) : Fallback ? (
       <Fallback />
@@ -33,7 +33,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
         <RtcSurfaceView
           style={{...styles.fullView, ...(maxViewStyles as object)}}
           canvas={{
-            renderMode: RenderModeType.RenderModeFit,
+            renderMode: RenderModeType.RenderModeHidden,
             uid: props.user.uid as number,
           }}
         />
