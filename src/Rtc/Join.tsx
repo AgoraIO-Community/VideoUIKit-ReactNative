@@ -77,12 +77,23 @@ const Join: React.FC<{
       //   console.error('FPE:Error on executing useBeforeJoin', error);
       // }
 
-      await engine.joinChannel(
-        rtcProps.token || null,
-        rtcProps.channel,
-        null,
-        rtcProps.uid || 0,
-      );
+      try {
+        await engine.joinChannel(
+          rtcProps.token || null,
+          rtcProps.channel,
+          null,
+          rtcProps.uid || 0,
+        );
+      } catch (e) {
+        if (
+          //@ts-ignore
+          engine.client.connectionState !== 'CONNECTED' ||
+          //@ts-ignore
+          engine.client.connectionState !== 'CONNECTING'
+        ) {
+          throw e;
+        }
+      }
       if (
         !audioRoom &&
         videoState === ToggleState.enabled &&
