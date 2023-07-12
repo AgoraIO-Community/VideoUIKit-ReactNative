@@ -34,6 +34,8 @@ const Create = ({
     geoFencing = true,
     audioRoom = false,
     activeSpeaker = false,
+    preferredCameraId = '',
+    preferredMicrophoneId = '',
   } = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
   // commented for v1 release
@@ -84,7 +86,16 @@ const Create = ({
           value: [ToggleState.disabled],
         });
       } else {
-        await engine.current.enableVideo();
+        if (Platform.OS === 'web') {
+          await engine.current.enableVideo(
+            //@ts-ignore
+            preferredCameraId,
+            //@ts-ignore
+            preferredMicrophoneId,
+          );
+        } else {
+          await engine.current.enableVideo();
+        }
         dispatch({
           type: 'LocalPermissionState',
           value: [PermissionState.GRANTED_FOR_CAM_AND_MIC],
@@ -143,7 +154,17 @@ const Create = ({
           value: [ToggleState.enabled],
         });
       } else {
-        await engine.current.enableVideo();
+        if (Platform.OS === 'web') {
+          //@ts-ignore
+          await engine.current.enableVideo(
+            //@ts-ignore
+            preferredCameraId,
+            //@ts-ignore
+            preferredMicrophoneId,
+          );
+        } else {
+          await engine.current.enableVideo();
+        }
         dispatch({
           type: 'LocalPermissionState',
           value: [PermissionState.GRANTED_FOR_CAM_AND_MIC],
