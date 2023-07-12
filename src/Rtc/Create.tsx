@@ -35,6 +35,7 @@ const Create = ({
     audioRoom = false,
     activeSpeaker = false,
     preferredCameraId = '',
+    preferredMicrophoneId = '',
   } = rtcProps || {};
   let engine = useRef<RtcEngine>({} as RtcEngine);
   // commented for v1 release
@@ -86,8 +87,12 @@ const Create = ({
         });
       } else {
         if (Platform.OS === 'web') {
-          //@ts-ignore
-          await engine.current.enableVideo(preferredCameraId);
+          await engine.current.enableVideo(
+            //@ts-ignore
+            preferredCameraId,
+            //@ts-ignore
+            preferredMicrophoneId,
+          );
         } else {
           await engine.current.enableVideo();
         }
@@ -151,7 +156,12 @@ const Create = ({
       } else {
         if (Platform.OS === 'web') {
           //@ts-ignore
-          await engine.current.enableVideo(preferredCameraId);
+          await engine.current.enableVideo(
+            //@ts-ignore
+            preferredCameraId,
+            //@ts-ignore
+            preferredMicrophoneId,
+          );
         } else {
           await engine.current.enableVideo();
         }
