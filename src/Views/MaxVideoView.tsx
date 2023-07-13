@@ -12,15 +12,24 @@ interface MaxViewInterface {
   user: RenderInterface;
   fallback?: React.ComponentType;
   containerStyle?: ViewStyle;
+  landscapeMode?: boolean;
 }
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps, rtcProps} = useContext(PropsContext);
   const {maxViewStyles} = styleProps || {};
   const Fallback = props.fallback;
-  const {containerStyle = {}} = props;
+  const {containerStyle = {}, landscapeMode = false} = props;
   const localUid = useLocalUid();
   const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
+  let landscapeModeStyle = {};
+  if (landscapeMode) {
+    landscapeModeStyle = {
+      transform: 'rotate(90deg)',
+      alignSelf: 'center',
+      alignItems: 'center',
+    };
+  }
   return uid === localUid ? (
     props.user.video ? (
       <LocalView style={containerStyle} renderMode={VideoRenderMode.Fit} />
@@ -36,6 +45,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
           flex: 1,
           overflow: 'hidden',
           display: props.user.video ? 'flex' : 'none',
+          ...landscapeModeStyle,
         }}>
         <RemoteView
           style={containerStyle}
