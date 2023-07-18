@@ -2,11 +2,17 @@ import React, {useContext} from 'react';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {RenderInterface} from '../Contexts/PropsContext';
-import {View, ViewStyle, useWindowDimensions, ViewProps} from 'react-native';
+import {
+  View,
+  ViewStyle,
+  useWindowDimensions,
+  Platform,
+  ViewProps,
+} from 'react-native';
 import useLocalUid from '../Utils/useLocalUid';
 
 const LocalView = RtcLocalView.SurfaceView;
-const RemoteView = RtcRemoteView.SurfaceView;
+let RemoteView = RtcRemoteView.SurfaceView;
 
 interface MaxViewInterface {
   user: RenderInterface;
@@ -21,6 +27,11 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {containerStyle = {}, landscapeMode = false} = props;
   let landscapeModeStyle: ViewProps['style'] = {};
   if (landscapeMode) {
+    //SurfaceView does not support transform
+    //TextureView only applicable to android
+    if (Platform.OS === 'android') {
+      RemoteView = RtcRemoteView.TextureView;
+    }
     landscapeModeStyle = {
       flex: 1,
       alignSelf: 'center',
