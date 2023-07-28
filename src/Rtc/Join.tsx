@@ -31,14 +31,14 @@ const Join: React.FC<
 
     function setDefaults() {
       // explictly checking for false as anything else will be treated as default case with video enabled.
-      if(rtcProps.enableVideo === false){
+      if(rtcProps.defaultVideo === false){
         engine.muteLocalVideoStream(true)
         dispatch({
           type: 'LocalMuteVideo',
           value: [ToggleState.disabled],
         });
       }
-      if(rtcProps.enableAudio === false){
+      if(rtcProps.defaultAudio === false){
         engine.muteLocalAudioStream(true)
         dispatch({
           type: 'LocalMuteAudio',
