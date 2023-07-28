@@ -30,7 +30,7 @@ const Join: React.FC<
     const videoState = uidState.max[0].video;
 
     function setDefaults() {
-      // explictly checking for false as anything else will be treated as default case with video enabled.
+      // explicitly checking for false as anything else will be treated as default case with video enabled.
       if(rtcProps.defaultVideo === false){
         engine.muteLocalVideoStream(true)
         dispatch({
@@ -77,21 +77,22 @@ const Join: React.FC<
         )
           .then((response) => {
             response.json().then((data) => {
-              setDefaults()
               engine.joinChannel(data.rtcToken, rtcProps.channel, UID, {});
+              setDefaults();
             });
           })
           .catch(function (err) {
             console.log('Fetch Error', err);
           });
       } else {
-        setDefaults()
+
         await engine.joinChannel(
           rtcProps.token ? rtcProps.token : '',
           rtcProps.channel,
           UID,
           {},
         );
+        setDefaults();
       }
       if (videoState === ToggleState.enabled && Platform.OS === 'ios') {
         dispatch({
