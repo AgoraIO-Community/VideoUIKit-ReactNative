@@ -11,7 +11,7 @@ import RtmClient, {
   RtmConnectionState,
   RtmMessage,
 } from 'agora-react-native-rtm';
-import PropsContext from './Contexts/PropsContext';
+import PropsContext, {ToggleState} from './Contexts/PropsContext';
 import {
   RtmProvider,
   muteRequest as muteRequestType,
@@ -85,7 +85,14 @@ const RtmConfigure: React.FC<PropsWithChildren> = (props) => {
   const joinChannel = async () => {
     console.log('join RTM channel', rtcProps.channel);
     try {
-      await rtmEngineRef.current?.joinChannel(rtcProps.channel);
+      await rtmEngineRef.current?.joinChannel(rtcProps.channel).then(() => {
+        if (rtcProps.defaultVideo === false) {
+          muteVideo(local, dispatch, RtcEngine);
+        }
+        if (rtcProps.defaultAudio === false) {
+          muteAudio(local, dispatch, RtcEngine);
+        }
+      });
     } catch (error) {
       console.log('joinChannelError:', error);
     }
