@@ -244,9 +244,17 @@ const Create = ({
         if (!audioRoom) {
           if (rtcProps.profile) {
             if (Platform.OS === 'web') {
+              //hardcoding custom profile for testing
               // move this to bridge?
               // @ts-ignore
-              await engine.current.setVideoProfile(rtcProps.profile);
+              //await engine.current.setVideoProfile({});
+              await engine.current.setVideoProfile({
+                width: 1280,
+                height: 720,
+                frameRate: 24,
+                bitrateMin: 1000,
+                bitrateMax: 1500,
+              });
             } else {
               const config: VideoEncoderConfiguration =
                 quality[rtcProps.profile];
