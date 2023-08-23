@@ -239,7 +239,7 @@ const Create = ({
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
         if (activeSpeaker) {
-          await engine.current.enableAudioVolumeIndication(500, 3, true);
+          await engine.current.enableAudioVolumeIndication(100, 3, true);
         }
         if (!audioRoom) {
           if (rtcProps.profile) {
