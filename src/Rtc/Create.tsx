@@ -21,10 +21,14 @@ const Create = ({
   children,
 }: {
   dispatch: DispatchType;
-  children: (engine: React.MutableRefObject<RtcEngine>) => JSX.Element;
+  children: (
+    engine: React.MutableRefObject<RtcEngine>,
+    tracksReady: boolean,
+  ) => JSX.Element;
 }) => {
   const mutexLock = useRef(false);
   const [ready, setReady] = useState(false);
+  const [tracksReady, setTracksReady] = useState(false);
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {
     geoFencing = true,
@@ -235,7 +239,7 @@ const Create = ({
           await engine.current.setChannelProfile(ChannelProfile.Communication);
         }
         if (activeSpeaker) {
-          await engine.current.enableAudioVolumeIndication(500, 3, true);
+          await engine.current.enableAudioVolumeIndication(100, 3, true);
         }
         if (!audioRoom) {
           if (rtcProps.profile) {
@@ -285,8 +289,10 @@ const Create = ({
             Platform.OS === 'web'
           )
         ) {
-          await enableVideoAndAudioWithInitialStates();
-          isVideoEnabledRef.current = true;
+          enableVideoAndAudioWithInitialStates().then(() => {
+            setTracksReady(true);
+            isVideoEnabledRef.current = true;
+          });
         }
 
         engine.current.addListener(
@@ -430,7 +436,7 @@ const Create = ({
     <>
       {
         // Render children once RTCEngine has been initialized
-        ready && engine ? children(engine) : <></>
+        ready && engine ? children(engine, tracksReady) : <></>
       }
     </>
   );

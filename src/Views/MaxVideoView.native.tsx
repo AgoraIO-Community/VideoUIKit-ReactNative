@@ -2,22 +2,43 @@ import React, {useContext} from 'react';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
-import {View, ViewStyle} from 'react-native';
+import {
+  View,
+  ViewStyle,
+  useWindowDimensions,
+  Platform,
+  ViewProps,
+} from 'react-native';
 import useLocalUid from '../Utils/useLocalUid';
 
 const LocalView = RtcLocalView.SurfaceView;
-const RemoteView = RtcRemoteView.SurfaceView;
+let RemoteView = RtcRemoteView.SurfaceView;
 
 interface MaxViewInterface {
   user: ContentInterface;
   fallback?: React.ComponentType;
   containerStyle?: ViewStyle;
+  landscapeMode?: boolean;
 }
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps, rtcProps} = useContext(PropsContext);
   const {maxViewStyles} = styleProps || {};
-  const {containerStyle = {}} = props;
+  const {containerStyle = {}, landscapeMode = false} = props;
+  let landscapeModeStyle: ViewProps['style'] = {};
+  if (landscapeMode) {
+    //SurfaceView does not support transform
+    //TextureView only applicable to android
+    if (Platform.OS === 'android') {
+      RemoteView = RtcRemoteView.TextureView;
+    }
+    landscapeModeStyle = {
+      flex: 1,
+      alignSelf: 'center',
+      alignItems: 'center',
+      transform: [{rotate: '90deg'}],
+    };
+  }
   const Fallback = props.fallback;
   const localUid = useLocalUid();
   const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
@@ -42,6 +63,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
         ...styles.fullView,
         ...(maxViewStyles as object),
         ...containerStyle,
+        ...landscapeModeStyle,
       }}
       uid={uid as number}
       renderMode={VideoRenderMode.Fit}
