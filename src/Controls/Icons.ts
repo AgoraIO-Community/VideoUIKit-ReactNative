@@ -14,11 +14,13 @@ export interface IconsInterface {
   'vb-blur': string;
   'vb-color': string;
   'vb-image': string;
+  vb: string;
   'turn-off-stt': string;
   'live-caption-mode': string;
 }
 
 const icons: IconsInterface = {
+  vb: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEfSURBVHgB7VNbEcIwELwwCCgOkIADggMcgAQcVAI4KBJAARLAQeugdXBc6KVzpE2a5Ls7szNtsrebywNgQSoQsSWe+XtLrIlvYsFjJ+xhNQXPD5q5gJD5kfgKmZsFxISMzD26cqq7LHNe7YVYmQ6Mzo5Lc9tdKGDK3IZK1CIkzpzFsmVrUOE0Xjx/k+cyF2DNS1HkQ+vU/A4dIroo2UDzfxsKkOazAcL8LMbunoDKNY/ZosGcCwth8Lf/YmuyHpo1vYg5jf0V1W4NJj40e+c1JAAnHpqaKTCrOhL3xB1xSzRjHbEhfohPpdSD9dpo6P8OER2UgdvjojZ6SGi1wjxcXS/lCUDIQ0fbs5EDK58Q8jC6pmuP8AD9oaaigQWp+AKsAoDF7uWeIAAAAABJRU5ErkJggg==',
   'vb-image':
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAB20lEQVRIie2UPWsUURSGn2siwcRsdgU/EkjnT5BgsZVgxCaNCiqIIi4WRrD1F6RQxMKAgTRWahkIikktRtzSD1IpCIIEsfAjCQQei5zRyZDdmVjnheHcc+5733fuzLkXdrFTqJ/UEzE+pLbVp+reqF1Rv6rjkTfUl+ozdV8Vg4mIh9W36kK2UG2qi+qZnHhbfaXWona5iskR9V1evANvqiiurlcRf18UV/vVlno3Yr/aow7kxdULZQYfthEfVpfdxK+Iy+pwzF+qJB7k/DcfjPhE/aE2I29G/jjyO5m42igzyMSvqedjvKJOF3jT6kr2+SLW1Td53p6iQUppVW0BD4CPUV4DagVqDViNNb/VOrAAWLaDlrqWtWvU7qsb6g31aMQN9V7MD6mv46mXGfwVjz4/qA6o827FfNR74qAtqUNdxUM0L95WJ3NzY9ExY4U1FzNx9VwVk/3qLePKqAr1bPGgpQ7ElFIyOuo0cAo4BowAfcA68AVoAy+A59EcJ4GRlNKjMoM+4DZwEzgAfAeWgM8xbgCjwPEYf2Oz66ZSSt2vijCYiR85p06ovR14vTE/F/yHRU6nHfwEFoGrpW/zD7PAeEppsIpB98PSBSmlLZrbbh24/r8Gu9gx/gBohhCCgI16xQAAAABJRU5ErkJggg==',
   'vb-color':
