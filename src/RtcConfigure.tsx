@@ -32,6 +32,8 @@ import {
   UserMuteRemoteVideo,
   UserOffline,
   UserPin,
+  UserSecondaryPin,
+  ActiveSpeaker,
 } from './Reducer';
 import Create from './Rtc/Create';
 import Join from './Rtc/Join';
@@ -59,6 +61,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     },
     activeUids: [localUid],
     pinnedUid: undefined,
+    secondaryPinnedUid: undefined,
     lastJoinedUid: 0,
   };
 
@@ -245,6 +248,16 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
           stateUpdate = UserPin(state, action);
         }
         break;
+      case 'UserSecondaryPin':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = UserSecondaryPin(state, action);
+        }
+        break;
+      case 'ActiveSpeaker':
+        if (actionTypeGuard(action, action.type)) {
+          stateUpdate = ActiveSpeaker(state, action);
+        }
+        break;
     }
 
     // TODO: remove Handle event listeners
@@ -425,6 +438,15 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                     uidState?.pinnedUid &&
                     uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
                       ? uidState.pinnedUid
+                      : uidState.activeUids?.length
+                      ? uidState.activeUids[0]
+                      : undefined,
+                  secondaryPinnedUid:
+                    uidState?.secondaryPinnedUid &&
+                    uidState?.activeUids?.indexOf(
+                      uidState.secondaryPinnedUid,
+                    ) !== -1
+                      ? uidState.secondaryPinnedUid
                       : undefined,
                   lastJoinedUid: uidState.lastJoinedUid,
                 }}>

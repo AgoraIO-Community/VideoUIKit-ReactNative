@@ -9,3 +9,5 @@ export {default as LocalPermissionState} from './LocalPermissionState';
 export {default as RemoteAudioStateChanged} from './RemoteAudioStateChanged';
 export {default as RemoteVideoStateChanged} from './RemoteVideoStateChanged';
 export {default as UserPin} from './UserPin';
+export {default as UserSecondaryPin} from './UserSecondaryPin';
+export {default as ActiveSpeaker} from './ActiveSpeaker';

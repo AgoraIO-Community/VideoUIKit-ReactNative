@@ -31,6 +31,7 @@ export interface ContentStateInterface {
   defaultContent: ContentObjects;
   activeUids: Array<UidType>;
   pinnedUid?: UidType;
+  secondaryPinnedUid?: UidType;
   lastJoinedUid?: UidType;
 }
 
