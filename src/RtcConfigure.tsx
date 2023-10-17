@@ -438,8 +438,6 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                     uidState?.pinnedUid &&
                     uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
                       ? uidState.pinnedUid
-                      : uidState.activeUids?.length
-                      ? uidState.activeUids[0]
                       : undefined,
                   secondaryPinnedUid:
                     uidState?.secondaryPinnedUid &&
