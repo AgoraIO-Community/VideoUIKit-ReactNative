@@ -433,7 +433,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                     mode == ChannelProfile.LiveBroadcasting &&
                     rtcProps?.role == ClientRole.Audience
                       ? uidState.activeUids.filter((i) => i !== localUid)
-                      : uidState.activeUids,
+                      : uidState.activeUids.filter((i) => i !== undefined),
                   pinnedUid:
                     uidState?.pinnedUid &&
                     uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
