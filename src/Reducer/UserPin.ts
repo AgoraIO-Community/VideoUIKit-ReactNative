@@ -6,7 +6,8 @@ export default function UserPin(
 ) {
   let localActiveUids = [...state.activeUids];
   let secondaryPinnedUid = state.secondaryPinnedUid;
-  const pinnedUid = action?.value && action.value?.length ? action.value[0] : 0;
+  const pinnedUid =
+    action?.value && action.value?.length ? action.value[0] : '';
   if (pinnedUid) {
     const filteredData = localActiveUids?.filter(
       (i) => i !== pinnedUid && i !== secondaryPinnedUid,
@@ -19,7 +20,7 @@ export default function UserPin(
   }
   return {
     ...state,
-    pinnedUid: action?.value && action.value?.length ? action.value[0] : '',
+    pinnedUid,
     secondaryPinnedUid:
       pinnedUid === secondaryPinnedUid ? 0 : secondaryPinnedUid,
     activeUids: localActiveUids,

@@ -5,7 +5,6 @@ export default function UserSecondaryPin(
   action: ActionType<'UserSecondaryPin'>,
 ) {
   let localActiveUids = [...state.activeUids];
-
   const secondaryPinnedUid =
     action?.value && action.value?.length ? action.value[0] : 0;
   if (secondaryPinnedUid) {
@@ -15,11 +14,9 @@ export default function UserSecondaryPin(
     const [maxUid, ...minUids] = filteredData;
     localActiveUids = [maxUid, secondaryPinnedUid, ...minUids];
   }
-
   return {
     ...state,
-    secondaryPinnedUid:
-      action?.value && action.value?.length ? action.value[0] : '',
+    secondaryPinnedUid,
     activeUids: localActiveUids,
   };
 }
