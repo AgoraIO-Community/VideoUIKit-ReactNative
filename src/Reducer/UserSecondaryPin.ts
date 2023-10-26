@@ -17,6 +17,7 @@ export default function UserSecondaryPin(
   return {
     ...state,
     secondaryPinnedUid,
+    pinnedUid: state?.pinnedUid === secondaryPinnedUid ? 0 : state?.pinnedUid,
     activeUids: localActiveUids,
   };
 }

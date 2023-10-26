@@ -137,6 +137,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       customContent: {
         ...state.customContent,
         [action.value[0]]: {
+          uid: action.value[0],
           component: action.value[1]?.component,
           props: action.value[1]?.props,
           onStage: action.value[1]?.onStage,
