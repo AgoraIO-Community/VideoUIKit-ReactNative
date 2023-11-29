@@ -13,13 +13,18 @@ interface MaxViewInterface {
   fallback?: React.ComponentType;
   containerStyle?: ViewStyle;
   landscapeMode?: boolean;
+  isPrecallScreen?: boolean;
 }
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps, rtcProps} = useContext(PropsContext);
   const {maxViewStyles} = styleProps || {};
   const Fallback = props.fallback;
-  const {containerStyle = {}, landscapeMode = false} = props;
+  const {
+    containerStyle = {},
+    landscapeMode = false,
+    isPrecallScreen = false,
+  } = props;
   const localUid = useLocalUid();
   //@ts-ignore
   const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
@@ -33,7 +38,12 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   }
   return uid === localUid ? (
     props.user.video ? (
-      <LocalView style={containerStyle} renderMode={VideoRenderMode.Fit} />
+      <LocalView
+        style={containerStyle}
+        renderMode={
+          isPrecallScreen ? VideoRenderMode.FILL : VideoRenderMode.Fit
+        }
+      />
     ) : Fallback ? (
       <Fallback />
     ) : (
