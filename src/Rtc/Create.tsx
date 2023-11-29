@@ -217,13 +217,19 @@ const Create = ({
           geoFencing === true &&
           (Platform.OS === 'android' || Platform.OS === 'ios')
         ) {
-          engine.current = await RtcEngine.createWithAreaCode(
-            rtcProps.appId,
-            // eslint-disable-next-line no-bitwise
-            AreaCode.GLOB ^ AreaCode.CN,
-          );
+          if (rtcProps?.appId) {
+            //@ts-ignore
+            engine.current = await RtcEngine.createWithAreaCode(
+              rtcProps?.appId,
+              // eslint-disable-next-line no-bitwise
+              //@ts-ignore
+              AreaCode.GLOB ^ AreaCode.CN,
+            );
+          }
         } else {
-          engine.current = await RtcEngine.create(rtcProps.appId);
+          if (rtcProps?.appId) {
+            engine.current = await RtcEngine.create(rtcProps.appId);
+          }
         }
         /* Live Streaming */
         if (mode == ChannelProfile.LiveBroadcasting) {
@@ -242,24 +248,28 @@ const Create = ({
           await engine.current.enableAudioVolumeIndication(100, 3, true);
         }
         if (!audioRoom) {
-          if (rtcProps.profile) {
+          if (rtcProps && rtcProps.profile) {
             if (Platform.OS === 'web') {
               // move this to bridge?
               // @ts-ignore
               await engine.current.setVideoProfile(rtcProps.profile);
             } else {
-              const config: VideoEncoderConfiguration =
-                quality[rtcProps.profile];
-              await engine.current.setVideoEncoderConfiguration({
-                ...config,
-                bitrate: 0,
-              });
+              if (rtcProps && rtcProps?.profile) {
+                const config: VideoEncoderConfiguration =
+                  quality[rtcProps.profile];
+                //@ts-ignore
+                await engine.current.setVideoEncoderConfiguration({
+                  ...config,
+                  bitrate: 0,
+                });
+              }
             }
           }
         } else {
           //web will work even without audio profile
           //but native need to set audio profile otherwise user will experience low audio issue
           if (Platform.OS === 'android' || Platform.OS === 'ios') {
+            //@ts-ignore
             await engine.current.setAudioProfile(
               AudioProfile.Default,
               AudioScenario.Default,
@@ -269,6 +279,7 @@ const Create = ({
             //ref - https://docs.agora.io/en/help/integration-issues/profile_difference/#audio-route
             //so setting into phone speaker manually as requested
             if (mode == ChannelProfile.Communication) {
+              //@ts-ignore
               await engine.current.setEnableSpeakerphone(true);
             }
           }
@@ -299,8 +310,8 @@ const Create = ({
           'JoinChannelSuccess',
           async (channel, uid, elapsed) => {
             //Invoke the callback
-            console.log('UIkit enabling dual stream', rtcProps.dual);
-            if (rtcProps.dual) {
+            console.log('UIkit enabling dual stream', rtcProps?.dual);
+            if (rtcProps?.dual) {
               console.log('UIkit enabled dual stream');
               await engine.current!.enableDualStreamMode(rtcProps.dual);
               // await engine.current.setRemoteSubscribeFallbackOption(1);
@@ -312,12 +323,14 @@ const Create = ({
 
         engine.current.addListener('UserJoined', async (...args) => {
           // preventing STT pusher bot in renderlist
+          //@ts-ignore
           if (args[0] === 111111) {
             return;
           }
           //Get current peer IDs
           dispatch({
             type: 'UserJoined',
+            //@ts-ignore
             value: args,
           });
         });
@@ -326,6 +339,7 @@ const Create = ({
           //If user leaves
           dispatch({
             type: 'UserOffline',
+            //@ts-ignore
             value: args,
           });
         });
@@ -333,6 +347,7 @@ const Create = ({
         engine.current.addListener('RemoteAudioStateChanged', (...args) => {
           dispatch({
             type: 'RemoteAudioStateChanged',
+            //@ts-ignore
             value: args,
           });
         });
@@ -344,6 +359,7 @@ const Create = ({
         engine.current.addListener('RemoteVideoStateChanged', (...args) => {
           dispatch({
             type: 'RemoteVideoStateChanged',
+            //@ts-ignore
             value: args,
           });
         });

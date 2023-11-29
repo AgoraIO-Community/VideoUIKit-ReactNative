@@ -4,7 +4,7 @@ export default function UserMuteRemoteAudio(
   state: ContentStateInterface,
   action: ActionType<'UserMuteRemoteAudio'>,
 ) {
-  let stateUpdate: ContentStateInterface = {
+  let stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: {
       ...state.defaultContent,
       [action.value[0]]: {

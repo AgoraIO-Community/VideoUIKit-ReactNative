@@ -21,6 +21,7 @@ const RemoteVideoMute: React.FC<RemoteVideoMuteInterface> = (props) => {
   const localUid = useLocalUid();
   return props.user.uid !== localUid ? (
     <BtnTemplate
+      //@ts-ignore
       name={
         props.user.video === ToggleState.enabled ? 'videocam' : 'videocamOff'
       }

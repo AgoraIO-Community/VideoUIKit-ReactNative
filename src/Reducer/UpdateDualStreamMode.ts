@@ -11,7 +11,7 @@ export default function UpdateDualStreamMode(
 ) {
   const newMode = action.value[0];
   let defaultContent = {...state.defaultContent};
-  let stateUpdate: ContentStateInterface;
+  let stateUpdate: Partial<ContentStateInterface>;
   const setHighStreamType = (uid: UidType) => {
     defaultContent[uid].streamType = 'high';
   };

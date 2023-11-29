@@ -9,7 +9,7 @@ export default function LocalPermissionState(
   action: ActionType<'LocalPermissionState'>,
   localUid: UidType,
 ) {
-  let stateUpdate: ContentStateInterface = {
+  let stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: {
       ...state.defaultContent,
       [localUid]: {

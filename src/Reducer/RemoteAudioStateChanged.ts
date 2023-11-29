@@ -12,11 +12,11 @@ export default function RemoteAudioStateChanged(
     audioState = ToggleState.disabled;
   }
 
-  const stateUpdate: ContentStateInterface = {
+  const stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: {
       ...state.defaultContent,
-      [action.value[0]]: {
-        ...state.defaultContent[action.value[0]],
+      [action.value[0] as unknown as number]: {
+        ...state.defaultContent[action.value[0] as unknown as number],
         audio: audioState,
       },
     },

@@ -26,6 +26,7 @@ interface BtnTemplateBasicInterface {
   disabled?: boolean;
 }
 interface BtnTemplateInterfaceWithName extends BtnTemplateBasicInterface {
+  //@ts-ignore
   name?: keyof IconsInterface;
 }
 interface BtnTemplateInterfaceWithIcon extends BtnTemplateBasicInterface {

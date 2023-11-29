@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
-import {RtcEngineEvents} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import {RtcEngineEvents} from 'react-native-agora/lib/typescript/common/RtcEvents';
 import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
 import {UidType} from './RtcContext';
@@ -46,6 +46,7 @@ export const toggleHelper = (state: ToggleState) =>
   state === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled;
 
 export interface DefaultContentInterface {
+  //uikit and core
   uid: UidType;
   audio: ToggleState;
   video: ToggleState;
@@ -54,6 +55,15 @@ export interface DefaultContentInterface {
   permissionStatus?: PermissionState;
   //applicable only to the screenshare
   parentUid?: UidType;
+  //uikit and core
+
+  //core only
+  name: string;
+  screenUid: number;
+  offline: boolean;
+  lastMessageTimeStamp: number;
+  isInWaitingRoom?: boolean;
+  //core only
 }
 export interface CustomContentInterface<T> {
   type: T extends DefaultContentInterface['type'] ? never : T;
@@ -123,6 +133,11 @@ export interface RtcPropsInterface {
   geoFencing?: boolean;
   audioRoom?: boolean;
   activeSpeaker?: boolean;
+
+  //core only
+  screenShareUid?: number;
+  screenShareToken?: string;
+  //core only
 }
 
 export interface CallbacksInterface {
@@ -161,7 +176,7 @@ export interface PropsInterface {
   mode?: ChannelProfile;
 }
 
-const initialValue: PropsInterface = {
+const initialValue: Partial<PropsInterface> = {
   rtcProps: {
     appId: '',
     channel: '',
@@ -170,7 +185,7 @@ const initialValue: PropsInterface = {
   },
 };
 
-const PropsContext = React.createContext<PropsInterface>(initialValue);
+const PropsContext = React.createContext<Partial<PropsInterface>>(initialValue);
 
 export const PropsProvider = PropsContext.Provider;
 export const PropsConsumer = PropsContext.Consumer;

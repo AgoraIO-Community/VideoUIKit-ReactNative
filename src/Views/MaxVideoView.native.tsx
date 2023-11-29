@@ -41,6 +41,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   }
   const Fallback = props.fallback;
   const localUid = useLocalUid();
+  //@ts-ignore
   const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
   return uid === localUid ? (
     props.user.video ? (

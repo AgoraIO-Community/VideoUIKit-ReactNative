@@ -23,6 +23,7 @@ function LocalVideoMute(props: LocalVideoMuteProps) {
 
   return (
     <BtnTemplate
+      //@ts-ignore
       name={local.video === ToggleState.enabled ? 'videocam' : 'videocamOff'}
       btnText={btnText}
       style={{

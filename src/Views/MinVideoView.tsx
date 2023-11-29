@@ -23,6 +23,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const {minCloseBtnStyles} = remoteBtnStyles || {};
   const {showOverlay} = props || {};
   const localUid = useLocalUid();
+  //@ts-ignore
   const uid = props.user.uid === rtcProps?.screenShareUid ? 1 : props.user.uid;
   return (
     <View style={{margin: 5}}>
@@ -80,6 +81,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
                 height: 25,
                 tintColor: theme || props.color || '#fff',
               }}
+              //@ts-ignore
               source={{uri: icons.close}}
             />
           </TouchableOpacity>

@@ -9,7 +9,7 @@ export default function LocalMuteVideo(
   action: ActionType<'LocalMuteVideo'>,
   localUid: UidType,
 ) {
-  let stateUpdate: ContentStateInterface = {
+  let stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: {
       ...state.defaultContent,
       [localUid]: {

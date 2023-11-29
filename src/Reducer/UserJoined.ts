@@ -17,14 +17,17 @@ export default function UserJoined(
   let typeData = {
     type: 'rtc',
   };
-  if (state.defaultContent[newUid] && 'type' in state.defaultContent[newUid]) {
-    typeData.type = state.defaultContent[newUid].type;
+  if (
+    state.defaultContent[newUid as unknown as number] &&
+    'type' in state.defaultContent[newUid as unknown as number]
+  ) {
+    typeData.type = state.defaultContent[newUid as unknown as number].type;
   }
 
   let defaultContent: ContentStateInterface['defaultContent'] = {
     ...state.defaultContent,
-    [newUid]: {
-      ...state.defaultContent[newUid],
+    [newUid as unknown as number]: {
+      ...state.defaultContent[newUid as unknown as number],
       uid: newUid,
       audio: ToggleState.disabled,
       video: ToggleState.disabled,
@@ -40,7 +43,7 @@ export default function UserJoined(
     //Only one remote and local is maximized
     //Change stream type to high if dualStreaMode is DYNAMIC
     if (dualStreamMode === DualStreamMode.DYNAMIC) {
-      defaultContent[newUid].streamType = 'high';
+      defaultContent[newUid as unknown as number].streamType = 'high';
     }
     //Swap render positions
     stateUpdate = {

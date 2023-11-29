@@ -22,6 +22,7 @@ function LocalAudioMute(props: LocalAudioMuteProps) {
 
   return (
     <BtnTemplate
+      //@ts-ignore
       name={local.audio === ToggleState.enabled ? 'mic' : 'micOff'}
       btnText={btnText}
       style={{

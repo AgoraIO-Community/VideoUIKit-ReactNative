@@ -17,6 +17,7 @@ function SwitchCamera(props?: Props) {
   const local = useContext(LocalContext);
   return (
     <BtnTemplate
+      //@ts-ignore
       name={'switchCamera'}
       style={{...styles.localBtn, ...(switchCamera as object)}}
       btnText={props?.btnText || 'Switch'}

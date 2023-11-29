@@ -15,7 +15,7 @@ export default function UserOffline(
   const updatedActiveUids = [...state.activeUids].filter(
     (uid) => uid !== action.value[0],
   );
-  const stateUpdate: ContentStateInterface = {
+  const stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: state.defaultContent,
     activeUids: updatedActiveUids,
   };

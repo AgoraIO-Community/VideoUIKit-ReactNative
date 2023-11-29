@@ -9,7 +9,7 @@ export default function LocalMuteAudio(
   action: ActionType<'LocalMuteAudio'>,
   localUid: UidType,
 ) {
-  let stateUpdate: ContentStateInterface = {
+  let stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: {
       ...state.defaultContent,
       [localUid]: {

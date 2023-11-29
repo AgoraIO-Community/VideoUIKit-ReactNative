@@ -20,6 +20,7 @@ const RemoteAudioMute: React.FC<RemoteAudioMuteInterface> = (props) => {
   const localUid = useLocalUid();
   return props.user.uid !== localUid ? (
     <BtnTemplate
+      //@ts-ignore
       name={props.user.audio === ToggleState.enabled ? 'mic' : 'micOff'}
       style={{...styles.leftRemoteBtn, ...(muteRemoteAudio as object)}}
       onPress={() => {

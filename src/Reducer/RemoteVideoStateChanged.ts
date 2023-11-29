@@ -12,15 +12,16 @@ export default function RemoteVideoStateChanged(
     videoState = ToggleState.enabled;
   }
 
-  const stateUpdate: ContentStateInterface = {
+  const stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: {
       ...state.defaultContent,
-      [action.value[0]]: {
-        ...state.defaultContent[action.value[0]],
+      [action.value[0] as unknown as number]: {
+        ...state.defaultContent[action.value[0] as unknown as number],
         video:
+          //@ts-ignore
           videoState !== undefined
             ? videoState
-            : state.defaultContent[action.value[0]].video,
+            : state.defaultContent[action.value[0] as unknown as number].video,
       },
     },
     activeUids: [...state.activeUids],
