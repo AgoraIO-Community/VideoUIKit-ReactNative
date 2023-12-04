@@ -74,6 +74,7 @@ const RtmConfigure: React.FC<PropsWithChildren> = (props) => {
       try {
         await rtmEngineRef.current?.loginV2(
           rtmProps?.uid || String(rtcUidRef.current),
+          rtmProps?.token || undefined,
         );
       } catch (error) {
         console.log('login error', error);
