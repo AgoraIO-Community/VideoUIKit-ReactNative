@@ -1,14 +1,13 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
+import { IRtcEngine } from 'react-native-agora';
+import { LocalContext } from '../../Contexts/LocalUserContext';
 import PropsContext, {
   ToggleState,
   UidInterface,
 } from '../../Contexts/PropsContext';
-import RtcContext from '../../Contexts/RtcContext';
-import BtnTemplate from '../BtnTemplate';
+import RtcContext, { DispatchType } from '../../Contexts/RtcContext';
 import styles from '../../Style';
-import {LocalContext} from '../../Contexts/LocalUserContext';
-import {DispatchType} from '../../Contexts/RtcContext';
-import {IRtcEngine} from 'react-native-agora';
+import BtnTemplate from '../BtnTemplate';
 
 interface LocalVideoMuteProps {
   btnText?: string;
@@ -16,7 +15,7 @@ interface LocalVideoMuteProps {
 }
 
 const LocalVideoMute: React.FC<LocalVideoMuteProps> = (props) => {
-  const {btnText = 'Video', variant = 'Outlined'} = props;
+  const {btnText = 'Video', variant = 'outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
   const {muteLocalVideo} = localBtnStyles || {};
@@ -30,7 +29,7 @@ const LocalVideoMute: React.FC<LocalVideoMuteProps> = (props) => {
       btnText={btnText}
       style={{
         ...styles.localBtn,
-        ...(variant === 'Outlined'
+        ...(variant === 'outlined'
           ? (muteLocalVideo as object)
           : (muteRemoteVideo as object)),
       }}
