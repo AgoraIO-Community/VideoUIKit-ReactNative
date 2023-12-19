@@ -1,14 +1,15 @@
-import React, {useContext} from 'react';
-import {View} from 'react-native';
+import React, { useContext } from 'react';
+import { View } from 'react-native';
+import { ClientRoleType } from 'react-native-agora';
+import { MaxUidConsumer } from '../Contexts/MaxUidContext';
+import PropsContext, { Layout } from '../Contexts/PropsContext';
 import styles from '../Style';
 import EndCall from './Local/EndCall';
 import LocalAudioMute from './Local/LocalAudioMute';
 import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
+import Timer from './Local/Timer';
 import RemoteControls from './RemoteControls';
-import {MaxUidConsumer} from '../Contexts/MaxUidContext';
-import PropsContext, {Layout} from '../Contexts/PropsContext';
-import {ClientRoleType} from 'react-native-agora';
 
 interface ControlsPropsInterface {
   showButton?: boolean;
@@ -23,6 +24,7 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
       <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
         {rtcProps.role !== ClientRoleType.ClientRoleAudience && (
           <>
+            <Timer />
             <LocalAudioMute />
             <LocalVideoMute />
             <SwitchCamera />
