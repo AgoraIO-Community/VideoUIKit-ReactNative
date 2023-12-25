@@ -13,7 +13,7 @@ interface MaxViewInterface {
   fallback?: React.ComponentType;
   containerStyle?: ViewStyle;
   landscapeMode?: boolean;
-  isPrecallScreen?: boolean;
+  isFullView?: boolean;
 }
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
@@ -23,7 +23,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {
     containerStyle = {},
     landscapeMode = false,
-    isPrecallScreen = false,
+    isFullView = false,
   } = props;
   const localUid = useLocalUid();
   //@ts-ignore
@@ -40,9 +40,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     props.user.video ? (
       <LocalView
         style={containerStyle}
-        renderMode={
-          isPrecallScreen ? VideoRenderMode.FILL : VideoRenderMode.Fit
-        }
+        renderMode={isFullView ? VideoRenderMode.FILL : VideoRenderMode.Fit}
       />
     ) : Fallback ? (
       <Fallback />

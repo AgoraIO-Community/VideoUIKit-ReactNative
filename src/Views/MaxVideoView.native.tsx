@@ -19,12 +19,17 @@ interface MaxViewInterface {
   fallback?: React.ComponentType;
   containerStyle?: ViewStyle;
   landscapeMode?: boolean;
+  isFullView?: boolean;
 }
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps, rtcProps} = useContext(PropsContext);
   const {maxViewStyles} = styleProps || {};
-  const {containerStyle = {}, landscapeMode = false} = props;
+  const {
+    containerStyle = {},
+    landscapeMode = false,
+    isFullView = false,
+  } = props;
   let landscapeModeStyle: ViewProps['style'] = {};
   if (landscapeMode) {
     //SurfaceView does not support transform
@@ -51,7 +56,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
           ...(maxViewStyles as object),
           ...containerStyle,
         }}
-        renderMode={VideoRenderMode.Fit}
+        renderMode={isFullView ? VideoRenderMode.FILL : VideoRenderMode.Fit}
       />
     ) : Fallback ? (
       <Fallback />
