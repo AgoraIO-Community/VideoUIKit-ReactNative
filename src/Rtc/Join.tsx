@@ -48,7 +48,6 @@ const Join: React.FC<{
         rtcProps.encryption.key &&
         rtcProps.encryption.mode
       ) {
-        console.log('using channel encryption', rtcProps.encryption);
         await engine.enableEncryption(true, {
           encryptionKey: rtcProps.encryption.key,
           encryptionMode: rtcProps.encryption.mode,
@@ -109,7 +108,6 @@ const Join: React.FC<{
           await leave();
           await join();
         }
-        console.log('Attempted join: ', rtcProps.channel);
       } else {
         console.log('In precall - waiting to join');
       }
