@@ -60,7 +60,6 @@ const GridVideo: React.FC = () => {
     [users.length, isDesktop],
   );
 
-  console.log('grid video')
   return (
     <View style={style.full} onLayout={onLayout}>
       {matrix.map((r, ridx) => (

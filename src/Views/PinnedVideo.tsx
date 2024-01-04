@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
 import { ClientRoleType } from 'react-native-agora';
-import { MaxUidConsumer } from '../Contexts/MaxUidContext';
-import { MinUidConsumer } from '../Contexts/MinUidContext';
+import MaxUidContext, { MaxUidConsumer } from '../Contexts/MaxUidContext';
+import MinUidContext, { MinUidConsumer } from '../Contexts/MinUidContext';
 import PropsContext from '../Contexts/PropsContext';
 import styles from '../Style';
 import MaxVideoView from './MaxVideoView';
@@ -12,7 +12,14 @@ const PinnedVideo: React.FC = () => {
   const {rtcProps, styleProps} = useContext(PropsContext);
   const [width, setWidth] = useState(Dimensions.get('screen').width);
 
-  console.log('pinned video');
+  const max = useContext(MaxUidContext);
+  const min = useContext(MinUidContext);
+  const users =
+    rtcProps.role === ClientRoleType.ClientRoleAudience
+      ? [...max, ...min].filter((user) => user.uid !== 'local')
+      : [...max, ...min];
+
+  console.log('users', users)
 
   useEffect(() => {
     Dimensions.addEventListener('change', () => {
@@ -37,17 +44,17 @@ const PinnedVideo: React.FC = () => {
           width: width,
           ...(styleProps?.minViewContainer as Object),
         }}>
-          <>
-          {(minUsers) => {
-            return (<MinUidConsumer>
-              {minUsers.map((user) =>
+          {users.length > 1 &&
+          (<MinUidConsumer>
+          {(minUsers) =>
+            minUsers.map((user) =>
               rtcProps.role === ClientRoleType.ClientRoleAudience &&
               user.uid === 'local' ? null : (
                 <MinVideoView user={user} key={user.uid} showOverlay={true} />
-              ))}
-            </MinUidConsumer>)
-          }}
-         </>
+              ),
+            )
+          }
+        </MinUidConsumer>)}
       </ScrollView>
     </>
   );

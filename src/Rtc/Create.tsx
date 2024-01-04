@@ -1,16 +1,16 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import {
-  createAgoraRtcEngine,
-  VideoEncoderConfiguration,
   AreaCode,
-  IRtcEngine,
   ChannelProfileType,
   ClientRoleType,
+  IRtcEngine,
+  VideoEncoderConfiguration,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-import {Platform} from 'react-native';
+import PropsContext, { ToggleState } from '../Contexts/PropsContext';
+import { DispatchType } from '../Contexts/RtcContext';
 import requestCameraAndAudioPermission from '../Utils/permission';
-import {DispatchType} from '../Contexts/RtcContext';
-import PropsContext, {ToggleState} from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
 
 const Create: React.FC<{
@@ -37,9 +37,7 @@ const Create: React.FC<{
         await requestCameraAndAudioPermission();
       }
       try {
-        console.log('hello');
         engine.current = createAgoraRtcEngine();
-        console.log('hello2');
         console.log(engine.current);
         if (Platform.OS === 'android' || Platform.OS === 'ios') {
           engine.current.initialize({
