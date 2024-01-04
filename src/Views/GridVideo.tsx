@@ -35,7 +35,6 @@ const GridVideo: React.FC = () => {
   const max = useContext(MaxUidContext);
   const min = useContext(MinUidContext);
   const {rtcProps, styleProps} = useContext(PropsContext);
-  console.log('role',rtcProps.role)
   const users =
     rtcProps.role === ClientRoleType.ClientRoleAudience
       ? [...max, ...min].filter((user) => user.uid !== 'local')

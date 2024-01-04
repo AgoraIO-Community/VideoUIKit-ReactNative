@@ -11,6 +11,7 @@ import MinVideoView from './MinVideoView';
 const PinnedVideo: React.FC = () => {
   const {rtcProps, styleProps} = useContext(PropsContext);
   const [width, setWidth] = useState(Dimensions.get('screen').width);
+  console.log('role',rtcProps.role)
 
   const max = useContext(MaxUidContext);
   const min = useContext(MinUidContext);
