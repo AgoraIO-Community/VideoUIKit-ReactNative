@@ -12,6 +12,8 @@ const PinnedVideo: React.FC = () => {
   const {rtcProps, styleProps} = useContext(PropsContext);
   const [width, setWidth] = useState(Dimensions.get('screen').width);
 
+  console.log('pinned video');
+
   useEffect(() => {
     Dimensions.addEventListener('change', () => {
       setWidth(Dimensions.get('screen').width);
