@@ -19,8 +19,6 @@ const PinnedVideo: React.FC = () => {
       ? [...max, ...min].filter((user) => user.uid !== 'local')
       : [...max, ...min];
 
-  console.log('users', users)
-
   useEffect(() => {
     Dimensions.addEventListener('change', () => {
       setWidth(Dimensions.get('screen').width);
