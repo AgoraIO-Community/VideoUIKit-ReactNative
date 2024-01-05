@@ -24,9 +24,9 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
     <>
       <View style={[styles.Controls, localBtnContainer as object]}>
         {rtcProps.role !== ClientRoleType.ClientRoleAudience && (
-          <View>
+          <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
             <Timer />
-            <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+            <View>
             <LocalAudioMute />
             <LocalVideoMute />
             <SwitchCamera />
