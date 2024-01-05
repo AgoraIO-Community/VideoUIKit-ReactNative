@@ -26,7 +26,7 @@ const Controls: React.FC<ControlsPropsInterface> = (props) => {
         {rtcProps.role !== ClientRoleType.ClientRoleAudience && (
           <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
             <Timer />
-            <View>
+            <View style={{  flexDirection: 'row', justifyContent: 'space-evenly'}}>
             <LocalAudioMute />
             <LocalVideoMute />
             <SwitchCamera />
