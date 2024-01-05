@@ -11,7 +11,6 @@ import MinVideoView from './MinVideoView';
 const PinnedVideo: React.FC = () => {
   const {rtcProps, styleProps} = useContext(PropsContext);
   const [width, setWidth] = useState(Dimensions.get('screen').width);
-  console.log('role',rtcProps.role)
 
   const max = useContext(MaxUidContext);
   const min = useContext(MinUidContext);
@@ -37,6 +36,8 @@ const PinnedVideo: React.FC = () => {
           ) : null
         }
       </MaxUidConsumer>
+      {users.length > 1 &&
+
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}
@@ -45,8 +46,7 @@ const PinnedVideo: React.FC = () => {
           width: width,
           ...(styleProps?.minViewContainer as Object),
         }}>
-          {users.length > 1 &&
-          (<MinUidConsumer>
+          <MinUidConsumer>
           {(minUsers) =>
             minUsers.map((user) =>
               rtcProps.role === ClientRoleType.ClientRoleAudience &&
@@ -54,9 +54,11 @@ const PinnedVideo: React.FC = () => {
                 <MinVideoView user={user} key={user.uid} showOverlay={true} />
               ),
             )
-          }
-        </MinUidConsumer>)}
+              }
+        </MinUidConsumer>
       </ScrollView>
+      }
+
     </>
   );
 };
