@@ -255,6 +255,14 @@ export interface RtcSettings {
    * Disable Agora RTM, this also disables the use of usernames and remote mute functionality
    */
   disableRtm?: boolean;
+  /**
+   * Enable / Disable audio when user first joins the channel
+   */
+  defaultAudio?:boolean;
+  /**
+   * Enable / Disable video when user first joins the channel
+   */
+  defaultVideo?:boolean;
   // /**
   //  * Enable the mic before joining the call. (default: true)
   //  */
