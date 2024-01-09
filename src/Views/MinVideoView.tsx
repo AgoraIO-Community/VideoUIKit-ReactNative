@@ -1,11 +1,11 @@
-import React, {useState, useContext} from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
-import {RenderModeType, RtcSurfaceView} from 'react-native-agora';
-import styles from '../Style';
+import React, { useContext, useState } from 'react';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { RenderModeType, RtcSurfaceView } from 'react-native-agora';
+import PropsContext, { UidInterface } from '../Contexts/PropsContext';
 import icons from '../Controls/Icons';
-import RemoteControls from '../Controls/RemoteControls';
-import PropsContext, {UidInterface} from '../Contexts/PropsContext';
 import ImageIcon from '../Controls/ImageIcon';
+import RemoteControls from '../Controls/RemoteControls';
+import styles from '../Style';
 import Username from './Usernames';
 // import RtcContext from '../Contexts/RtcContext';
 
@@ -24,7 +24,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
   const {showOverlay} = props || {};
 
   return (
-    <View style={{margin: 5}}>
+    <View>
       {showOverlay ? (
         <TouchableOpacity onPress={() => setOverlay(true)}>
           <UserVideoWithFallback user={props.user} Fallback={props.Fallback} />
