@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropsContext from '../../Contexts/PropsContext';
 import RtcContext from '../../Contexts/RtcContext';
 import styles from '../../Style';
@@ -13,34 +13,16 @@ const FullScreen: React.FC = () => {
   const {localBtnStyles} = styleProps || {};
   const {fullScreen} = localBtnStyles || {};
   const {dispatch} = useContext(RtcContext);
-  const [action, setAction] = useState('fullScreen')
-
-  const onPress = () => {
-    if (action === 'fullScreen') {
-      console.log('pressing fullscreen')
-      dispatch({
-        type: 'FullScreen',
-        value: [],
-      })
-      setAction('normal')
-    }
-    if (action === 'normal') {
-      console.log('pressing normal')
-      dispatch({
-        type: 'NormalScreen',
-        value: [],
-      })
-      setAction('fullScreen')
-    }
-  }
-
 
   return (
     <BtnTemplate
       name={'fullScreen'} //or normalScreen
       btnText={'Full Screen'}
       style={{...styles.localBtn, ...(fullScreen as object)}}
-      onPress={onPress}
+      onPress={() => dispatch({
+        type: 'FullScreen',
+        value: [],
+      })}
     />
   );
 };
