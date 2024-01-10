@@ -1,16 +1,23 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Dimensions, ScrollView} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Dimensions, ScrollView } from 'react-native';
+import { ClientRoleType } from 'react-native-agora';
+import MaxUidContext, { MaxUidConsumer } from '../Contexts/MaxUidContext';
+import MinUidContext, { MinUidConsumer } from '../Contexts/MinUidContext';
+import PropsContext from '../Contexts/PropsContext';
+import styles from '../Style';
 import MaxVideoView from './MaxVideoView';
 import MinVideoView from './MinVideoView';
-import {MinUidConsumer} from '../Contexts/MinUidContext';
-import {MaxUidConsumer} from '../Contexts/MaxUidContext';
-import styles from '../Style';
-import PropsContext from '../Contexts/PropsContext';
-import {ClientRoleType} from 'react-native-agora';
 
 const PinnedVideo: React.FC = () => {
   const {rtcProps, styleProps} = useContext(PropsContext);
   const [width, setWidth] = useState(Dimensions.get('screen').width);
+
+  const max = useContext(MaxUidContext);
+  const min = useContext(MinUidContext);
+  const users =
+    rtcProps.role === ClientRoleType.ClientRoleAudience
+      ? [...max, ...min].filter((user) => user.uid !== 'local')
+      : [...max, ...min];
 
   useEffect(() => {
     Dimensions.addEventListener('change', () => {
@@ -27,6 +34,8 @@ const PinnedVideo: React.FC = () => {
           ) : null
         }
       </MaxUidConsumer>
+      {users.length > 1 &&
+
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}
@@ -35,7 +44,7 @@ const PinnedVideo: React.FC = () => {
           width: width,
           ...(styleProps?.minViewContainer as Object),
         }}>
-        <MinUidConsumer>
+          <MinUidConsumer>
           {(minUsers) =>
             minUsers.map((user) =>
               rtcProps.role === ClientRoleType.ClientRoleAudience &&
@@ -43,9 +52,11 @@ const PinnedVideo: React.FC = () => {
                 <MinVideoView user={user} key={user.uid} showOverlay={true} />
               ),
             )
-          }
+              }
         </MinUidConsumer>
       </ScrollView>
+      }
+
     </>
   );
 };

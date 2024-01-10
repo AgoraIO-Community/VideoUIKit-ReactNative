@@ -1,32 +1,18 @@
 {
-  "name": "agora-rn-uikit",
-  "version": "5.0.2",
-  "author": {
-    "name": "Ekaansh Arora",
-    "email": "ekaansh@agora.io"
-  },
-  "main": "./index.ts",
-  "contributors": [
-    {
-      "name": "Vineeth S",
-      "email": "vineeth@agora.io"
-    }
-  ],
+  "name": "agora-video-uikit-react-native",
+  "version": "1.0.0",
+  "author": "elenitaex5 <elena.martincastillo@gmail.com>",
   "license": "MIT",
+  "main": "./index.ts",
   "files": [
     "Components.ts",
     "Contexts.ts",
     "index.ts",
     "/src/**/*"
   ],
-  "description": "Agora react native UI KIT. Rapidly integrate video calling into your React Native application with built in UI Elements.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit"
-  },
-  "bugs": {
-    "url": "https://github.com/AgoraIO-Community/ReactNative-UIKit/issues"
-  },
+  "description": "A React Native UIKit for the Agora Web SDK (based on EkaanshArora project)",
+  "repository": "elenitaex5/agora-video-uikit-react-native",
+  "bugs": "https://github.com/elenitaex5/agora-video-uikit-react-native/issues",
   "peerDependencies": {
     "agora-react-native-rtm": "^1.5.1",
     "react": "*",

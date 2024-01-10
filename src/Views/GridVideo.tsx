@@ -5,12 +5,12 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
-import MaxVideoView from './MaxVideoView';
-import MinUidContext from '../Contexts/MinUidContext';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import { ClientRoleType } from 'react-native-agora';
 import MaxUidContext from '../Contexts/MaxUidContext';
+import MinUidContext from '../Contexts/MinUidContext';
 import PropsContext from '../Contexts/PropsContext';
-import {ClientRoleType} from 'react-native-agora';
+import MaxVideoView from './MaxVideoView';
 
 const layout = (len: number, isDesktop: boolean = true) => {
   console.log('layout');
@@ -59,6 +59,7 @@ const GridVideo: React.FC = () => {
     () => layout(users.length, isDesktop),
     [users.length, isDesktop],
   );
+
   return (
     <View style={style.full} onLayout={onLayout}>
       {matrix.map((r, ridx) => (

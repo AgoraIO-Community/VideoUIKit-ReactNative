@@ -51,7 +51,7 @@ const BtnTemplate: React.FC<BtnTemplateInterface> = (props) => {
       <View
         style={[
           {...styles.controlBtn, ...(BtnTemplateStyles as object)},
-          props.style as object,
+          props.style as object
         ]}>
         <Image
           ref={Platform.OS === 'web' ? imageRef : undefined}

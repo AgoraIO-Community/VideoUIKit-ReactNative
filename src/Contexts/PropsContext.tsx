@@ -90,6 +90,10 @@ interface localBtnStylesInterface {
    * Style for the end call button
    */
   endCall?: StyleProp<ViewStyle>;
+  /**
+   * Style for fullScreen Button
+   */
+  fullScreen?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -356,6 +360,11 @@ export interface CallbacksInterface {
     IRtcEngineEventHandler['onJoinChannelSuccess']
   >;
   BecomeAudience(): void;
+  FullScreen(): void;
+  NormalScreen(): void;
+  OnConnectionStateChanged: RemoveUndefined<
+    IRtcEngineEventHandler['onConnectionStateChanged']
+  >;
 }
 
 export type CustomCallbacksInterface = CallbacksInterface;
@@ -459,6 +468,10 @@ export interface IconsInterface {
    * Icon to close the overlay in floating layout
    */
   close: string;
+  /**
+   * Icon for fullScreen
+   */
+  fullScreen: string;
 }
 
 const PropsContext = React.createContext<PropsInterface>(initialValue);
