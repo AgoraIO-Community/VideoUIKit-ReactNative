@@ -79,9 +79,18 @@ interface localBtnStylesInterface {
    */
   muteLocalAudio?: StyleProp<ViewStyle>;
   /**
+   * Style for the local mute audio button if disabled. Paired with muteLocalAudio
+   */
+  unmuteLocalAudio?: StyleProp<ViewStyle>;
+
+  /**
    * Style for the local mute video button
    */
   muteLocalVideo?: StyleProp<ViewStyle>;
+  /**
+   * Style for the local mute video button if disabled. Paired with muteLocalVideo
+   */
+  unmuteLocalVideo?: StyleProp<ViewStyle>;
   /**
    * Style for the switch camera button
    */

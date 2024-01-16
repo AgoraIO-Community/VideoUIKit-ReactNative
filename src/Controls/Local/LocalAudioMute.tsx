@@ -17,10 +17,13 @@ const LocalAudioMute: React.FC<LocalAudioMuteProps> = (props) => {
   const {btnText = 'Audio', variant = 'outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
-  const {muteLocalAudio} = localBtnStyles || {};
+  const {muteLocalAudio, unmuteLocalAudio} = localBtnStyles || {};
   const {muteRemoteAudio} = remoteBtnStyles || {};
   const {RtcEngine, dispatch} = useContext(RtcContext);
   const localUser = useContext(LocalContext);
+
+  const customStyle = localUser.audio === ToggleState.disabled && unmuteLocalAudio ? unmuteLocalAudio : muteLocalAudio;
+
 
   return (
     <BtnTemplate
@@ -29,7 +32,7 @@ const LocalAudioMute: React.FC<LocalAudioMuteProps> = (props) => {
       style={{
         ...styles.localBtn,
         ...(variant === 'outlined'
-          ? (muteLocalAudio as object)
+          ? (customStyle as object)
           : (muteRemoteAudio as object)),
       }}
       onPress={() => muteAudio(localUser, dispatch, RtcEngine)}

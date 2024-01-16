@@ -18,10 +18,12 @@ const LocalVideoMute: React.FC<LocalVideoMuteProps> = (props) => {
   const {btnText = 'Video', variant = 'outlined'} = props;
   const {styleProps} = useContext(PropsContext);
   const {localBtnStyles, remoteBtnStyles} = styleProps || {};
-  const {muteLocalVideo} = localBtnStyles || {};
+  const {muteLocalVideo, unmuteLocalVideo} = localBtnStyles || {};
   const {muteRemoteVideo} = remoteBtnStyles || {};
   const {RtcEngine, dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
+
+  const customStyle = local.video === ToggleState.disabled && unmuteLocalVideo ? unmuteLocalVideo : muteLocalVideo;
 
   return (
     <BtnTemplate
@@ -30,7 +32,7 @@ const LocalVideoMute: React.FC<LocalVideoMuteProps> = (props) => {
       style={{
         ...styles.localBtn,
         ...(variant === 'outlined'
-          ? (muteLocalVideo as object)
+          ? (customStyle as object)
           : (muteRemoteVideo as object)),
       }}
       onPress={() => muteVideo(local, dispatch, RtcEngine)}
