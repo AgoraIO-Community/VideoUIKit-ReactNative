@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useContext, useEffect } from 'react';
 import { Platform } from 'react-native';
-import { IRtcEngine, RtcConnection, VirtualBackgroundBlurDegree, VirtualBackgroundSource, VirtualBackgroundSourceType } from 'react-native-agora';
+import { BackgroundBlurDegree, BackgroundSourceType, IRtcEngine, RtcConnection } from 'react-native-agora';
 import PropsContext, { ToggleState } from '../Contexts/PropsContext';
 import { DispatchType, UidStateInterface } from '../Contexts/RtcContext';
 
@@ -56,10 +56,10 @@ const Join: React.FC<
 
       // blur background
       engine?.enableVirtualBackground(true,
-        new VirtualBackgroundSource({
-          backgroundSourceType: VirtualBackgroundSourceType.Blur,
-          blur_degree: VirtualBackgroundBlurDegree.Medium
-        })
+       {
+          backgroundSourceType: BackgroundSourceType.Blur,
+          blur_degree: BackgroundBlurDegree.Medium
+        }
       );
 
       const UID = rtcProps.uid || 0;
