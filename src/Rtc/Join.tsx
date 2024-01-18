@@ -14,8 +14,7 @@ const Join: React.FC<
     joinState: React.MutableRefObject<boolean>;
   }>
 > = ({children, precall, engineRef, uidState, dispatch, joinState}) => {
-  // let joinState = useRef(false);
-  const {rtcProps} = useContext(PropsContext);
+  const {rtcProps, enableBlurBackground} = useContext(PropsContext);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -55,12 +54,14 @@ const Join: React.FC<
       }
 
       // blur background
-      engine?.enableVirtualBackground(true,
-       {
-          backgroundSourceType: BackgroundSourceType.Blur,
-          blur_degree: BackgroundBlurDegree.Medium
-        }
-      );
+      if (enableBlurBackground) {
+        engine?.enableVirtualBackground(true,
+          {
+             backgroundSourceType: BackgroundSourceType.Blur,
+             blur_degree: BackgroundBlurDegree.Medium
+           }
+         );
+      }
 
       const UID = rtcProps.uid || 0;
       if (rtcProps.tokenUrl) {
