@@ -392,6 +392,7 @@ export interface ConnectionData
   rtcUid?: number;
   rtmToken?: string;
   rtmUid?: string;
+  enableBlurBackground?: boolean;
 }
 
 /**
@@ -432,6 +433,7 @@ export interface PropsInterface {
   styleProps?: Partial<StylePropInterface>;
   callbacks?: Partial<CallbacksInterface>;
   rtmCallbacks?: rtmCallbacks;
+  enableBlurBackground?: boolean;
 }
 
 const initialValue: PropsInterface = {
