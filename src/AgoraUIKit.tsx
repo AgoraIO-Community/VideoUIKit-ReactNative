@@ -2,20 +2,20 @@
  * @module AgoraUIKit
  */
 import React from 'react';
-import {View} from 'react-native';
-import RtcConfigure from './RtcConfigure';
+import { View } from 'react-native';
+import LocalUserContext from './Contexts/LocalUserContext';
 import {
-  PropsProvider,
-  PropsInterface,
-  Layout,
   AgoraUIKitProps,
+  Layout,
+  PropsInterface,
+  PropsProvider,
 } from './Contexts/PropsContext';
 import LocalControls from './Controls/LocalControls';
+import PopUp from './Controls/Remote/RemoteMutePopUp';
+import RtcConfigure from './RtcConfigure';
+import RtmConfigure from './RtmConfigure';
 import GridVideo from './Views/GridVideo';
 import PinnedVideo from './Views/PinnedVideo';
-import RtmConfigure from './RtmConfigure';
-import LocalUserContext from './Contexts/LocalUserContext';
-import PopUp from './Controls/Remote/RemoteMutePopUp';
 
 /**
  * Agora UIKit component following the v3 props
@@ -52,7 +52,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
  * @returns Renders the UIKit
  */
 const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
-  const {rtcUid, rtcToken, rtmToken, rtmUid, ...restConnectonData} =
+  const {rtcUid, rtcToken, rtmToken, rtmUid, enableBlurBackground, ...restConnectonData} =
     props.connectionData;
   const adaptedProps: PropsInterface = {
     rtcProps: {
@@ -68,6 +68,7 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
       ...restConnectonData,
       ...props.settings,
     },
+    enableBlurBackground
   };
 
   return (
