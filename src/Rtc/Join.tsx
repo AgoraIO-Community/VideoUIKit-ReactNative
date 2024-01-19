@@ -54,7 +54,6 @@ const Join: React.FC<
       }
 
       // blur background
-      console.log('blur background', enableBlurBackground)
       if (enableBlurBackground) {
         engine?.enableVirtualBackground(true,
           {
