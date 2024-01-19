@@ -12,6 +12,7 @@ const Join: React.FC<{
   uidState: ContentStateInterface;
   dispatch: DispatchType;
   tracksReady: boolean;
+  preventJoin?: boolean;
 }> = ({children, precall, engineRef, uidState, dispatch, tracksReady}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
@@ -29,6 +30,9 @@ const Join: React.FC<{
   }, [tracksReady]);
 
   useEffect(() => {
+    if (rtcProps?.preventJoin) {
+      return;
+    }
     const engine = engineRef.current;
     async function leave() {
       try {
@@ -77,13 +81,16 @@ const Join: React.FC<{
       // } catch (error) {
       //   console.error('FPE:Error on executing useBeforeJoin', error);
       // }
-
-      await engine.joinChannel(
-        rtcProps.token || null,
-        rtcProps.channel,
-        null,
-        rtcProps.uid || 0,
-      );
+      try {
+        await engine.joinChannel(
+          rtcProps.token || null,
+          rtcProps.channel,
+          null,
+          rtcProps.uid || 0,
+        );
+      } catch (error) {
+        console.error('RTC joinChannel error', error);
+      }
       if (
         !audioRoom &&
         videoState === ToggleState.enabled &&
@@ -126,6 +133,7 @@ const Join: React.FC<{
     rtcProps.token,
     precall,
     rtcProps.encryption,
+    rtcProps.preventJoin,
   ]);
 
   return <>{children}</>;

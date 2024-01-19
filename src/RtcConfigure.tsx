@@ -414,6 +414,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
       {(engineRef, tracksReady) => (
         <Join
           precall={!rtcProps.callActive}
+          preventJoin={rtcProps?.preventJoin}
           engineRef={engineRef}
           uidState={uidState}
           dispatch={dispatch}

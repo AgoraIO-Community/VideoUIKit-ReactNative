@@ -133,6 +133,7 @@ export interface RtcPropsInterface {
   geoFencing?: boolean;
   audioRoom?: boolean;
   activeSpeaker?: boolean;
+  preventJoin?: boolean;
 
   //core only
   screenShareUid?: number;
@@ -182,6 +183,7 @@ const initialValue: Partial<PropsInterface> = {
     channel: '',
     geoFencing: true,
     audioRoom: false,
+    preventJoin: true,
   },
 };
 
