@@ -52,7 +52,7 @@ const AgoraUIKitv3: React.FC<PropsInterface> = (props) => {
  * @returns Renders the UIKit
  */
 const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
-  const {rtcUid, rtcToken, rtmToken, rtmUid, enableBlurBackground, ...restConnectonData} =
+  const {rtcUid, rtcToken, rtmToken, rtmUid, ...restConnectonData} =
     props.connectionData;
   const adaptedProps: PropsInterface = {
     rtcProps: {
@@ -68,7 +68,6 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
       ...restConnectonData,
       ...props.settings,
     },
-    enableBlurBackground
   };
 
   return (
@@ -78,6 +77,7 @@ const AgoraUIKit: React.FC<AgoraUIKitProps> = (props) => {
       callbacks={props.rtcCallbacks}
       rtmCallbacks={props.rtmCallbacks}
       styleProps={props.styleProps}
+      enableBlurBackground={props.connectionData.enableBlurBackground}
     />
   );
 };
