@@ -1,6 +1,6 @@
 {
   "name": "agora-video-uikit-react-native",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "author": "elenitaex5 <elena.martincastillo@gmail.com>",
   "license": "MIT",
   "main": "./index.ts",
