@@ -10,10 +10,7 @@ export const Timer = () => {
     return () => clearInterval(timer)
   }, [counter]);
 
-  const minutes = Math.floor(counter / 60000);
-  const seconds = Math.floor(counter / 1000);
-
-  return <Text style={{color: 'white', textAlign: 'left', alignSelf: 'center', alignItems: 'center', height: '100%'}}>{`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}</Text>
+  return <Text style={{color: 'white', textAlign: 'left', alignSelf: 'center', alignItems: 'center', height: '100%'}}>{new Date(counter).toISOString().slice(14, 19)}</Text>
 }
 
 export default Timer;
