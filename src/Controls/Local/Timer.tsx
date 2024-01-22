@@ -3,11 +3,16 @@ import { Text } from 'react-native';
 
 export const Timer = () => {
   const [counter, setCounter] = useState(0);
+  const [start, setStart] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => setCounter(counter + 1), 1000)
+    const timer = setInterval(() => setCounter(Date.now() - start), 1000)
     return () => clearInterval(timer)
   }, [counter]);
+
+  useEffect(() => {
+    setStart(Date.now());
+  }, []);
 
   const minutes = Math.trunc(counter / 60);
   const seconds = counter - minutes * 60;
