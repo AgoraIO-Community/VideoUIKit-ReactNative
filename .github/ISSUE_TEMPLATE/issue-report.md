@@ -3,8 +3,6 @@ name: Issue report
 about: Report any issues while trying to use the UIKit
 title: ''
 labels: ''
-assignees: EkaanshArora
-
 ---
 
 **Target device:** (Note: simulators are not supported for running the UIKit)
