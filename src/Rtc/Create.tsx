@@ -296,10 +296,12 @@ const Create = ({
         if (
           !(
             mode === ChannelProfile.LiveBroadcasting &&
-            rtcProps.role == ClientRole.Audience &&
-            Platform.OS === 'web'
+            rtcProps?.role == ClientRole.Audience &&
+            Platform.OS === 'web' &&
+            rtcProps?.recordingBot
           )
         ) {
+          console.log('supriya asking permission');
           enableVideoAndAudioWithInitialStates().then(() => {
             setTracksReady(true);
             isVideoEnabledRef.current = true;
