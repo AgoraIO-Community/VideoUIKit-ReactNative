@@ -301,11 +301,15 @@ const Create = ({
             rtcProps?.recordingBot
           )
         ) {
-          console.log('supriya asking permission');
-          enableVideoAndAudioWithInitialStates().then(() => {
-            setTracksReady(true);
-            isVideoEnabledRef.current = true;
-          });
+          if (rtcProps?.recordingBot) {
+            console.log('supriya not asking permission');
+          } else {
+            console.log('supriya taking permission');
+            enableVideoAndAudioWithInitialStates().then(() => {
+              setTracksReady(true);
+              isVideoEnabledRef.current = true;
+            });
+          }
         }
 
         engine.current.addListener(
