@@ -48,14 +48,16 @@ const Join: React.FC<{
     const videoState = defaultContent[maxUid].video;
     async function join() {
       if (
-        rtcProps.encryption &&
+        rtcProps?.encryption &&
         rtcProps.encryption.key &&
-        rtcProps.encryption.mode
+        rtcProps.encryption.mode &&
+        rtcProps.encryption.salt
       ) {
-        console.log('using channel encryption', rtcProps.encryption);
+        console.log('using channel encryption', rtcProps?.encryption);
         await engine.enableEncryption(true, {
-          encryptionKey: rtcProps.encryption.key,
-          encryptionMode: rtcProps.encryption.mode,
+          encryptionKey: rtcProps?.encryption.key,
+          encryptionMode: rtcProps?.encryption.mode,
+          encryptionKdfSalt: rtcProps?.encryption.salt,
         });
       }
       if (
