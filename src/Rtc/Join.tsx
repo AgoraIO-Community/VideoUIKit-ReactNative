@@ -54,11 +54,15 @@ const Join: React.FC<{
         rtcProps.encryption.salt
       ) {
         console.log('using channel encryption', rtcProps?.encryption);
-        await engine.enableEncryption(true, {
-          encryptionKey: rtcProps?.encryption.key,
-          encryptionMode: rtcProps?.encryption.mode,
-          encryptionKdfSalt: rtcProps?.encryption.salt,
-        });
+        try {
+          await engine.enableEncryption(true, {
+            encryptionKey: rtcProps?.encryption.key,
+            encryptionMode: rtcProps?.encryption.mode,
+            encryptionKdfSalt: rtcProps?.encryption.salt,
+          });
+        } catch (error) {
+          console.warn('encryption error', error);
+        }
       }
       if (
         !audioRoom &&
