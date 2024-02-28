@@ -32,6 +32,8 @@ const Create = ({
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {
     geoFencing = true,
+    geoFencingIncludeArea = -1,
+    geoFencingExcludeArea = 0,
     audioRoom = false,
     activeSpeaker = false,
   } = rtcProps || {};
@@ -218,12 +220,20 @@ const Create = ({
           (Platform.OS === 'android' || Platform.OS === 'ios')
         ) {
           if (rtcProps?.appId) {
+            console.log(
+              'debugging geoFencingIncludeArea',
+              geoFencingIncludeArea,
+            );
+            console.log(
+              'debugging geoFencingExcludeArea',
+              geoFencingExcludeArea,
+            );
             //@ts-ignore
             engine.current = await RtcEngine.createWithAreaCode(
               rtcProps?.appId,
-              // eslint-disable-next-line no-bitwise
-              //@ts-ignore
-              AreaCode.GLOB ^ AreaCode.CN,
+              geoFencingExcludeArea === 0
+                ? geoFencingIncludeArea
+                : geoFencingIncludeArea ^ geoFencingExcludeArea,
             );
           }
         } else {

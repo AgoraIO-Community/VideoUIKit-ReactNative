@@ -131,6 +131,8 @@ export interface RtcPropsInterface {
   //   useBeforeCreate?: () => () => Promise<void>;
   // };
   geoFencing?: boolean;
+  geoFencingIncludeArea?: number;
+  geoFencingExcludeArea?: number;
   audioRoom?: boolean;
   activeSpeaker?: boolean;
   preventJoin?: boolean;
@@ -182,6 +184,8 @@ const initialValue: Partial<PropsInterface> = {
     appId: '',
     channel: '',
     geoFencing: true,
+    geoFencingIncludeArea: -1,
+    geoFencingExcludeArea: 0,
     audioRoom: false,
     preventJoin: true,
   },
