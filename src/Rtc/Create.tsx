@@ -220,14 +220,6 @@ const Create = ({
           (Platform.OS === 'android' || Platform.OS === 'ios')
         ) {
           if (rtcProps?.appId) {
-            console.log(
-              'debugging geoFencingIncludeArea',
-              geoFencingIncludeArea,
-            );
-            console.log(
-              'debugging geoFencingExcludeArea',
-              geoFencingExcludeArea,
-            );
             //@ts-ignore
             engine.current = await RtcEngine.createWithAreaCode(
               rtcProps?.appId,
