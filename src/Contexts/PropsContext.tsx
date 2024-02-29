@@ -1,26 +1,54 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
-import {RtcEngineEvents} from 'react-native-agora/lib/typescript/common/RtcEvents';
+import {IRtcEngineEventHandler} from 'react-native-agora';
 import {EncryptionMode} from 'react-native-agora';
 import {VideoProfile} from '../Utils/quality';
 import {UidType} from './RtcContext';
 
 /* User role for live streaming mode */
-export enum ClientRole {
-  /* 1: A host can both send and receive streams. */
-  Broadcaster = 1,
-  /* 2: The default role. An audience can only receive streams. */
-  Audience = 2,
+export enum ClientRoleType {
+  /**
+   * 1: Host. A host can both send and receive streams.
+   */
+  ClientRoleBroadcaster = 1,
+  /**
+   * 2: (Default) Audience. An audience member can only receive streams.
+   */
+  ClientRoleAudience = 2,
 }
 
+// /* Mode for RTC (Live or Broadcast) */
+// export enum ChannelProfile {
+//   /** 0: (Default) The Communication profile.
+//    *  Use this profile in one-on-one calls or group calls, where all users can talk freely. */
+//   Communication = 0,
+//   /**  1: The Live-Broadcast profile.
+//    *   Users in a live-broadcast channel have a role as either host or audience. A host can both send and receive streams; an audience can only receive streams. */
+//   LiveBroadcasting = 1,
+// }
+
 /* Mode for RTC (Live or Broadcast) */
-export enum ChannelProfile {
-  /** 0: (Default) The Communication profile.
-   *  Use this profile in one-on-one calls or group calls, where all users can talk freely. */
-  Communication = 0,
-  /**  1: The Live-Broadcast profile.
-   *   Users in a live-broadcast channel have a role as either host or audience. A host can both send and receive streams; an audience can only receive streams. */
-  LiveBroadcasting = 1,
+export enum ChannelProfileType {
+  /**
+   * 0: Communication. Use this profile when there are only two users in the channel.
+   */
+  ChannelProfileCommunication = 0,
+  /**
+   * 1: Live streaming. Live streaming. Use this profile when there are more than two users in the channel.
+   */
+  ChannelProfileLiveBroadcasting = 1,
+  /**
+   * 2: Gaming. This profile is deprecated.
+   */
+  ChannelProfileGame = 2,
+  /**
+   * Cloud gaming. The scenario is optimized for latency. Use this profile if the use case requires frequent interactions between users.
+   */
+  ChannelProfileCloudGaming = 3,
+  /**
+   * @ignore
+   */
+  ChannelProfileCommunication1v1 = 4,
 }
 
 // disabled is intentionally kept as the 1st item in the enum.
@@ -144,8 +172,8 @@ export interface CallbacksInterface {
   FullScreen(): void; //?
   SwitchCamera(): void; //Not in reducer
   UpdateDualStreamMode(mode: DualStreamMode): void;
-  UserJoined: RtcEngineEvents['UserJoined'];
-  UserOffline: RtcEngineEvents['UserOffline'];
+  UserJoined: IRtcEngineEventHandler['onUserJoined'];
+  UserOffline: IRtcEngineEventHandler['onUserOffline'];
   SwapVideo(uid: UidType): void;
   DequeVideo(uid: UidType): void;
   UserMuteRemoteAudio(uid: UidType, muted: ContentInterface['audio']): void;
@@ -155,9 +183,9 @@ export interface CallbacksInterface {
   LocalPermissionState(
     permissionState: ContentInterface['permissionStatus'],
   ): void;
-  RemoteAudioStateChanged: RtcEngineEvents['RemoteAudioStateChanged'];
-  RemoteVideoStateChanged: RtcEngineEvents['RemoteVideoStateChanged'];
-  JoinChannelSuccess: RtcEngineEvents['JoinChannelSuccess'];
+  RemoteAudioStateChanged: IRtcEngineEventHandler['onRemoteAudioStateChanged'];
+  RemoteVideoStateChanged: IRtcEngineEventHandler['onRemoteVideoStateChanged'];
+  JoinChannelSuccess: IRtcEngineEventHandler['onJoinChannelSuccess'];
   UpdateRenderList(uid: UidType, user: Partial<ContentInterface>): void;
   AddCustomContent(uid: UidType, data: any): void;
   RemoveCustomContent(uid: UidType): void;
@@ -172,7 +200,7 @@ export interface PropsInterface {
   rtcProps: RtcPropsInterface;
   styleProps?: Partial<StylePropInterface>;
   callbacks?: Partial<CallbacksInterface>;
-  mode?: ChannelProfile;
+  mode?: ChannelProfileType;
 }
 
 const initialValue: Partial<PropsInterface> = {

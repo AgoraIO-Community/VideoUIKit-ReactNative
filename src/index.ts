@@ -42,7 +42,7 @@ export type {
   PropsInterface,
 } from './Contexts/PropsContext';
 
-export {ClientRole, ChannelProfile} from './Contexts/PropsContext';
+export {ClientRoleType, ChannelProfileType} from './Contexts/PropsContext';
 
 export {
   default as RtcContext,
