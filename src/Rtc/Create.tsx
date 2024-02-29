@@ -15,6 +15,7 @@ import PropsContext, {
   PermissionState,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
+import {isBotUser} from '../Utils/isBotUser';
 
 const Create = ({
   dispatch,
@@ -302,9 +303,10 @@ const Create = ({
           )
         ) {
           if (rtcProps?.recordingBot) {
-            console.log('supriya not asking permission');
+            console.log(
+              'supriya recordingBot, hence not asking audio/video permission',
+            );
           } else {
-            console.log('supriya taking permission');
             enableVideoAndAudioWithInitialStates().then(() => {
               setTracksReady(true);
               isVideoEnabledRef.current = true;
@@ -328,9 +330,8 @@ const Create = ({
         );
 
         engine.current.addListener('UserJoined', async (...args) => {
-          // preventing STT pusher bot in renderlist
-          //@ts-ignore
-          if (args[0] === 111111) {
+          // preventing bots(ex: STT, recording) in renderlist
+          if (isBotUser(args)) {
             return;
           }
           //Get current peer IDs

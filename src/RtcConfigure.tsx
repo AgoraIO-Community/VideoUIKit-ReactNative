@@ -47,23 +47,42 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
   );
   const localUid = useLocalUid();
 
-  const initialLocalState: Partial<ContentStateInterface> = {
-    customContent: {},
-    defaultContent: {
-      [localUid]: {
-        uid: localUid,
-        audio: ToggleState.disabled,
-        video: ToggleState.disabled,
-        streamType: 'high',
-        type: 'rtc',
-        permissionStatus: PermissionState.NOT_REQUESTED,
-      },
-    },
-    activeUids: [localUid],
-    pinnedUid: undefined,
-    secondaryPinnedUid: undefined,
-    lastJoinedUid: 0,
-  };
+  const initialLocalState: Partial<ContentStateInterface> =
+    rtcProps?.recordingBot
+      ? {
+          customContent: {},
+          defaultContent: {
+            [localUid]: {
+              uid: localUid,
+              audio: ToggleState.disabled,
+              video: ToggleState.disabled,
+              streamType: 'high',
+              type: 'rtc',
+              permissionStatus: PermissionState.NOT_REQUESTED,
+            },
+          },
+          activeUids: [],
+          pinnedUid: undefined,
+          secondaryPinnedUid: undefined,
+          lastJoinedUid: 0,
+        }
+      : {
+          customContent: {},
+          defaultContent: {
+            [localUid]: {
+              uid: localUid,
+              audio: ToggleState.disabled,
+              video: ToggleState.disabled,
+              streamType: 'high',
+              type: 'rtc',
+              permissionStatus: PermissionState.NOT_REQUESTED,
+            },
+          },
+          activeUids: [localUid],
+          pinnedUid: undefined,
+          secondaryPinnedUid: undefined,
+          lastJoinedUid: 0,
+        };
 
   const [initialState, setInitialState] = React.useState(
     JSON.parse(JSON.stringify(initialLocalState)),
