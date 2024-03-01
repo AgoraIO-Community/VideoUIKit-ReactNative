@@ -4,18 +4,16 @@ import {
   ContentStateInterface,
   ActionType,
   UidType,
-  CustomContentObjects,
   CustomContentInferface,
 } from './Contexts/RtcContext';
 import {DispatchType} from './Contexts/DispatchContext';
 import PropsContext, {
   ToggleState,
-  RtcPropsInterface,
   CallbacksInterface,
   DualStreamMode,
   PermissionState,
-  ChannelProfile,
-  ClientRole,
+  ChannelProfileType,
+  ClientRoleType,
 } from './Contexts/PropsContext';
 import {ContentProvider} from './Contexts/ContentContext';
 import {actionTypeGuard} from './Utils/actionTypeGuard';
@@ -71,6 +69,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
 
   React.useEffect(() => {
     setInitialState(JSON.parse(JSON.stringify(initialLocalState)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -413,7 +412,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
     <Create dispatch={dispatch}>
       {(engineRef, tracksReady) => (
         <Join
-          precall={!rtcProps.callActive}
+          precall={!rtcProps?.callActive}
           preventJoin={rtcProps?.preventJoin}
           engineRef={engineRef}
           uidState={uidState}
@@ -432,8 +431,9 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                   defaultContent: uidState.defaultContent,
                   activeUids:
                     //In livestreaming mode ->audience should not see their local video tile
-                    mode == ChannelProfile.LiveBroadcasting &&
-                    rtcProps?.role == ClientRole.Audience
+                    mode ===
+                      ChannelProfileType.ChannelProfileLiveBroadcasting &&
+                    rtcProps?.role === ClientRoleType.ClientRoleAudience
                       ? uidState.activeUids.filter((i) => i !== localUid)
                       : uidState.activeUids.filter((i) => i !== undefined),
                   pinnedUid:

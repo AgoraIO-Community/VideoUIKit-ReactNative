@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useRef} from 'react';
-import RtcEngine from 'react-native-agora';
+import {IRtcEngine} from 'react-native-agora';
 import {ContentStateInterface} from '../Contexts/RtcContext';
 import {DispatchType} from '../Contexts/DispatchContext';
 import PropsContext, {ToggleState} from '../Contexts/PropsContext';
@@ -8,7 +8,7 @@ import {Platform} from 'react-native';
 const Join: React.FC<{
   children: React.ReactNode;
   precall: boolean;
-  engineRef: React.MutableRefObject<RtcEngine>;
+  engineRef: React.MutableRefObject<IRtcEngine>;
   uidState: ContentStateInterface;
   dispatch: DispatchType;
   tracksReady: boolean;
@@ -16,7 +16,8 @@ const Join: React.FC<{
 }> = ({children, precall, engineRef, uidState, dispatch, tracksReady}) => {
   let joinState = useRef(false);
   const {rtcProps} = useContext(PropsContext);
-  const {audioRoom = false} = rtcProps;
+
+  const audioRoom = rtcProps?.audioRoom || false;
   //commented for v1 release
   // const beforeJoin = rtcProps?.lifecycle?.useBeforeJoin
   //   ? rtcProps.lifecycle.useBeforeJoin()
@@ -27,12 +28,14 @@ const Join: React.FC<{
       //@ts-ignore
       engineRef.current.publish();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tracksReady]);
 
   useEffect(() => {
     if (rtcProps?.preventJoin) {
       return;
     }
+
     const engine = engineRef.current;
     async function leave() {
       try {
@@ -89,10 +92,10 @@ const Join: React.FC<{
       // }
       try {
         await engine.joinChannel(
-          rtcProps.token || null,
-          rtcProps.channel,
-          null,
-          rtcProps.uid || 0,
+          rtcProps?.token || '',
+          rtcProps?.channel || '',
+          rtcProps?.uid || 0,
+          {},
         );
       } catch (error) {
         console.error('RTC joinChannel error', error);
@@ -122,7 +125,7 @@ const Join: React.FC<{
           await leave();
           await join();
         }
-        console.log('Attempted join: ', rtcProps.channel);
+        console.log('Attempted join: ', rtcProps?.channel);
       } else {
         console.log('In precall - waiting to join');
       }
@@ -133,13 +136,14 @@ const Join: React.FC<{
         leave();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    rtcProps.channel,
-    rtcProps.uid,
-    rtcProps.token,
+    rtcProps?.channel,
+    rtcProps?.uid,
+    rtcProps?.token,
     precall,
-    rtcProps.encryption,
-    rtcProps.preventJoin,
+    rtcProps?.encryption,
+    rtcProps?.preventJoin,
   ]);
 
   return <>{children}</>;

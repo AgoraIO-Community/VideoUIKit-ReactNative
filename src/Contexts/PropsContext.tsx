@@ -17,16 +17,6 @@ export enum ClientRoleType {
   ClientRoleAudience = 2,
 }
 
-// /* Mode for RTC (Live or Broadcast) */
-// export enum ChannelProfile {
-//   /** 0: (Default) The Communication profile.
-//    *  Use this profile in one-on-one calls or group calls, where all users can talk freely. */
-//   Communication = 0,
-//   /**  1: The Live-Broadcast profile.
-//    *   Users in a live-broadcast channel have a role as either host or audience. A host can both send and receive streams; an audience can only receive streams. */
-//   LiveBroadcasting = 1,
-// }
-
 /* Mode for RTC (Live or Broadcast) */
 export enum ChannelProfileType {
   /**
@@ -144,11 +134,11 @@ export interface RtcPropsInterface {
   dual?: boolean | null;
   profile?: VideoProfile;
   initialDualStreamMode?: DualStreamMode;
-  role?: ClientRole /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
+  role?: ClientRoleType /* Set local user's role between audience and host. Use with mode set to livestreaming. (default: host) */;
   callActive?: boolean;
   encryption?: {
     key: string;
-    mode: EncryptionMode.AES128GCM2 | EncryptionMode.AES128GCM2;
+    mode: EncryptionMode.Aes128Gcm2 | EncryptionMode.Aes256Gcm2;
     salt: number[];
   };
   // commented for v1 release
