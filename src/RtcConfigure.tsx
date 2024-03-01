@@ -38,7 +38,7 @@ import Join from './Rtc/Join';
 import useLocalUid from './Utils/useLocalUid';
 import {DispatchProvider} from './Contexts/DispatchContext';
 
-const RtcConfigure = (props: {children: React.ReactNode}) => {
+const RtcConfigure = (outerProps: {children: React.ReactNode}) => {
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   let [dualStreamMode, setDualStreamMode] = useState<DualStreamMode>(
     rtcProps?.initialDualStreamMode || DualStreamMode.DYNAMIC,
@@ -450,7 +450,7 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                       : undefined,
                   lastJoinedUid: uidState.lastJoinedUid,
                 }}>
-                {props.children}
+                {outerProps.children}
               </ContentProvider>
             </RtcProvider>
           </DispatchProvider>
