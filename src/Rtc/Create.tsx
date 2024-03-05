@@ -377,6 +377,18 @@ const Create = ({
       init();
     }
     return () => {
+      //TODO: check below events
+      // engine.current.removeAllListeners('onJoinChannelSuccess');
+      // engine.current.removeAllListeners('onLeaveChannel');
+      // engine.current.removeAllListeners('onUserJoined');
+      // engine.current.removeAllListeners('onUserOffline');
+      // engine.current.removeAllListeners('onRemoteVideoStateChanged');
+      // engine.current.removeAllListeners('onRemoteAudioStateChanged');
+      // engine.current.removeAllListeners('onError');
+      // if (tracksReady) {
+      //   // release resources
+      //   engine.current.release();
+      // }
       /**
        * if condition add for websdk issue
        * For some reason even if engine.current is defined somehow destroy gets undefined and
