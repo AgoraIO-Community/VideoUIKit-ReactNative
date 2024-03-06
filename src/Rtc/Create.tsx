@@ -325,33 +325,37 @@ const Create = ({
         );
 
         engine.current.addListener('onUserJoined', async (...args) => {
+          // exluding the connection obj being passed by native sdk
+          const [, ...remainingArgs] = args;
           // preventing STT pusher bot in renderlist
           //@ts-ignore
-          if (args[0] === 111111) {
+          if (remainingArgs[0] === 111111) {
             return;
           }
           //Get current peer IDs
           dispatch({
             type: 'UserJoined',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
         engine.current.addListener('onUserOffline', (...args) => {
+          const [, ...remainingArgs] = args;
           //If user leaves
           dispatch({
             type: 'UserOffline',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
         engine.current.addListener('onRemoteAudioStateChanged', (...args) => {
+          const [, ...remainingArgs] = args;
           dispatch({
             type: 'RemoteAudioStateChanged',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
@@ -360,10 +364,11 @@ const Create = ({
         });
 
         engine.current.addListener('onRemoteVideoStateChanged', (...args) => {
+          const [, ...remainingArgs] = args;
           dispatch({
             type: 'RemoteVideoStateChanged',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
