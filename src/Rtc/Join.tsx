@@ -48,15 +48,21 @@ const Join: React.FC<{
     const videoState = defaultContent[maxUid]?.video;
     async function join() {
       if (
-        rtcProps.encryption &&
+        rtcProps?.encryption &&
         rtcProps.encryption.key &&
-        rtcProps.encryption.mode
+        rtcProps.encryption.mode &&
+        rtcProps.encryption.salt
       ) {
-        console.log('using channel encryption', rtcProps.encryption);
-        await engine.enableEncryption(true, {
-          encryptionKey: rtcProps.encryption.key,
-          encryptionMode: rtcProps.encryption.mode,
-        });
+        console.log('using channel encryption', rtcProps?.encryption);
+        try {
+          await engine.enableEncryption(true, {
+            encryptionKey: rtcProps?.encryption.key,
+            encryptionMode: rtcProps?.encryption.mode,
+            encryptionKdfSalt: rtcProps?.encryption.salt,
+          });
+        } catch (error) {
+          console.warn('encryption error', error);
+        }
       }
       if (
         !audioRoom &&
