@@ -32,6 +32,8 @@ const Create = ({
   const {callbacks, rtcProps, mode} = useContext(PropsContext);
   const {
     geoFencing = true,
+    geoFencingIncludeArea = -1,
+    geoFencingExcludeArea = 0,
     audioRoom = false,
     activeSpeaker = false,
   } = rtcProps || {};
@@ -223,7 +225,9 @@ const Create = ({
               rtcProps?.appId,
               // eslint-disable-next-line no-bitwise
               //@ts-ignore
-              AreaCode.GLOB ^ AreaCode.CN,
+              geoFencingExcludeArea === 0
+                ? geoFencingIncludeArea
+                : geoFencingIncludeArea ^ geoFencingExcludeArea,
             );
           }
         } else {
