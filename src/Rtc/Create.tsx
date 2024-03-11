@@ -382,7 +382,6 @@ const Create = ({
       init();
     }
     return () => {
-      //TODO: check below events
       // engine.current.removeAllListeners('onJoinChannelSuccess');
       // engine.current.removeAllListeners('onLeaveChannel');
       // engine.current.removeAllListeners('onUserJoined');
@@ -390,19 +389,13 @@ const Create = ({
       // engine.current.removeAllListeners('onRemoteVideoStateChanged');
       // engine.current.removeAllListeners('onRemoteAudioStateChanged');
       // engine.current.removeAllListeners('onError');
-      // if (tracksReady) {
-      //   // release resources
-      //   engine.current.release();
-      // }
+
       /**
        * if condition add for websdk issue
        * For some reason even if engine.current is defined somehow destroy gets undefined and
        * causes a crash so thats why this check is needed before we call the method
        */
-      //TODO: check with Hari if below req ?
-      // if (engine.current.destroy) {
-      //   engine.current!.destroy();
-      // }
+      engine.current.release();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rtcProps?.appId, rtcProps?.uid]);
