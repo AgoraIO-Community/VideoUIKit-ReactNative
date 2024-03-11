@@ -389,13 +389,14 @@ const Create = ({
       // engine.current.removeAllListeners('onRemoteVideoStateChanged');
       // engine.current.removeAllListeners('onRemoteAudioStateChanged');
       // engine.current.removeAllListeners('onError');
-
       /**
        * if condition add for websdk issue
        * For some reason even if engine.current is defined somehow destroy gets undefined and
        * causes a crash so thats why this check is needed before we call the method
        */
-      engine.current.release();
+      if (tracksReady) {
+        engine.current.release();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rtcProps?.appId, rtcProps?.uid]);
