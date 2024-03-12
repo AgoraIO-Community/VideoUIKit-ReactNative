@@ -52,16 +52,16 @@ const Join: React.FC<{
     async function join() {
       if (
         rtcProps?.encryption &&
-        rtcProps.encryption.key &&
+        rtcProps?.encryption.key &&
         rtcProps.encryption.mode &&
         rtcProps.encryption.salt
       ) {
-        console.log('using channel encryption', rtcProps?.encryption);
         try {
           await engine.enableEncryption(true, {
             encryptionKey: rtcProps?.encryption.key,
             encryptionMode: rtcProps?.encryption.mode,
             encryptionKdfSalt: rtcProps?.encryption.salt,
+            datastreamEncryptionEnabled: true,
           });
         } catch (error) {
           console.warn('encryption error', error);
