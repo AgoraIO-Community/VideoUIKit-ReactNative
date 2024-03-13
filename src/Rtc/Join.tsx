@@ -48,7 +48,7 @@ const Join: React.FC<{
     }
     const {defaultContent, activeUids} = uidState;
     const [maxUid] = activeUids;
-    const videoState = defaultContent[maxUid].video;
+    const videoState = defaultContent[maxUid]?.video;
     async function join() {
       if (
         rtcProps?.encryption &&

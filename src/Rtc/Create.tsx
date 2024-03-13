@@ -17,6 +17,7 @@ import PropsContext, {
   PermissionState,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
+import {isBotUser} from '../Utils/isBotUser';
 
 const Create = ({
   dispatch,
@@ -300,13 +301,20 @@ const Create = ({
           !(
             mode === ChannelProfileType.ChannelProfileLiveBroadcasting &&
             rtcProps?.role === ClientRoleType.ClientRoleAudience &&
-            Platform.OS === 'web'
+            Platform.OS === 'web' &&
+            rtcProps?.recordingBot
           )
         ) {
-          enableVideoAndAudioWithInitialStates().then(() => {
-            setTracksReady(true);
-            isVideoEnabledRef.current = true;
-          });
+          if (rtcProps?.recordingBot) {
+            console.log(
+              'recording-bot, hence not asking audio/video permission',
+            );
+          } else {
+            enableVideoAndAudioWithInitialStates().then(() => {
+              setTracksReady(true);
+              isVideoEnabledRef.current = true;
+            });
+          }
         }
 
         engine.current.addListener(
@@ -327,9 +335,9 @@ const Create = ({
         engine.current.addListener('onUserJoined', async (...args) => {
           // exluding the connection obj being passed by native sdk
           const [, ...remainingArgs] = args;
-          // preventing STT pusher bot in renderlist
           //@ts-ignore
-          if (remainingArgs[0] === 111111) {
+          // preventing bots(ex: STT, recording) in renderlist
+          if (isBotUser(remainingArgs)) {
             return;
           }
           //Get current peer IDs

@@ -154,6 +154,7 @@ export interface RtcPropsInterface {
   //core only
   screenShareUid?: number;
   screenShareToken?: string;
+  recordingBot?: false;
   //core only
 }
 

@@ -57,7 +57,7 @@ const RtcConfigure = (outerProps: {children: React.ReactNode}) => {
         permissionStatus: PermissionState.NOT_REQUESTED,
       },
     },
-    activeUids: [localUid],
+    activeUids: rtcProps?.recordingBot ? [] : [localUid],
     pinnedUid: undefined,
     secondaryPinnedUid: undefined,
     lastJoinedUid: 0,
