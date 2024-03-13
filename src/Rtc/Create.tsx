@@ -304,7 +304,7 @@ const Create = ({
         ) {
           if (rtcProps?.recordingBot) {
             console.log(
-              'supriya recordingBot, hence not asking audio/video permission',
+              'recording-bot, hence not asking audio/video permission',
             );
           } else {
             enableVideoAndAudioWithInitialStates().then(() => {

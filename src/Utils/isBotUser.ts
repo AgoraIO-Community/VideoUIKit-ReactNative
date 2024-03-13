@@ -1,5 +1,4 @@
 export function isBotUser(args: [uid: number, elapsed: number]): boolean {
-  console.log('supriya inside UserJoined verifying if bot user', args[0]);
   // STT bot
   if (args[0] === 111111) {
     return true;

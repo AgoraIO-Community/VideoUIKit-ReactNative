@@ -47,42 +47,23 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
   );
   const localUid = useLocalUid();
 
-  const initialLocalState: Partial<ContentStateInterface> =
-    rtcProps?.recordingBot
-      ? {
-          customContent: {},
-          defaultContent: {
-            [localUid]: {
-              uid: localUid,
-              audio: ToggleState.disabled,
-              video: ToggleState.disabled,
-              streamType: 'high',
-              type: 'rtc',
-              permissionStatus: PermissionState.NOT_REQUESTED,
-            },
-          },
-          activeUids: [],
-          pinnedUid: undefined,
-          secondaryPinnedUid: undefined,
-          lastJoinedUid: 0,
-        }
-      : {
-          customContent: {},
-          defaultContent: {
-            [localUid]: {
-              uid: localUid,
-              audio: ToggleState.disabled,
-              video: ToggleState.disabled,
-              streamType: 'high',
-              type: 'rtc',
-              permissionStatus: PermissionState.NOT_REQUESTED,
-            },
-          },
-          activeUids: [localUid],
-          pinnedUid: undefined,
-          secondaryPinnedUid: undefined,
-          lastJoinedUid: 0,
-        };
+  const initialLocalState: Partial<ContentStateInterface> = {
+    customContent: {},
+    defaultContent: {
+      [localUid]: {
+        uid: localUid,
+        audio: ToggleState.disabled,
+        video: ToggleState.disabled,
+        streamType: 'high',
+        type: 'rtc',
+        permissionStatus: PermissionState.NOT_REQUESTED,
+      },
+    },
+    activeUids: rtcProps?.recordingBot ? [] : [localUid],
+    pinnedUid: undefined,
+    secondaryPinnedUid: undefined,
+    lastJoinedUid: 0,
+  };
 
   const [initialState, setInitialState] = React.useState(
     JSON.parse(JSON.stringify(initialLocalState)),
@@ -453,8 +434,16 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                     //In livestreaming mode ->audience should not see their local video tile
                     mode == ChannelProfile.LiveBroadcasting &&
                     rtcProps?.role == ClientRole.Audience
-                      ? [...new Set(uidState.activeUids.filter((i) => i !== localUid))]
-                      : [...new Set(uidState.activeUids.filter((i) => i !== undefined))],
+                      ? [
+                          ...new Set(
+                            uidState.activeUids.filter((i) => i !== localUid),
+                          ),
+                        ]
+                      : [
+                          ...new Set(
+                            uidState.activeUids.filter((i) => i !== undefined),
+                          ),
+                        ],
                   pinnedUid:
                     uidState?.pinnedUid &&
                     uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
