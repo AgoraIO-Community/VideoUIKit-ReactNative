@@ -1,14 +1,16 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useContext} from 'react';
 import {View, TouchableOpacity, Image} from 'react-native';
-import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
+
+import {RenderModeType, RtcSurfaceView} from 'react-native-agora';
 import styles from '../Style';
 import icons from '../Controls/Icons';
 import RemoteControls from '../Controls/RemoteControls';
 import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
 import useLocalUid from '../Utils/useLocalUid';
 
-const LocalView = RtcLocalView.SurfaceView;
-const RemoteView = RtcRemoteView.SurfaceView;
+const LocalView = RtcSurfaceView;
+const RemoteView = RtcSurfaceView;
 
 interface MinViewInterface {
   user: ContentInterface;
@@ -33,7 +35,7 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
             props.user.video ? (
               <LocalView
                 style={{...styles.minView, ...(minViewStyles as object)}}
-                renderMode={VideoRenderMode.Hidden}
+                canvas={{renderMode: RenderModeType.RenderModeHidden, uid: 0}}
                 zOrderMediaOverlay={true}
               />
             ) : (
@@ -49,8 +51,10 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
           ) : (
             <RemoteView
               style={{...styles.minView, ...(minViewStyles as object)}}
-              uid={uid as number}
-              renderMode={VideoRenderMode.Hidden}
+              canvas={{
+                renderMode: RenderModeType.RenderModeHidden,
+                uid: uid as number,
+              }}
               zOrderMediaOverlay={true}
             />
           )}
@@ -58,14 +62,16 @@ const MinVideoView: React.FC<MinViewInterface> = (props) => {
       ) : uid === localUid ? (
         <LocalView
           style={{...styles.minView, ...(minViewStyles as object)}}
-          renderMode={VideoRenderMode.Hidden}
+          canvas={{renderMode: RenderModeType.RenderModeHidden, uid: 0}}
           zOrderMediaOverlay={true}
         />
       ) : (
         <RemoteView
           style={{...styles.minView, ...(minViewStyles as object)}}
-          uid={uid as number}
-          renderMode={VideoRenderMode.Hidden}
+          canvas={{
+            renderMode: RenderModeType.RenderModeHidden,
+            uid: uid as number,
+          }}
           zOrderMediaOverlay={true}
         />
       )}
