@@ -15,6 +15,8 @@ export default function LocalMuteAudio(
       [localUid]: {
         ...state.defaultContent[localUid],
         audio: action.value[0],
+        localAudioForceDisabled:
+          action?.value?.length === 2 ? action.value[1] : false,
       },
     },
     activeUids: [...state.activeUids],

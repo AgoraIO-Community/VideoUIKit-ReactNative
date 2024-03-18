@@ -57,6 +57,8 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
         streamType: 'high',
         type: 'rtc',
         permissionStatus: PermissionState.NOT_REQUESTED,
+        audioForceDisabled: false,
+        videoForceDisabled: false,
       },
     },
     activeUids: [localUid],
@@ -434,8 +436,16 @@ const RtcConfigure = (props: {children: React.ReactNode}) => {
                     //In livestreaming mode ->audience should not see their local video tile
                     mode == ChannelProfile.LiveBroadcasting &&
                     rtcProps?.role == ClientRole.Audience
-                      ? [...new Set(uidState.activeUids.filter((i) => i !== localUid))]
-                      : [...new Set(uidState.activeUids.filter((i) => i !== undefined))],
+                      ? [
+                          ...new Set(
+                            uidState.activeUids.filter((i) => i !== localUid),
+                          ),
+                        ]
+                      : [
+                          ...new Set(
+                            uidState.activeUids.filter((i) => i !== undefined),
+                          ),
+                        ],
                   pinnedUid:
                     uidState?.pinnedUid &&
                     uidState?.activeUids?.indexOf(uidState.pinnedUid) !== -1
