@@ -390,19 +390,23 @@ const Create = ({
       init();
     }
     return () => {
-      // engine.current.removeAllListeners('onJoinChannelSuccess');
-      // engine.current.removeAllListeners('onLeaveChannel');
-      // engine.current.removeAllListeners('onUserJoined');
-      // engine.current.removeAllListeners('onUserOffline');
-      // engine.current.removeAllListeners('onRemoteVideoStateChanged');
-      // engine.current.removeAllListeners('onRemoteAudioStateChanged');
-      // engine.current.removeAllListeners('onError');
+      if (Platform.OS !== 'web') {
+        // for web, events are cleared in release method
+        engine.current.removeAllListeners('onJoinChannelSuccess');
+        engine.current.removeAllListeners('onLeaveChannel');
+        engine.current.removeAllListeners('onUserJoined');
+        engine.current.removeAllListeners('onUserOffline');
+        engine.current.removeAllListeners('onRemoteVideoStateChanged');
+        engine.current.removeAllListeners('onRemoteAudioStateChanged');
+        engine.current.removeAllListeners('onError');
+      }
+
       /**
        * if condition add for websdk issue
        * For some reason even if engine.current is defined somehow destroy gets undefined and
        * causes a crash so thats why this check is needed before we call the method
        */
-      if (tracksReady) {
+      if (tracksReady || Platform.OS === 'web') {
         engine.current.release();
       }
     };
