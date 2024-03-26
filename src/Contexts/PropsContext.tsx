@@ -142,7 +142,7 @@ export interface RtcPropsInterface {
 }
 
 export interface CallbacksInterface {
-  EndCall(isHost: boolean, isTriggeredByHost: boolean): void; //?
+  EndCall(): void; //?
   FullScreen(): void; //?
   SwitchCamera(): void; //Not in reducer
   UpdateDualStreamMode(mode: DualStreamMode): void;
