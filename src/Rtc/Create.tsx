@@ -1,20 +1,23 @@
-import React, {useState, useEffect, useContext, useRef, FC} from 'react';
-import RtcEngine, {
+import React, {useState, useEffect, useContext, useRef} from 'react';
+import {
+  createAgoraRtcEngine,
   VideoEncoderConfiguration,
   AreaCode,
-  AudioProfile,
-  AudioScenario,
+  IRtcEngine,
+  AudioProfileType,
+  AudioScenarioType,
 } from 'react-native-agora';
 import {Platform} from 'react-native';
 import requestCameraAndAudioPermission from '../Utils/permission';
 import {DispatchType} from '../Contexts/DispatchContext';
 import PropsContext, {
   ToggleState,
-  ClientRole,
-  ChannelProfile,
+  ClientRoleType,
+  ChannelProfileType,
   PermissionState,
 } from '../Contexts/PropsContext';
 import quality from '../Utils/quality';
+import {isBotUser} from '../Utils/isBotUser';
 
 const Create = ({
   dispatch,
@@ -22,9 +25,9 @@ const Create = ({
 }: {
   dispatch: DispatchType;
   children: (
-    engine: React.MutableRefObject<RtcEngine>,
+    engine: React.MutableRefObject<IRtcEngine>,
     tracksReady: boolean,
-  ) => JSX.Element;
+  ) => React.ReactElement;
 }) => {
   const mutexLock = useRef(false);
   const [ready, setReady] = useState(false);
@@ -35,7 +38,7 @@ const Create = ({
     audioRoom = false,
     activeSpeaker = false,
   } = rtcProps || {};
-  let engine = useRef<RtcEngine>({} as RtcEngine);
+  let engine = useRef<IRtcEngine>({} as IRtcEngine);
   // commented for v1 release
   // const beforeCreate = rtcProps?.lifecycle?.useBeforeCreate
   //   ? rtcProps.lifecycle.useBeforeCreate()
@@ -188,8 +191,8 @@ const Create = ({
   };
   const enableVideoAndAudioWithInitialStates = async () => {
     if (
-      mode == ChannelProfile.LiveBroadcasting &&
-      rtcProps?.role == ClientRole.Audience
+      mode === ChannelProfileType.ChannelProfileLiveBroadcasting &&
+      rtcProps?.role === ClientRoleType.ClientRoleAudience
     ) {
       enableVideoAndAudioWithDisabledState();
     } else {
@@ -213,36 +216,37 @@ const Create = ({
       //   console.error('FPE:Error on executing useBeforeCreate', error);
       // }
       try {
+        engine.current = createAgoraRtcEngine();
         if (
           geoFencing === true &&
           (Platform.OS === 'android' || Platform.OS === 'ios')
         ) {
           if (rtcProps?.appId) {
-            //@ts-ignore
-            engine.current = await RtcEngine.createWithAreaCode(
-              rtcProps?.appId,
+            engine.current.initialize({
+              appId: rtcProps.appId,
               // eslint-disable-next-line no-bitwise
-              //@ts-ignore
-              AreaCode.GLOB ^ AreaCode.CN,
-            );
+              areaCode: AreaCode.AreaCodeGlob ^ AreaCode.AreaCodeCn,
+            });
           }
         } else {
           if (rtcProps?.appId) {
-            engine.current = await RtcEngine.create(rtcProps.appId);
+            engine.current.initialize({appId: rtcProps.appId});
           }
         }
         /* Live Streaming */
-        if (mode == ChannelProfile.LiveBroadcasting) {
+        if (mode === ChannelProfileType.ChannelProfileLiveBroadcasting) {
           await engine.current.setChannelProfile(
-            ChannelProfile.LiveBroadcasting,
+            ChannelProfileType.ChannelProfileLiveBroadcasting,
           );
           await engine.current.setClientRole(
-            rtcProps.role === ClientRole.Audience
-              ? ClientRole.Audience
-              : ClientRole.Broadcaster,
+            rtcProps?.role === ClientRoleType.ClientRoleAudience
+              ? ClientRoleType.ClientRoleAudience
+              : ClientRoleType.ClientRoleBroadcaster,
           );
         } else {
-          await engine.current.setChannelProfile(ChannelProfile.Communication);
+          await engine.current.setChannelProfile(
+            ChannelProfileType.ChannelProfileCommunication,
+          );
         }
         if (activeSpeaker) {
           await engine.current.enableAudioVolumeIndication(100, 3, true);
@@ -271,14 +275,14 @@ const Create = ({
           if (Platform.OS === 'android' || Platform.OS === 'ios') {
             //@ts-ignore
             await engine.current.setAudioProfile(
-              AudioProfile.Default,
-              AudioScenario.Default,
+              AudioProfileType.AudioProfileDefault,
+              AudioScenarioType.AudioScenarioDefault,
             );
             //also audio route for voice-chat will work through earpiece not phonespeaker
             //for audiolivecast it will work through phone speaker
             //ref - https://docs.agora.io/en/help/integration-issues/profile_difference/#audio-route
             //so setting into phone speaker manually as requested
-            if (mode == ChannelProfile.Communication) {
+            if (mode === ChannelProfileType.ChannelProfileCommunication) {
               //@ts-ignore
               await engine.current.setEnableSpeakerphone(true);
             }
@@ -295,20 +299,27 @@ const Create = ({
          */
         if (
           !(
-            mode === ChannelProfile.LiveBroadcasting &&
-            rtcProps.role == ClientRole.Audience &&
-            Platform.OS === 'web'
+            mode === ChannelProfileType.ChannelProfileLiveBroadcasting &&
+            rtcProps?.role === ClientRoleType.ClientRoleAudience &&
+            Platform.OS === 'web' &&
+            rtcProps?.recordingBot
           )
         ) {
-          enableVideoAndAudioWithInitialStates().then(() => {
-            setTracksReady(true);
-            isVideoEnabledRef.current = true;
-          });
+          if (rtcProps?.recordingBot) {
+            console.log(
+              'recording-bot, hence not asking audio/video permission',
+            );
+          } else {
+            enableVideoAndAudioWithInitialStates().then(() => {
+              setTracksReady(true);
+              isVideoEnabledRef.current = true;
+            });
+          }
         }
 
         engine.current.addListener(
-          'JoinChannelSuccess',
-          async (channel, uid, elapsed) => {
+          'onJoinChannelSuccess',
+          async (connection, elapsed) => {
             //Invoke the callback
             console.log('UIkit enabling dual stream', rtcProps?.dual);
             if (rtcProps?.dual) {
@@ -317,50 +328,55 @@ const Create = ({
               // await engine.current.setRemoteSubscribeFallbackOption(1);
             }
             callbacks?.JoinChannelSuccess &&
-              callbacks.JoinChannelSuccess(channel, uid, elapsed);
+              callbacks.JoinChannelSuccess(connection, elapsed);
           },
         );
 
-        engine.current.addListener('UserJoined', async (...args) => {
-          // preventing STT pusher bot in renderlist
+        engine.current.addListener('onUserJoined', async (...args) => {
+          // exluding the connection obj being passed by native sdk
+          const [, ...remainingArgs] = args;
           //@ts-ignore
-          if (args[0] === 111111) {
+          // preventing bots(ex: STT, recording) in renderlist
+          if (isBotUser(remainingArgs)) {
             return;
           }
           //Get current peer IDs
           dispatch({
             type: 'UserJoined',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
-        engine.current.addListener('UserOffline', (...args) => {
+        engine.current.addListener('onUserOffline', (...args) => {
+          const [, ...remainingArgs] = args;
           //If user leaves
           dispatch({
             type: 'UserOffline',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
-        engine.current.addListener('RemoteAudioStateChanged', (...args) => {
+        engine.current.addListener('onRemoteAudioStateChanged', (...args) => {
+          const [, ...remainingArgs] = args;
           dispatch({
             type: 'RemoteAudioStateChanged',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
-        engine.current.addListener('Error', (e) => {
+        engine.current.addListener('onError', (e) => {
           console.log('Error: ', e);
         });
 
-        engine.current.addListener('RemoteVideoStateChanged', (...args) => {
+        engine.current.addListener('onRemoteVideoStateChanged', (...args) => {
+          const [, ...remainingArgs] = args;
           dispatch({
             type: 'RemoteVideoStateChanged',
             //@ts-ignore
-            value: args,
+            value: remainingArgs,
           });
         });
 
@@ -374,25 +390,39 @@ const Create = ({
       init();
     }
     return () => {
+      if (Platform.OS !== 'web') {
+        // for web, events are cleared in release method
+        engine.current.removeAllListeners('onJoinChannelSuccess');
+        engine.current.removeAllListeners('onLeaveChannel');
+        engine.current.removeAllListeners('onUserJoined');
+        engine.current.removeAllListeners('onUserOffline');
+        engine.current.removeAllListeners('onRemoteVideoStateChanged');
+        engine.current.removeAllListeners('onRemoteAudioStateChanged');
+        engine.current.removeAllListeners('onError');
+      }
+
       /**
        * if condition add for websdk issue
        * For some reason even if engine.current is defined somehow destroy gets undefined and
        * causes a crash so thats why this check is needed before we call the method
        */
-      if (engine.current.destroy) {
-        engine.current!.destroy();
+      if (tracksReady || Platform.OS === 'web') {
+        engine.current.release();
       }
     };
-  }, [rtcProps.appId, rtcProps.uid]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rtcProps?.appId, rtcProps?.uid]);
 
   useEffect(() => {
     const toggleRole = async () => {
       if (
-        mode == ChannelProfile.LiveBroadcasting &&
+        mode === ChannelProfileType.ChannelProfileLiveBroadcasting &&
         engine.current.setClientRole // Check if engine initialized
       ) {
-        if (rtcProps.role == ClientRole.Broadcaster) {
-          await engine.current?.setClientRole(ClientRole.Broadcaster);
+        if (rtcProps?.role === ClientRoleType.ClientRoleBroadcaster) {
+          await engine.current?.setClientRole(
+            ClientRoleType.ClientRoleBroadcaster,
+          );
           // isVideoEnabledRef checks if the permission is already taken once
           if (!isVideoEnabledRef.current) {
             await enableVideoAndAudioWithDisabledState();
@@ -417,7 +447,7 @@ const Create = ({
             }
           }
         }
-        if (rtcProps.role == ClientRole.Audience) {
+        if (rtcProps?.role === ClientRoleType.ClientRoleAudience) {
           /**
            * To switch the user role back to "audience", call unpublish first
            * Otherwise the setClientRole method call fails and throws an exception.
@@ -436,7 +466,9 @@ const Create = ({
               value: [ToggleState.disabled],
             });
           }
-          await engine.current?.setClientRole(ClientRole.Audience);
+          await engine.current?.setClientRole(
+            ClientRoleType.ClientRoleAudience,
+          );
         }
       }
     };
@@ -446,7 +478,8 @@ const Create = ({
       return;
     }
     toggleRole();
-  }, [rtcProps.role]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rtcProps?.role]);
 
   return (
     <>

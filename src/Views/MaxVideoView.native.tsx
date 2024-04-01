@@ -1,18 +1,16 @@
 import React, {useContext} from 'react';
-import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
+import {
+  RenderModeType,
+  RtcSurfaceView,
+  RtcTextureView,
+} from 'react-native-agora';
 import styles from '../Style';
 import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
-import {
-  View,
-  ViewStyle,
-  useWindowDimensions,
-  Platform,
-  ViewProps,
-} from 'react-native';
+import {View, ViewStyle, Platform, ViewProps, StyleSheet} from 'react-native';
 import useLocalUid from '../Utils/useLocalUid';
 
-const LocalView = RtcLocalView.SurfaceView;
-let RemoteView = RtcRemoteView.SurfaceView;
+const LocalView = RtcSurfaceView;
+let RemoteView = RtcSurfaceView;
 
 interface MaxViewInterface {
   user: ContentInterface;
@@ -21,6 +19,13 @@ interface MaxViewInterface {
   landscapeMode?: boolean;
   isFullView?: boolean;
 }
+
+/* 
+RenderModeType :
+Fill: Stretches or zooms to fill the screen, might distort.
+Fit: Fits the entire video without distortion, might have black bars.
+Hidden: Fills the screen, might cut off parts of the video.
+*/
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
   const {styleProps, rtcProps} = useContext(PropsContext);
@@ -35,7 +40,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     //SurfaceView does not support transform
     //TextureView only applicable to android
     if (Platform.OS === 'android') {
-      RemoteView = RtcRemoteView.TextureView;
+      RemoteView = RtcTextureView;
     }
     landscapeModeStyle = {
       flex: 1,
@@ -56,12 +61,17 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
           ...(maxViewStyles as object),
           ...containerStyle,
         }}
-        renderMode={isFullView ? VideoRenderMode.FILL : VideoRenderMode.Fit}
+        canvas={{
+          renderMode: isFullView
+            ? RenderModeType.RenderModeAdaptive
+            : RenderModeType.RenderModeFit,
+          uid: 0,
+        }}
       />
     ) : Fallback ? (
       <Fallback />
     ) : (
-      <View style={[{flex: 1, backgroundColor: '#000'}, containerStyle]} />
+      <View style={[style.containerStyle, containerStyle]} />
     )
   ) : props.user.video ? (
     <RemoteView
@@ -71,14 +81,20 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
         ...containerStyle,
         ...landscapeModeStyle,
       }}
-      uid={uid as number}
-      renderMode={VideoRenderMode.Fit}
+      canvas={{
+        renderMode: RenderModeType.RenderModeFit,
+        uid: uid as number,
+      }}
     />
   ) : Fallback ? (
     <Fallback />
   ) : (
-    <View style={[{flex: 1, backgroundColor: '#000'}, containerStyle]} />
+    <View style={[style.containerStyle, containerStyle]} />
   );
 };
 
 export default MaxVideoView;
+
+const style = StyleSheet.create({
+  containerStyle: {flex: 1, backgroundColor: '#000'},
+});

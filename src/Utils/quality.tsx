@@ -239,6 +239,14 @@ const quality = {
     frameRate: 30,
     bitRate: 1380,
   },
+  '720p_7': {
+    dimensions: {
+      width: 1280,
+      height: 720,
+    },
+    frameRate: 30,
+    bitRate: 3000,
+  },
 };
 
 export default quality;

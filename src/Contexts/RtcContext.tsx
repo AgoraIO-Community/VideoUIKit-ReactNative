@@ -1,6 +1,6 @@
 import React from 'react';
 import {CallbacksInterface} from './PropsContext';
-import RtcEngine from 'react-native-agora';
+import {IRtcEngine} from 'react-native-agora';
 import type {DualStreamMode, ContentInterface} from './PropsContext';
 
 export type UidType = number;
@@ -43,7 +43,7 @@ export interface ActionInterface<T extends keyof CallbacksInterface> {
 export type ActionType<T extends keyof CallbacksInterface> = ActionInterface<T>;
 
 export interface RtcContextInterface {
-  RtcEngineUnsafe: RtcEngine;
+  RtcEngineUnsafe: IRtcEngine;
   setDualStreamMode: React.Dispatch<React.SetStateAction<DualStreamMode>>;
 }
 

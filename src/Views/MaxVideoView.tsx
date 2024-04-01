@@ -1,12 +1,13 @@
 import React, {useContext} from 'react';
-import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
-import styles from '../Style';
+
+import {RenderModeType, RtcSurfaceView} from 'react-native-agora';
+
 import PropsContext, {ContentInterface} from '../Contexts/PropsContext';
-import {View, ViewStyle} from 'react-native';
+import {View, ViewStyle, StyleSheet} from 'react-native';
 import useLocalUid from '../Utils/useLocalUid';
 
-const LocalView = RtcLocalView.SurfaceView;
-const RemoteView = RtcRemoteView.SurfaceView;
+const LocalView = RtcSurfaceView;
+const RemoteView = RtcSurfaceView;
 
 interface MaxViewInterface {
   user: ContentInterface;
@@ -17,8 +18,8 @@ interface MaxViewInterface {
 }
 
 const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
-  const {styleProps, rtcProps} = useContext(PropsContext);
-  const {maxViewStyles} = styleProps || {};
+  const {rtcProps} = useContext(PropsContext);
+
   const Fallback = props.fallback;
   const {
     containerStyle = {},
@@ -40,16 +41,22 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
     props.user.video ? (
       <LocalView
         style={containerStyle}
-        renderMode={isFullView ? VideoRenderMode.FILL : VideoRenderMode.Fit}
+        canvas={{
+          renderMode: isFullView
+            ? RenderModeType.RenderModeAdaptive
+            : RenderModeType.RenderModeFit,
+          uid: 0,
+        }}
       />
     ) : Fallback ? (
       <Fallback />
     ) : (
-      <View style={[{flex: 1, backgroundColor: '#000'}, containerStyle]} />
+      <View style={[style.containerStyle, containerStyle]} />
     )
   ) : (
     <>
       <div
+        // eslint-disable-next-line react-native/no-inline-styles
         style={{
           flex: 1,
           overflow: 'hidden',
@@ -58,8 +65,10 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
         }}>
         <RemoteView
           style={containerStyle}
-          uid={uid as number}
-          renderMode={VideoRenderMode.Fit}
+          canvas={{
+            renderMode: RenderModeType.RenderModeFit,
+            uid: uid as number,
+          }}
         />
       </div>
       {props.user.video ? (
@@ -69,9 +78,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
           {Fallback ? (
             <Fallback />
           ) : (
-            <View
-              style={[{flex: 1, backgroundColor: '#000'}, containerStyle]}
-            />
+            <View style={[style.containerStyle, containerStyle]} />
           )}
         </>
       )}
@@ -80,3 +87,7 @@ const MaxVideoView: React.FC<MaxViewInterface> = (props) => {
 };
 
 export default MaxVideoView;
+
+const style = StyleSheet.create({
+  containerStyle: {flex: 1, backgroundColor: '#000'},
+});
