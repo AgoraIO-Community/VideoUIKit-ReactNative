@@ -71,6 +71,8 @@ export interface DefaultContentInterface {
   streamType: 'high' | 'low';
   type: 'rtc';
   permissionStatus?: PermissionState;
+  localAudioForceDisabled?: boolean;
+  localVideoForceDisabled?: boolean;
   //applicable only to the screenshare
   parentUid?: UidType;
   //uikit and core
@@ -169,8 +171,8 @@ export interface CallbacksInterface {
   DequeVideo(uid: UidType): void;
   UserMuteRemoteAudio(uid: UidType, muted: ContentInterface['audio']): void;
   UserMuteRemoteVideo(uid: UidType, muted: ContentInterface['video']): void;
-  LocalMuteAudio(muted: ToggleState): void;
-  LocalMuteVideo(muted: ToggleState): void;
+  LocalMuteAudio(muted: ToggleState, forceDisabled?: boolean): void;
+  LocalMuteVideo(muted: ToggleState, forceDisabled?: boolean): void;
   LocalPermissionState(
     permissionState: ContentInterface['permissionStatus'],
   ): void;

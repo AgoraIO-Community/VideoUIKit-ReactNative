@@ -55,6 +55,8 @@ const RtcConfigure = (outerProps: {children: React.ReactNode}) => {
         streamType: 'high',
         type: 'rtc',
         permissionStatus: PermissionState.NOT_REQUESTED,
+        audioForceDisabled: false,
+        videoForceDisabled: false,
       },
     },
     activeUids: rtcProps?.recordingBot ? [] : [localUid],
