@@ -71,8 +71,8 @@ export interface DefaultContentInterface {
   streamType: 'high' | 'low';
   type: 'rtc';
   permissionStatus?: PermissionState;
-  localAudioForceDisabled?: boolean;
-  localVideoForceDisabled?: boolean;
+  audioForceDisabled?: boolean;
+  videoForceDisabled?: boolean;
   //applicable only to the screenshare
   parentUid?: UidType;
   //uikit and core

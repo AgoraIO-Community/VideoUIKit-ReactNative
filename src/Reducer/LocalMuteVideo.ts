@@ -15,7 +15,7 @@ export default function LocalMuteVideo(
       [localUid]: {
         ...state.defaultContent[localUid],
         video: action.value[0],
-        localVideoForceDisabled:
+        videoForceDisabled:
           action?.value?.length === 2 ? action.value[1] : false,
       },
     },
