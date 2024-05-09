@@ -88,7 +88,8 @@ export interface DefaultContentInterface {
 export interface CustomContentInterface<T> {
   type: T extends DefaultContentInterface['type'] ? never : T;
 }
-interface ExtenedContentInterface extends CustomContentInterface<string> {
+export interface ExtenedContentInterface
+  extends CustomContentInterface<string> {
   [key: string]: any;
 }
 export type ContentInterface =

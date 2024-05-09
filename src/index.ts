@@ -56,6 +56,7 @@ export type {
   ActionInterface,
   ActionType,
 } from './Contexts/RtcContext';
+export type {ExtenedContentInterface} from './Contexts/PropsContext';
 export type {DispatchType} from './Contexts/DispatchContext';
 
 export {default as BtnTemplate} from './Controls/BtnTemplate';
