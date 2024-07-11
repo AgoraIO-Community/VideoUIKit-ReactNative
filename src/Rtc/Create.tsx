@@ -257,6 +257,10 @@ const Create = ({
               // move this to bridge?
               // @ts-ignore
               await engine.current.setVideoProfile(rtcProps.profile);
+              // @ts-ignore
+              await engine.current.setScreenShareProfile(
+                rtcProps.screenShareProfile,
+              );
             } else {
               if (rtcProps && rtcProps?.profile) {
                 const config: VideoEncoderConfiguration =
@@ -266,6 +270,7 @@ const Create = ({
                   ...config,
                   bitrate: 0,
                 });
+                //TODO set for native
               }
             }
           }
