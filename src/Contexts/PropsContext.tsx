@@ -69,7 +69,7 @@ export interface DefaultContentInterface {
   audio: ToggleState;
   video: ToggleState;
   streamType: 'high' | 'low';
-  type: 'rtc';
+  type: 'rtc' | 'screenshare';
   permissionStatus?: PermissionState;
   audioForceDisabled?: boolean;
   videoForceDisabled?: boolean;

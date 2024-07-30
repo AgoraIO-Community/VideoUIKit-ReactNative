@@ -15,7 +15,7 @@ export default function UserJoined(
   let stateUpdate = {};
   //default type will be rtc
   let typeData = {
-    type: 'rtc',
+    type: '',
   };
   if (
     state.defaultContent[newUid as unknown as number] &&
