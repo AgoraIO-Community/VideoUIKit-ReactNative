@@ -60,7 +60,7 @@ export default function UserJoined(
     };
   }
 
-  console.log('new user joined - supriya!\n', state, stateUpdate, {
+  console.log('new user joined!\n', state, stateUpdate, {
     dualStreamMode,
   });
   return stateUpdate;
