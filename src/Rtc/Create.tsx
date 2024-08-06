@@ -37,9 +37,8 @@ const Create: React.FC<{
         await requestCameraAndAudioPermission();
       }
       try {
-        console.log('hello');
         engine.current = createAgoraRtcEngine();
-        console.log('hello2');
+
         console.log(engine.current);
         if (Platform.OS === 'android' || Platform.OS === 'ios') {
           engine.current.initialize({
