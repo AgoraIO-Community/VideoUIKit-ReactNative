@@ -18,6 +18,15 @@ export default function UserOffline(
   const stateUpdate: Partial<ContentStateInterface> = {
     defaultContent: state.defaultContent,
     activeUids: updatedActiveUids,
+    pinnedUid:
+      state?.pinnedUid && updatedActiveUids?.indexOf(state.pinnedUid) !== -1
+        ? state.pinnedUid
+        : 0,
+    secondaryPinnedUid:
+      state?.secondaryPinnedUid &&
+      updatedActiveUids?.indexOf(state.secondaryPinnedUid) !== -1
+        ? state.secondaryPinnedUid
+        : 0,
   };
 
   return stateUpdate;
