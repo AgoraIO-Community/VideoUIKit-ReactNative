@@ -24,13 +24,20 @@ export default function UserJoined(
     typeData.type = state.defaultContent[newUid as unknown as number].type;
   }
 
+  const isExitingUser =
+    state?.activeUids?.indexOf(newUid as unknown as number) !== -1;
+
   let defaultContent: ContentStateInterface['defaultContent'] = {
     ...state.defaultContent,
     [newUid as unknown as number]: {
       ...state.defaultContent[newUid as unknown as number],
       uid: newUid,
-      audio: ToggleState.disabled,
-      video: ToggleState.disabled,
+      audio: isExitingUser
+        ? state?.defaultContent[newUid as unknown as number]?.audio || 0
+        : ToggleState.disabled,
+      video: isExitingUser
+        ? state?.defaultContent[newUid as unknown as number]?.video || 0
+        : ToggleState.disabled,
       streamType: dualStreamMode === DualStreamMode.HIGH ? 'high' : 'low', // Low if DualStreamMode is LOW or DYNAMIC by default,
       ...typeData,
     },
