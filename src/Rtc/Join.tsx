@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useRef} from 'react';
+import React, {useEffect, useContext, useRef, useState} from 'react';
 import {IRtcEngine} from 'react-native-agora';
 import {ContentStateInterface} from '../Contexts/RtcContext';
 import {DispatchType} from '../Contexts/DispatchContext';
@@ -14,7 +14,7 @@ const Join: React.FC<{
   tracksReady: boolean;
   preventJoin?: boolean;
 }> = ({children, precall, engineRef, uidState, dispatch, tracksReady}) => {
-  let joinState = useRef(false);
+  const [joinState, setJoinState] = useState(false);
   const {rtcProps} = useContext(PropsContext);
 
   const audioRoom = rtcProps?.audioRoom || false;
@@ -24,12 +24,12 @@ const Join: React.FC<{
   //   : null;
 
   useEffect(() => {
-    if (joinState.current && tracksReady && Platform.OS === 'web') {
+    if (joinState && tracksReady && Platform.OS === 'web') {
       //@ts-ignore
       engineRef.current.publish();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tracksReady]);
+  }, [tracksReady, joinState]);
 
   useEffect(() => {
     if (rtcProps?.preventJoin) {
@@ -41,7 +41,7 @@ const Join: React.FC<{
       try {
         console.log('Leaving channel');
         engine.leaveChannel();
-        joinState.current = false;
+        setJoinState(false);
       } catch (err) {
         console.error('Cannot leave the channel:', err);
       }
@@ -118,9 +118,9 @@ const Join: React.FC<{
     }
     async function init() {
       if (!precall) {
-        if (!joinState.current) {
+        if (!joinState) {
           await join();
-          joinState.current = true;
+          setJoinState(true);
         } else {
           await leave();
           await join();
